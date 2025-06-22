@@ -6,6 +6,9 @@
       Paul Gauthier (llmcode): 4
     llmcode/commands.py:
       Paul Gauthier: 2
+    llmcode/core/utils.py:
+      Paul Gauthier: 22
+      Paul Gauthier (llmcode): 17
     llmcode/main.py:
       Paul Gauthier: 4
       Paul Gauthier (llmcode): 5
@@ -14,9 +17,6 @@
     llmcode/repomap.py:
       Paul Gauthier: 6
       Paul Gauthier (llmcode): 1
-    llmcode/core/utils.py:
-      Paul Gauthier: 22
-      Paul Gauthier (llmcode): 17
     setup.py:
       Paul Gauthier: 7
       Paul Gauthier (llmcode): 7
@@ -51,10 +51,10 @@
       Paul Gauthier (llmcode): 11
     llmcode/commands.py:
       Paul Gauthier: 28
-    llmcode/diffs.py:
-      Paul Gauthier: 17
     llmcode/core/io.py:
       Paul Gauthier: 16
+    llmcode/diffs.py:
+      Paul Gauthier: 17
     llmcode/main.py:
       Paul Gauthier: 51
       Paul Gauthier (llmcode): 8
@@ -99,8 +99,6 @@
     .github/workflows/windows-tests.yml:
       Paul Gauthier: 13
       Paul Gauthier (llmcode): 25
-    docker/benchmark.Dockerfile:
-      Paul Gauthier: 7
     benchmark/benchmark.py:
       Paul Gauthier: 446
       Paul Gauthier (llmcode): 29
@@ -116,6 +114,8 @@
     benchmark/test_benchmark.py:
       Paul Gauthier: 34
       Paul Gauthier (llmcode): 13
+    docker/benchmark.Dockerfile:
+      Paul Gauthier: 7
     llmcode/__init__.py:
       Paul Gauthier: 1
     llmcode/coders/__init__.py:
@@ -136,19 +136,19 @@
       Paul Gauthier: 14
     llmcode/commands.py:
       Paul Gauthier: 18
-    llmcode/diffs.py:
-      Paul Gauthier: 25
     llmcode/core/io.py:
       Paul Gauthier: 38
       Paul Gauthier (llmcode): 9
+    llmcode/core/utils.py:
+      Paul Gauthier: 11
+    llmcode/diffs.py:
+      Paul Gauthier: 25
     llmcode/main.py:
       Paul Gauthier: 14
       Paul Gauthier (llmcode): 5
       kwmiebach: 5
     llmcode/repomap.py:
       Paul Gauthier: 30
-    llmcode/core/utils.py:
-      Paul Gauthier: 11
     tests/test_coder.py:
       Paul Gauthier: 87
       Paul Gauthier (llmcode): 24
@@ -196,13 +196,13 @@
       Paul Gauthier (llmcode): 4
     llmcode/core/io.py:
       Paul Gauthier: 7
+    llmcode/core/utils.py:
+      Paul Gauthier: 8
     llmcode/main.py:
       Paul Gauthier: 126
       Paul Gauthier (llmcode): 59
     llmcode/repomap.py:
       Paul Gauthier: 36
-    llmcode/core/utils.py:
-      Paul Gauthier: 8
     scripts/versionbump.py:
       Paul Gauthier: 15
       Paul Gauthier (llmcode): 10
@@ -348,10 +348,10 @@
       Joshua Vial: 2
       Paul Gauthier: 17
       Paul Gauthier (llmcode): 3
-    llmcode/history.py:
-      Paul Gauthier: 6
     llmcode/core/io.py:
       Paul Gauthier: 10
+    llmcode/history.py:
+      Paul Gauthier: 6
     llmcode/main.py:
       Paul Gauthier: 2
     llmcode/repo.py:
@@ -496,12 +496,12 @@
     .github/workflows/release.yml:
       Paul Gauthier: 9
       Paul Gauthier (llmcode): 14
-    docker/benchmark.Dockerfile:
-      Joshua Vial: 1
     benchmark/benchmark.py:
       Joshua Vial: 1
     docker/app.Dockerfile:
       Paul Gauthier: 9
+    docker/benchmark.Dockerfile:
+      Joshua Vial: 1
     llmcode/__init__.py:
       Paul Gauthier: 1
     llmcode/coders/base_coder.py:
@@ -542,10 +542,10 @@
 - end_date: '2023-10-29'
   end_tag: v0.16.0
   file_counts:
-    docker/benchmark.Dockerfile:
-      Paul Gauthier: 4
     docker/app.Dockerfile:
       Paul Gauthier: 1
+    docker/benchmark.Dockerfile:
+      Paul Gauthier: 4
     llmcode/__init__.py:
       Paul Gauthier: 1
     llmcode/coders/base_coder.py:
@@ -617,12 +617,12 @@
       Paul Gauthier (llmcode): 7
     .github/workflows/release.yml:
       Paul Gauthier: 4
-    docker/benchmark.Dockerfile:
-      Paul Gauthier: 2
     benchmark/benchmark.py:
       Paul Gauthier: 24
     docker/app.Dockerfile:
       Paul Gauthier: 5
+    docker/benchmark.Dockerfile:
+      Paul Gauthier: 2
     llmcode/__init__.py:
       Paul Gauthier: 1
     llmcode/coders/base_coder.py:
@@ -725,6 +725,8 @@
       Paul Gauthier: 2
     llmcode/commands.py:
       Paul Gauthier: 1
+    llmcode/core/utils.py:
+      Paul Gauthier: 15
     llmcode/history.py:
       Paul Gauthier: 3
     llmcode/main.py:
@@ -742,8 +744,6 @@
     llmcode/repo.py:
       Paul Gauthier: 4
     llmcode/sendchat.py:
-      Paul Gauthier: 15
-    llmcode/core/utils.py:
       Paul Gauthier: 15
     llmcode/voice.py:
       Paul Gauthier: 7
@@ -798,6 +798,8 @@
       Paul Gauthier (llmcode): 6
     llmcode/core/io.py:
       Joshua Vial: 14
+    llmcode/core/utils.py:
+      Joshua Vial: 29
     llmcode/models/model.py:
       Joshua Vial: 43
     llmcode/models/openrouter.py:
@@ -808,8 +810,6 @@
       Paul Gauthier: 6
     llmcode/sendchat.py:
       Joshua Vial: 9
-    llmcode/core/utils.py:
-      Joshua Vial: 29
     tests/test_commands.py:
       Paul Gauthier: 17
       Paul Gauthier (llmcode): 20
@@ -909,6 +909,8 @@
     llmcode/commands.py:
       Paul Gauthier: 16
       Paul Gauthier (llmcode): 8
+    llmcode/core/utils.py:
+      Paul Gauthier: 7
     llmcode/main.py:
       Paul Gauthier: 2
     llmcode/models/__init__.py:
@@ -920,8 +922,6 @@
     llmcode/scrape.py:
       Paul Gauthier: 170
       Paul Gauthier (llmcode): 17
-    llmcode/core/utils.py:
-      Paul Gauthier: 7
     tests/test_models.py:
       Paul Gauthier: 8
   grand_total:
@@ -1122,12 +1122,12 @@
   file_counts:
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 375
     llmcode/coders/base_coder.py:
       Paul Gauthier: 120
     llmcode/commands.py:
       Paul Gauthier: 45
+    llmcode/core/args.py:
+      Paul Gauthier: 375
     llmcode/gui.py:
       Paul Gauthier: 531
       Paul Gauthier (llmcode): 2
@@ -1164,8 +1164,6 @@
       Paul Gauthier: 3
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 7
     llmcode/coders/__init__.py:
       Paul Gauthier: 2
     llmcode/coders/base_coder.py:
@@ -1174,6 +1172,10 @@
       Paul Gauthier: 3
     llmcode/coders/editblock_fenced_coder.py:
       Paul Gauthier: 11
+    llmcode/core/args.py:
+      Paul Gauthier: 7
+    llmcode/core/utils.py:
+      Paul Gauthier: 1
     llmcode/gui.py:
       Paul Gauthier: 1
     llmcode/main.py:
@@ -1183,8 +1185,6 @@
       Paul Gauthier: 45
     llmcode/sendchat.py:
       Paul Gauthier: 10
-    llmcode/core/utils.py:
-      Paul Gauthier: 1
     tests/test_main.py:
       Paul Gauthier: 10
     tests/test_sendchat.py:
@@ -1226,10 +1226,10 @@
   file_counts:
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 6
     llmcode/coders/base_coder.py:
       Paul Gauthier: 18
+    llmcode/core/args.py:
+      Paul Gauthier: 6
     llmcode/main.py:
       Paul Gauthier: 9
     llmcode/models.py:
@@ -1251,19 +1251,21 @@
   file_counts:
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 15
-      Paul Gauthier (llmcode): 5
     llmcode/coders/base_coder.py:
       Paul Gauthier: 22
       Paul Gauthier (llmcode): 1
     llmcode/coders/editblock_coder.py:
       Paul Gauthier: 82
       Paul Gauthier (llmcode): 10
-    llmcode/history.py:
-      Paul Gauthier: 20
+    llmcode/core/args.py:
+      Paul Gauthier: 15
+      Paul Gauthier (llmcode): 5
     llmcode/core/io.py:
       Paul Gauthier: 7
+    llmcode/core/utils.py:
+      Paul Gauthier: 51
+    llmcode/history.py:
+      Paul Gauthier: 20
     llmcode/main.py:
       Paul Gauthier: 1
       Paul Gauthier (llmcode): 1
@@ -1271,8 +1273,6 @@
       Paul Gauthier: 18
     llmcode/sendchat.py:
       Paul Gauthier: 6
-    llmcode/core/utils.py:
-      Paul Gauthier: 51
     llmcode/versioncheck.py:
       Paul Gauthier: 10
   grand_total:
@@ -1294,9 +1294,6 @@
       Paul Gauthier (llmcode): 28
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 37
-      Paul Gauthier (llmcode): 3
     llmcode/coders/base_coder.py:
       Paul Gauthier: 110
       Paul Gauthier (llmcode): 3
@@ -1304,6 +1301,9 @@
       Paul Gauthier (llmcode): 2
     llmcode/commands.py:
       Paul Gauthier: 45
+    llmcode/core/args.py:
+      Paul Gauthier: 37
+      Paul Gauthier (llmcode): 3
     llmcode/core/io.py:
       Paul Gauthier: 9
     llmcode/linter.py:
@@ -1395,10 +1395,6 @@
       Paul Gauthier (llmcode): 4
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Krazer: 4
-      Paul Gauthier: 57
-      develmusa: 1
     llmcode/args_formatter.py:
       Paul Gauthier: 116
       Paul Gauthier (llmcode): 20
@@ -1406,11 +1402,15 @@
       Paul Gauthier: 77
     llmcode/commands.py:
       Paul Gauthier: 29
-    llmcode/gui.py:
-      Paul Gauthier: 22
+    llmcode/core/args.py:
+      Krazer: 4
+      Paul Gauthier: 57
+      develmusa: 1
     llmcode/core/io.py:
       Paul Gauthier: 5
       Paul Gauthier (llmcode): 2
+    llmcode/gui.py:
+      Paul Gauthier: 22
     llmcode/main.py:
       Krazer: 13
       Paul Gauthier: 11
@@ -1452,10 +1452,6 @@
       Paul Gauthier: 1
     llmcode/__main__.py:
       Paul Gauthier (llmcode): 4
-    llmcode/core/args.py:
-      Daniel Vainsencher: 6
-      John-Mason P. Shackelford: 14
-      Paul Gauthier: 14
     llmcode/args_formatter.py:
       Paul Gauthier: 24
       Paul Gauthier (llmcode): 9
@@ -1465,8 +1461,16 @@
       Paul Gauthier: 2
     llmcode/commands.py:
       Paul Gauthier: 1
+    llmcode/core/args.py:
+      Daniel Vainsencher: 6
+      John-Mason P. Shackelford: 14
+      Paul Gauthier: 14
     llmcode/core/io.py:
       Daniel Vainsencher: 14
+    llmcode/core/utils.py:
+      Daniel Vainsencher: 7
+      Daniel Vainsencher (llmcode): 11
+      John-Mason P. Shackelford: 7
     llmcode/main.py:
       Daniel Vainsencher: 1
       John-Mason P. Shackelford: 14
@@ -1486,10 +1490,6 @@
     llmcode/urls.py:
       Nicolas Perez: 1
       Paul Gauthier: 1
-    llmcode/core/utils.py:
-      Daniel Vainsencher: 7
-      Daniel Vainsencher (llmcode): 11
-      John-Mason P. Shackelford: 7
     scripts/dev/sync_docs.sh:
       Paul Gauthier: 1
   grand_total:
@@ -1508,13 +1508,13 @@
   file_counts:
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Krazer: 6
-      Paul Gauthier: 27
     llmcode/coders/base_coder.py:
       Paul Gauthier: 28
     llmcode/coders/editblock_coder.py:
       Paul Gauthier: 64
+    llmcode/core/args.py:
+      Krazer: 6
+      Paul Gauthier: 27
     llmcode/linter.py:
       Paul Gauthier: 23
       Paul Gauthier (llmcode): 21
@@ -1545,9 +1545,6 @@
       Paul Gauthier: 1
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 5
-      Paul Gauthier (llmcode): 5
     llmcode/coders/base_coder.py:
       Paul Gauthier: 122
       Paul Gauthier (llmcode): 2
@@ -1556,6 +1553,9 @@
     llmcode/commands.py:
       Amir Elaguizy (llmcode): 3
       Paul Gauthier: 1
+    llmcode/core/args.py:
+      Paul Gauthier: 5
+      Paul Gauthier (llmcode): 5
     llmcode/gui.py:
       Paul Gauthier: 4
     llmcode/main.py:
@@ -1598,17 +1598,17 @@
       Paul Gauthier: 14
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 6
     llmcode/coders/base_coder.py:
       Paul Gauthier: 10
       Paul Gauthier (llmcode): 7
     llmcode/commands.py:
       Paul Gauthier: 31
-    llmcode/history.py:
-      Paul Gauthier: 5
+    llmcode/core/args.py:
+      Paul Gauthier: 6
     llmcode/core/io.py:
       Paul Gauthier: 32
+    llmcode/history.py:
+      Paul Gauthier: 5
     llmcode/llm.py:
       Paul Gauthier: 18
     llmcode/main.py:
@@ -1649,8 +1649,6 @@
       Paul Gauthier: 2
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 2
     llmcode/args_formatter.py:
       Paul Gauthier: 4
     llmcode/coders/__init__.py:
@@ -1662,6 +1660,8 @@
     llmcode/commands.py:
       Paul Gauthier: 63
       Paul Gauthier (llmcode): 5
+    llmcode/core/args.py:
+      Paul Gauthier: 2
     llmcode/help.py:
       Paul Gauthier: 114
       Paul Gauthier (llmcode): 6
@@ -1701,15 +1701,13 @@
       Paul Gauthier: 3
     .github/workflows/windows-tests.yml:
       Paul Gauthier: 4
-    docker/benchmark.Dockerfile:
-      Paul Gauthier: 3
     docker/app.Dockerfile:
       Paul Gauthier: 14
       Paul Gauthier (llmcode): 1
+    docker/benchmark.Dockerfile:
+      Paul Gauthier: 3
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 4
     llmcode/args_formatter.py:
       Paul Gauthier: 1
     llmcode/coders/base_coder.py:
@@ -1719,6 +1717,11 @@
     llmcode/commands.py:
       Paul Gauthier: 17
       Paul Gauthier (llmcode): 10
+    llmcode/core/args.py:
+      Paul Gauthier: 4
+    llmcode/core/utils.py:
+      Paul Gauthier: 78
+      Paul Gauthier (llmcode): 16
     llmcode/help.py:
       Paul Gauthier: 20
     llmcode/main.py:
@@ -1727,9 +1730,6 @@
       Paul Gauthier: 11
     llmcode/scrape.py:
       Paul Gauthier: 53
-    llmcode/core/utils.py:
-      Paul Gauthier: 78
-      Paul Gauthier (llmcode): 16
     llmcode/versioncheck.py:
       Paul Gauthier: 27
     llmcode/voice.py:
@@ -1805,10 +1805,11 @@
   file_counts:
     docker/benchmark.Dockerfile:
       Your Name: 1
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 11
+      Paul Gauthier (llmcode): 85
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier (llmcode): 3
     llmcode/coders/__init__.py:
       Paul Gauthier: 2
       Your Name: 1
@@ -1834,6 +1835,8 @@
       Paul Gauthier: 43
       Your Name: 26
       Your Name (llmcode): 25
+    llmcode/core/args.py:
+      Paul Gauthier (llmcode): 3
     llmcode/core/io.py:
       Paul Gauthier: 3
     llmcode/llm.py:
@@ -1852,9 +1855,6 @@
     llmcode/scrape.py:
       Paul Gauthier: 3
       Paul Gauthier (llmcode): 32
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 11
-      Paul Gauthier (llmcode): 85
     tests/basic/test_coder.py:
       Paul Gauthier: 6
       Paul Gauthier (llmcode): 5
@@ -1886,23 +1886,28 @@
     docker/app.Dockerfile:
       Paul Gauthier: 19
       Paul Gauthier (llmcode): 18
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 11
+      Paul Gauthier (llmcode): 12
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 4
-      Paul Gauthier (llmcode): 5
     llmcode/coders/base_coder.py:
       Paul Gauthier: 8
       Paul Gauthier (llmcode): 3
     llmcode/commands.py:
       Paul Gauthier: 20
       Paul Gauthier (llmcode): 4
-    llmcode/history.py:
-      Paul Gauthier: 16
-      Paul Gauthier (llmcode): 6
+    llmcode/core/args.py:
+      Paul Gauthier: 4
+      Paul Gauthier (llmcode): 5
     llmcode/core/io.py:
       Paul Gauthier: 27
       Paul Gauthier (llmcode): 8
+    llmcode/core/utils.py:
+      Paul Gauthier: 7
+    llmcode/history.py:
+      Paul Gauthier: 16
+      Paul Gauthier (llmcode): 6
     llmcode/linter.py:
       Paul Gauthier: 14
       Paul Gauthier (llmcode): 1
@@ -1921,18 +1926,13 @@
       Paul Gauthier: 2
     llmcode/sendchat.py:
       Paul Gauthier (llmcode): 2
-    llmcode/core/utils.py:
-      Paul Gauthier: 7
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 11
-      Paul Gauthier (llmcode): 12
     scripts/blame.py:
       Paul Gauthier: 65
       Paul Gauthier (llmcode): 99
-    scripts/update-blame.sh:
-      Paul Gauthier: 6
     scripts/dev/sync_docs.sh:
       Paul Gauthier: 1
+    scripts/update-blame.sh:
+      Paul Gauthier: 6
     tests/basic/test_coder.py:
       Paul Gauthier: 32
       Paul Gauthier (llmcode): 4
@@ -1960,15 +1960,18 @@
       paul-gauthier: 1
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 1
-      Paul Gauthier (llmcode): 6
     llmcode/coders/base_coder.py:
       Paul Gauthier: 61
       Paul Gauthier (llmcode): 41
     llmcode/commands.py:
       Paul Gauthier: 13
       Paul Gauthier (llmcode): 24
+    llmcode/core/args.py:
+      Paul Gauthier: 1
+      Paul Gauthier (llmcode): 6
+    llmcode/core/utils.py:
+      Paul Gauthier: 29
+      Paul Gauthier (llmcode): 4
     llmcode/history.py:
       Paul Gauthier: 2
     llmcode/main.py:
@@ -1987,9 +1990,6 @@
     llmcode/sendchat.py:
       Paul Gauthier: 26
       Paul Gauthier (llmcode): 2
-    llmcode/core/utils.py:
-      Paul Gauthier: 29
-      Paul Gauthier (llmcode): 4
     scripts/blame.py:
       Paul Gauthier (llmcode): 2
     tests/basic/test_coder.py:
@@ -2022,20 +2022,25 @@
     docker/app.Dockerfile:
       Paul Gauthier: 5
       Paul Gauthier (llmcode): 2
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 11
+      Paul Gauthier (llmcode): 11
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 7
-      Paul Gauthier (llmcode): 9
     llmcode/coders/base_coder.py:
       Paul Gauthier: 81
       Paul Gauthier (llmcode): 41
     llmcode/commands.py:
       Paul Gauthier: 34
       Paul Gauthier (llmcode): 105
+    llmcode/core/args.py:
+      Paul Gauthier: 7
+      Paul Gauthier (llmcode): 9
     llmcode/core/io.py:
       Paul Gauthier: 7
       Paul Gauthier (llmcode): 23
+    llmcode/core/utils.py:
+      Paul Gauthier (llmcode): 11
     llmcode/llm.py:
       Paul Gauthier (llmcode): 5
     llmcode/main.py:
@@ -2056,14 +2061,9 @@
       Paul Gauthier: 20
     llmcode/urls.py:
       Paul Gauthier: 1
-    llmcode/core/utils.py:
-      Paul Gauthier (llmcode): 11
     llmcode/versioncheck.py:
       Paul Gauthier: 3
       Paul Gauthier (llmcode): 9
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 11
-      Paul Gauthier (llmcode): 11
     tests/basic/test_coder.py:
       Paul Gauthier (llmcode): 5
     tests/basic/test_commands.py:
@@ -2094,8 +2094,6 @@
       Branch Vincent: 2
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier (llmcode): 8
     llmcode/coders/base_coder.py:
       Paul Gauthier: 24
       Paul Gauthier (llmcode): 30
@@ -2103,7 +2101,11 @@
       Amir Elaguizy (llmcode): 11
       Paul Gauthier: 26
       Paul Gauthier (llmcode): 15
+    llmcode/core/args.py:
+      Paul Gauthier (llmcode): 8
     llmcode/core/io.py:
+      Paul Gauthier: 1
+    llmcode/core/utils.py:
       Paul Gauthier: 1
     llmcode/main.py:
       Paul Gauthier: 9
@@ -2115,8 +2117,6 @@
       Paul Gauthier (llmcode): 26
     llmcode/sendchat.py:
       Paul Gauthier (llmcode): 1
-    llmcode/core/utils.py:
-      Paul Gauthier: 1
     llmcode/versioncheck.py:
       Paul Gauthier: 7
       Paul Gauthier (llmcode): 1
@@ -2153,11 +2153,16 @@
       Paul Gauthier (llmcode): 57
     docker/app.Dockerfile:
       Paul Gauthier: 10
+    docs/site/_includes/code-in-json-benchmark.js:
+      Paul Gauthier: 101
+      Paul Gauthier (llmcode): 64
+    docs/site/_includes/code-in-json-syntax.js:
+      Paul Gauthier: 23
+      Paul Gauthier (llmcode): 116
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 1
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 2
-      Paul Gauthier (llmcode): 8
     llmcode/coders/__init__.py:
       Paul Gauthier: 3
     llmcode/coders/base_coder.py:
@@ -2168,6 +2173,11 @@
     llmcode/commands.py:
       Paul Gauthier: 3
       Paul Gauthier (llmcode): 5
+    llmcode/core/args.py:
+      Paul Gauthier: 2
+      Paul Gauthier (llmcode): 8
+    llmcode/core/utils.py:
+      Paul Gauthier (llmcode): 6
     llmcode/llm.py:
       Paul Gauthier: 2
     llmcode/main.py:
@@ -2181,16 +2191,6 @@
       Paul Gauthier (llmcode): 55
     llmcode/sendchat.py:
       Paul Gauthier: 3
-    llmcode/core/utils.py:
-      Paul Gauthier (llmcode): 6
-    docs/site/_includes/code-in-json-benchmark.js:
-      Paul Gauthier: 101
-      Paul Gauthier (llmcode): 64
-    docs/site/_includes/code-in-json-syntax.js:
-      Paul Gauthier: 23
-      Paul Gauthier (llmcode): 116
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 1
     scripts/blame.py:
       Paul Gauthier (llmcode): 17
     tests/basic/test_commands.py:
@@ -2213,11 +2213,10 @@
   file_counts:
     benchmark/benchmark.py:
       Paul Gauthier: 1
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 1
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 2
-      Paul Gauthier (llmcode): 6
     llmcode/coders/base_coder.py:
       Paul Gauthier: 77
       Paul Gauthier (llmcode): 25
@@ -2232,9 +2231,15 @@
       Paul Gauthier: 5
       Paul Gauthier (llmcode): 40
       pcamp: 1
+    llmcode/core/args.py:
+      Paul Gauthier: 2
+      Paul Gauthier (llmcode): 6
     llmcode/core/io.py:
       Paul Gauthier: 41
       Paul Gauthier (llmcode): 40
+    llmcode/core/utils.py:
+      Paul Gauthier: 2
+      Paul Gauthier (llmcode): 9
     llmcode/main.py:
       Paul Gauthier: 2
     llmcode/models.py:
@@ -2242,13 +2247,8 @@
     llmcode/repomap.py:
       Paul Gauthier: 1
       Paul Gauthier (llmcode): 5
-    llmcode/core/utils.py:
-      Paul Gauthier: 2
-      Paul Gauthier (llmcode): 9
     llmcode/versioncheck.py:
       Paul Gauthier: 2
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 1
     scripts/blame.py:
       Paul Gauthier: 1
     tests/basic/test_commands.py:
@@ -2278,9 +2278,6 @@
   file_counts:
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 2
-      Paul Gauthier (llmcode): 10
     llmcode/coders/base_coder.py:
       Paul Gauthier: 55
       Paul Gauthier (llmcode): 18
@@ -2291,11 +2288,17 @@
       Paul Gauthier (llmcode): 6
     llmcode/commands.py:
       Paul Gauthier: 18
-    llmcode/history.py:
-      Paul Gauthier (llmcode): 3
+    llmcode/core/args.py:
+      Paul Gauthier: 2
+      Paul Gauthier (llmcode): 10
     llmcode/core/io.py:
       Paul Gauthier: 44
       Paul Gauthier (llmcode): 22
+    llmcode/core/utils.py:
+      Paul Gauthier: 9
+      Paul Gauthier (llmcode): 9
+    llmcode/history.py:
+      Paul Gauthier (llmcode): 3
     llmcode/main.py:
       Paul Gauthier: 2
       Paul Gauthier (llmcode): 9
@@ -2310,9 +2313,6 @@
     llmcode/sendchat.py:
       Paul Gauthier: 7
       Paul Gauthier (llmcode): 11
-    llmcode/core/utils.py:
-      Paul Gauthier: 9
-      Paul Gauthier (llmcode): 9
     llmcode/versioncheck.py:
       Paul Gauthier: 2
       Paul Gauthier (llmcode): 10
@@ -2357,19 +2357,23 @@
       Paul Gauthier (llmcode): 1
     .github/workflows/windows-tests.yml:
       Paul Gauthier (llmcode): 1
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 1
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 1
-      Paul Gauthier (llmcode): 10
     llmcode/coders/base_coder.py:
       Paul Gauthier: 25
       Paul Gauthier (llmcode): 12
     llmcode/commands.py:
       Paul Gauthier: 12
       Paul Gauthier (llmcode): 4
+    llmcode/core/args.py:
+      Paul Gauthier: 1
+      Paul Gauthier (llmcode): 10
     llmcode/core/io.py:
       Paul Gauthier: 28
+    llmcode/core/utils.py:
+      Paul Gauthier (llmcode): 14
     llmcode/main.py:
       Paul Gauthier: 2
       Paul Gauthier (llmcode): 4
@@ -2378,13 +2382,9 @@
     llmcode/run_cmd.py:
       Paul Gauthier: 3
       Paul Gauthier (llmcode): 66
-    llmcode/core/utils.py:
-      Paul Gauthier (llmcode): 14
     llmcode/versioncheck.py:
       Paul Gauthier: 1
       Paul Gauthier (llmcode): 9
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 1
     tests/basic/test_coder.py:
       Paul Gauthier: 6
       Paul Gauthier (llmcode): 43
@@ -2406,11 +2406,11 @@
 - end_date: '2024-09-04'
   end_tag: v0.55.0
   file_counts:
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 1
     llmcode/__init__.py:
       Paul Gauthier: 4
       Paul Gauthier (llmcode): 2
-    llmcode/core/args.py:
-      Paul Gauthier (llmcode): 7
     llmcode/coders/base_coder.py:
       Paul Gauthier: 62
       Paul Gauthier (llmcode): 39
@@ -2426,13 +2426,18 @@
       Antti Kaihola: 7
       Paul Gauthier: 74
       Paul Gauthier (llmcode): 25
+    llmcode/core/args.py:
+      Paul Gauthier (llmcode): 7
+    llmcode/core/io.py:
+      Paul Gauthier: 56
+      Paul Gauthier (llmcode): 11
+    llmcode/core/utils.py:
+      Paul Gauthier: 31
+      Paul Gauthier (llmcode): 29
     llmcode/format_settings.py:
       Paul Gauthier (llmcode): 2
     llmcode/gui.py:
       Paul Gauthier: 4
-    llmcode/core/io.py:
-      Paul Gauthier: 56
-      Paul Gauthier (llmcode): 11
     llmcode/linter.py:
       Paul Gauthier: 5
     llmcode/llm.py:
@@ -2462,17 +2467,12 @@
       Paul Gauthier (llmcode): 197
     llmcode/urls.py:
       Paul Gauthier (llmcode): 1
-    llmcode/core/utils.py:
-      Paul Gauthier: 31
-      Paul Gauthier (llmcode): 29
     llmcode/versioncheck.py:
       Paul Gauthier: 22
       Paul Gauthier (llmcode): 6
     llmcode/voice.py:
       Paul Gauthier: 7
       Paul Gauthier (llmcode): 9
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 1
     scripts/versionbump.py:
       Paul Gauthier: 7
     tests/basic/test_coder.py:
@@ -2512,16 +2512,18 @@
   file_counts:
     benchmark/benchmark.py:
       Paul Gauthier: 1
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 1
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 2
-      Paul Gauthier (llmcode): 6
     llmcode/coders/base_coder.py:
       Paul Gauthier: 14
       Paul Gauthier (llmcode): 10
     llmcode/commands.py:
       Paul Gauthier: 8
+      Paul Gauthier (llmcode): 6
+    llmcode/core/args.py:
+      Paul Gauthier: 2
       Paul Gauthier (llmcode): 6
     llmcode/core/io.py:
       Paul Gauthier: 5
@@ -2542,8 +2544,6 @@
     llmcode/report.py:
       Paul Gauthier: 2
       Paul Gauthier (llmcode): 20
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 1
     tests/basic/test_linter.py:
       Paul Gauthier: 1
       Paul Gauthier (llmcode): 51
@@ -2563,6 +2563,10 @@
   file_counts:
     benchmark/benchmark.py:
       Paul Gauthier: 4
+    docs/site/docs/leaderboards/index.md:
+      Anjor Kanekar: 1
+      Paul Gauthier: 1
+      Paul Gauthier (llmcode): 12
     llmcode/__init__.py:
       Paul Gauthier: 1
     llmcode/args_formatter.py:
@@ -2584,6 +2588,8 @@
       Krazer: 23
       Paul Gauthier: 8
       Paul Gauthier (llmcode): 42
+    llmcode/core/utils.py:
+      Paul Gauthier: 2
     llmcode/main.py:
       Paul Gauthier: 5
       Paul Gauthier (llmcode): 8
@@ -2599,12 +2605,6 @@
       Paul Gauthier (llmcode): 33
     llmcode/sendchat.py:
       Paul Gauthier: 3
-    llmcode/core/utils.py:
-      Paul Gauthier: 2
-    docs/site/docs/leaderboards/index.md:
-      Anjor Kanekar: 1
-      Paul Gauthier: 1
-      Paul Gauthier (llmcode): 12
     scripts/issues.py:
       Paul Gauthier: 10
       Paul Gauthier (llmcode): 123
@@ -2641,14 +2641,10 @@
       Paul Gauthier: 25
       Paul Gauthier (llmcode): 29
       fry69: 3
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 152
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Mike Bailey: 7
-      Paul Gauthier: 8
-      Paul Gauthier (llmcode): 51
-      Stein Martin Hustad: 17
-      fry69: 2
     llmcode/coders/__init__.py:
       Paul Gauthier: 6
     llmcode/coders/architect_coder.py:
@@ -2670,16 +2666,24 @@
       Paul Gauthier: 17
       Paul Gauthier (llmcode): 77
       fry69: 2
-    llmcode/help.py:
-      Paul Gauthier: 27
-      Paul Gauthier (llmcode): 7
-    llmcode/history.py:
-      Paul Gauthier: 1
+    llmcode/core/args.py:
+      Mike Bailey: 7
+      Paul Gauthier: 8
+      Paul Gauthier (llmcode): 51
+      Stein Martin Hustad: 17
+      fry69: 2
     llmcode/core/io.py:
       Paul Gauthier: 38
       Paul Gauthier (llmcode): 62
       Stein Martin Hustad: 5
       fry69: 9
+    llmcode/core/utils.py:
+      Paul Gauthier: 4
+    llmcode/help.py:
+      Paul Gauthier: 27
+      Paul Gauthier (llmcode): 7
+    llmcode/history.py:
+      Paul Gauthier: 1
     llmcode/linter.py:
       Paul Gauthier: 5
     llmcode/main.py:
@@ -2701,21 +2705,17 @@
     llmcode/sendchat.py:
       Paul Gauthier: 1
       Paul Gauthier (llmcode): 5
-    llmcode/core/utils.py:
-      Paul Gauthier: 4
     llmcode/versioncheck.py:
       Paul Gauthier: 2
     llmcode/voice.py:
       Mike Bailey: 17
       Paul Gauthier: 2
       Paul Gauthier (llmcode): 6
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 152
+    scripts/dev/sync_docs.sh:
+      Paul Gauthier: 1
     scripts/issues.py:
       Paul Gauthier: 5
       Paul Gauthier (llmcode): 43
-    scripts/dev/sync_docs.sh:
-      Paul Gauthier: 1
     scripts/yank-old-versions.py:
       Paul Gauthier (llmcode): 51
     tests/basic/test_commands.py:
@@ -2747,11 +2747,10 @@
 - end_date: '2024-10-04'
   end_tag: v0.59.0
   file_counts:
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 4
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 2
-      Paul Gauthier (llmcode): 6
     llmcode/args_formatter.py:
       Paul Gauthier: 4
     llmcode/coders/architect_coder.py:
@@ -2763,6 +2762,9 @@
     llmcode/commands.py:
       Paul Gauthier: 3
       Paul Gauthier (llmcode): 47
+    llmcode/core/args.py:
+      Paul Gauthier: 2
+      Paul Gauthier (llmcode): 6
     llmcode/gui.py:
       Paul Gauthier: 2
     llmcode/main.py:
@@ -2777,12 +2779,10 @@
       Paul Gauthier: 2
     llmcode/versioncheck.py:
       Paul Gauthier: 1
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 4
-    scripts/issues.py:
-      Paul Gauthier: 1
     scripts/dev/sync_docs.sh:
       Paul Gauthier: 2
+    scripts/issues.py:
+      Paul Gauthier: 1
     tests/basic/test_commands.py:
       Paul Gauthier: 4
       Paul Gauthier (llmcode): 33
@@ -2808,23 +2808,25 @@
       Paul Gauthier (llmcode): 19
     .github/workflows/pages.yml:
       Paul Gauthier: 3
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 1
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 1
-      fry69: 2
     llmcode/coders/base_coder.py:
       Paul Gauthier: 2
     llmcode/coders/editblock_coder.py:
       Paul Gauthier (llmcode): 3
     llmcode/commands.py:
       Paul Gauthier: 1
-    llmcode/help.py:
+    llmcode/core/args.py:
       Paul Gauthier: 1
-      Paul Gauthier (llmcode): 33
+      fry69: 2
     llmcode/core/io.py:
       Jonathan Ellis: 10
       Paul Gauthier: 7
+    llmcode/help.py:
+      Paul Gauthier: 1
+      Paul Gauthier (llmcode): 33
     llmcode/main.py:
       Paul Gauthier: 20
       Paul Gauthier (llmcode): 39
@@ -2836,8 +2838,6 @@
       Paul Gauthier: 3
     llmcode/sendchat.py:
       Paul Gauthier: 3
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 1
     tests/basic/test_editblock.py:
       Paul Gauthier: 15
     tests/basic/test_main.py:
@@ -2863,9 +2863,6 @@
     llmcode/analytics.py:
       Paul Gauthier: 75
       Paul Gauthier (llmcode): 89
-    llmcode/core/args.py:
-      Paul Gauthier: 9
-      Paul Gauthier (llmcode): 21
     llmcode/coders/base_coder.py:
       Paul Gauthier: 55
       Paul Gauthier (llmcode): 43
@@ -2874,9 +2871,14 @@
     llmcode/commands.py:
       Paul Gauthier: 12
       Paul Gauthier (llmcode): 88
+    llmcode/core/args.py:
+      Paul Gauthier: 9
+      Paul Gauthier (llmcode): 21
     llmcode/core/io.py:
       Paul Gauthier: 12
       Paul Gauthier (llmcode): 32
+    llmcode/core/utils.py:
+      Paul Gauthier (llmcode): 6
     llmcode/linter.py:
       Paul Gauthier: 6
     llmcode/main.py:
@@ -2894,15 +2896,13 @@
       Paul Gauthier (llmcode): 23
     llmcode/urls.py:
       Paul Gauthier: 2
-    llmcode/core/utils.py:
-      Paul Gauthier (llmcode): 6
-    scripts/issues.py:
-      Paul Gauthier (llmcode): 13
     scripts/dev/generate_requirements.sh:
       Paul Gauthier (llmcode): 13
     scripts/dev/sync_docs.sh:
       Paul Gauthier: 1
       Paul Gauthier (llmcode): 5
+    scripts/issues.py:
+      Paul Gauthier (llmcode): 13
     tests/basic/test_analytics.py:
       Paul Gauthier: 1
       Paul Gauthier (llmcode): 99
@@ -2933,20 +2933,20 @@
 - end_date: '2024-11-04'
   end_tag: v0.62.0
   file_counts:
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 4
+      Paul Gauthier (llmcode): 12
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier (llmcode): 12
     llmcode/coders/editblock_coder.py:
       Paul Gauthier: 6
+    llmcode/core/args.py:
+      Paul Gauthier (llmcode): 12
     llmcode/main.py:
       Paul Gauthier (llmcode): 4
     llmcode/models.py:
       Paul Gauthier: 5
       Paul Gauthier (llmcode): 28
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 4
-      Paul Gauthier (llmcode): 12
   grand_total:
     Paul Gauthier: 16
     Paul Gauthier (llmcode): 56
@@ -2957,6 +2957,8 @@
 - end_date: '2024-11-13'
   end_tag: v0.63.0
   file_counts:
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 1
     llmcode/__init__.py:
       Paul Gauthier: 1
     llmcode/coders/architect_coder.py:
@@ -2988,8 +2990,6 @@
     llmcode/sendchat.py:
       Paul Gauthier: 17
       Paul Gauthier (llmcode): 4
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 1
     scripts/issues.py:
       Paul Gauthier: 4
       Paul Gauthier (llmcode): 179
@@ -3025,43 +3025,6 @@
     benchmark/over_time.py:
       Paul Gauthier: 11
       Paul Gauthier (llmcode): 162
-    llmcode/__init__.py:
-      Paul Gauthier: 1
-    llmcode/analytics.py:
-      Paul Gauthier: 20
-      Paul Gauthier (llmcode): 21
-    llmcode/core/args.py:
-      Paul Gauthier: 2
-      Paul Gauthier (llmcode): 9
-    llmcode/coders/base_coder.py:
-      Paul Gauthier: 15
-      Paul Gauthier (llmcode): 3
-      caetanominuzzo: 1
-    llmcode/commands.py:
-      Chad Phillips: 4
-      Paul Gauthier: 5
-      Paul Gauthier (llmcode): 19
-    llmcode/core/editor.py:
-      Chad Phillips: 135
-      Paul Gauthier (llmcode): 11
-    llmcode/core/exceptions.py:
-      Paul Gauthier: 5
-    llmcode/help_pats.py:
-      Paul Gauthier: 1
-    llmcode/core/io.py:
-      Chad Phillips: 9
-      Paul Gauthier (llmcode): 41
-      mw: 21
-    llmcode/main.py:
-      Paul Gauthier: 18
-      Paul Gauthier (llmcode): 35
-    llmcode/models.py:
-      Paul Gauthier: 31
-      Paul Gauthier (llmcode): 34
-    llmcode/repo.py:
-      Paul Gauthier (llmcode): 5
-    llmcode/urls.py:
-      Paul Gauthier: 1
     docs/site/_includes/edit-leaderboard.js:
       Paul Gauthier (llmcode): 96
     docs/site/_includes/quant-chart.js:
@@ -3074,6 +3037,43 @@
       Paul Gauthier (llmcode): 10
     docs/site/share/index.md:
       Paul Gauthier (llmcode): 29
+    llmcode/__init__.py:
+      Paul Gauthier: 1
+    llmcode/analytics.py:
+      Paul Gauthier: 20
+      Paul Gauthier (llmcode): 21
+    llmcode/coders/base_coder.py:
+      Paul Gauthier: 15
+      Paul Gauthier (llmcode): 3
+      caetanominuzzo: 1
+    llmcode/commands.py:
+      Chad Phillips: 4
+      Paul Gauthier: 5
+      Paul Gauthier (llmcode): 19
+    llmcode/core/args.py:
+      Paul Gauthier: 2
+      Paul Gauthier (llmcode): 9
+    llmcode/core/editor.py:
+      Chad Phillips: 135
+      Paul Gauthier (llmcode): 11
+    llmcode/core/exceptions.py:
+      Paul Gauthier: 5
+    llmcode/core/io.py:
+      Chad Phillips: 9
+      Paul Gauthier (llmcode): 41
+      mw: 21
+    llmcode/help_pats.py:
+      Paul Gauthier: 1
+    llmcode/main.py:
+      Paul Gauthier: 18
+      Paul Gauthier (llmcode): 35
+    llmcode/models.py:
+      Paul Gauthier: 31
+      Paul Gauthier (llmcode): 34
+    llmcode/repo.py:
+      Paul Gauthier (llmcode): 5
+    llmcode/urls.py:
+      Paul Gauthier: 1
     scripts/blame.py:
       Paul Gauthier: 1
       Paul Gauthier (llmcode): 2
@@ -3114,18 +3114,22 @@
     benchmark/over_time.py:
       Paul Gauthier: 1
       Paul Gauthier (llmcode): 157
+    docs/site/_includes/quant-chart.js:
+      Paul Gauthier (llmcode): 76
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 1
     llmcode/__init__.py:
       Paul Gauthier: 1
     llmcode/analytics.py:
       Paul Gauthier: 2
       Paul Gauthier (llmcode): 5
-    llmcode/core/args.py:
-      Paul Gauthier (llmcode): 10
     llmcode/coders/base_coder.py:
       Paul Gauthier: 1
       Paul Gauthier (llmcode): 31
     llmcode/commands.py:
       Paul Gauthier: 2
+    llmcode/core/args.py:
+      Paul Gauthier (llmcode): 10
     llmcode/core/io.py:
       Paul Gauthier: 3
       Paul Gauthier (llmcode): 9
@@ -3139,10 +3143,6 @@
       malkoG: 83
     llmcode/urls.py:
       Paul Gauthier (llmcode): 1
-    docs/site/_includes/quant-chart.js:
-      Paul Gauthier (llmcode): 76
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 1
     scripts/dev/sync_docs.sh:
       Paul Gauthier: 1
     scripts/update-history.py:
@@ -3185,22 +3185,26 @@
       Paul Gauthier (llmcode): 4
     benchmark/benchmark.py:
       Paul Gauthier (llmcode): 38
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 1
     llmcode/__init__.py:
       Paul Gauthier: 16
     llmcode/analytics.py:
       Paul Gauthier (llmcode): 19
-    llmcode/core/args.py:
-      Paul Gauthier: 1
-      Paul Gauthier (llmcode): 6
-      Philippe de Reynal: 6
     llmcode/coders/base_coder.py:
       Paul Gauthier: 15
       Paul Gauthier (llmcode): 39
     llmcode/commands.py:
       Paul Gauthier: 5
       Paul Gauthier (llmcode): 27
+    llmcode/core/args.py:
+      Paul Gauthier: 1
+      Paul Gauthier (llmcode): 6
+      Philippe de Reynal: 6
     llmcode/core/io.py:
       Paul Gauthier (llmcode): 17
+    llmcode/core/utils.py:
+      Paul Gauthier: 1
     llmcode/linter.py:
       Paul Gauthier (llmcode): 2
     llmcode/main.py:
@@ -3210,12 +3214,8 @@
       Paul Gauthier: 7
     llmcode/run_cmd.py:
       Paul Gauthier (llmcode): 8
-    llmcode/core/utils.py:
-      Paul Gauthier: 1
     llmcode/voice.py:
       Philippe de Reynal: 24
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 1
     scripts/blame.py:
       Paul Gauthier (llmcode): 26
     scripts/issues.py:
@@ -3291,21 +3291,29 @@
   file_counts:
     .github/workflows/issues.yml:
       Paul Gauthier (llmcode): 29
+    docs/site/_includes/qwq-chart.js:
+      Paul Gauthier: 30
+      Paul Gauthier (llmcode): 47
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 1
     llmcode/__init__.py:
       Paul Gauthier: 1
     llmcode/analytics.py:
       Paul Gauthier: 13
       Paul Gauthier (llmcode): 7
-    llmcode/core/args.py:
-      Paul Gauthier: 3
-      Paul Gauthier (llmcode): 4
     llmcode/coders/base_coder.py:
       Paul Gauthier: 15
     llmcode/commands.py:
       Paul Gauthier: 11
+    llmcode/core/args.py:
+      Paul Gauthier: 3
+      Paul Gauthier (llmcode): 4
     llmcode/core/io.py:
       Paul Gauthier: 28
       Paul Gauthier (llmcode): 31
+    llmcode/core/utils.py:
+      Paul Gauthier: 7
+      Paul Gauthier (llmcode): 22
     llmcode/llm.py:
       Paul Gauthier: 5
     llmcode/main.py:
@@ -3315,17 +3323,9 @@
       Paul Gauthier: 1
     llmcode/run_cmd.py:
       Paul Gauthier: 1
-    llmcode/core/utils.py:
-      Paul Gauthier: 7
-      Paul Gauthier (llmcode): 22
     llmcode/watch.py:
       Paul Gauthier: 51
       Paul Gauthier (llmcode): 221
-    docs/site/_includes/qwq-chart.js:
-      Paul Gauthier: 30
-      Paul Gauthier (llmcode): 47
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 1
     scripts/blame.py:
       Paul Gauthier (llmcode): 26
     scripts/update-history.py:
@@ -3358,13 +3358,19 @@
   file_counts:
     .github/workflows/pages.yml:
       Paul Gauthier (llmcode): 1
+    docs/site/_includes/edit-leaderboard.js:
+      Paul Gauthier: 2
+      Paul Gauthier (llmcode): 90
+    docs/site/_includes/head_custom.html:
+      Paul Gauthier: 7
+      Paul Gauthier (llmcode): 53
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 1
+      Paul Gauthier (llmcode): 2
     llmcode/__init__.py:
       Paul Gauthier: 1
     llmcode/analytics.py:
       Paul Gauthier: 2
-    llmcode/core/args.py:
-      Paul Gauthier: 30
-      Paul Gauthier (llmcode): 15
     llmcode/coders/base_coder.py:
       Paul Gauthier: 12
       Paul Gauthier (llmcode): 10
@@ -3378,12 +3384,17 @@
     llmcode/copypaste.py:
       Paul Gauthier: 4
       Paul Gauthier (llmcode): 68
+    llmcode/core/args.py:
+      Paul Gauthier: 30
+      Paul Gauthier (llmcode): 15
     llmcode/core/exceptions.py:
       Paul Gauthier: 9
-    llmcode/history.py:
-      Paul Gauthier (llmcode): 1
     llmcode/core/io.py:
       Paul Gauthier: 13
+    llmcode/core/utils.py:
+      Paul Gauthier: 1
+    llmcode/history.py:
+      Paul Gauthier (llmcode): 1
     llmcode/main.py:
       Paul Gauthier: 17
       Paul Gauthier (llmcode): 29
@@ -3395,22 +3406,11 @@
       Paul Gauthier: 1
     llmcode/sendchat.py:
       Paul Gauthier (llmcode): 4
-    llmcode/core/utils.py:
-      Paul Gauthier: 1
     llmcode/voice.py:
       Paul Gauthier: 9
     llmcode/watch.py:
       Paul Gauthier: 6
       Paul Gauthier (llmcode): 35
-    docs/site/_includes/edit-leaderboard.js:
-      Paul Gauthier: 2
-      Paul Gauthier (llmcode): 90
-    docs/site/_includes/head_custom.html:
-      Paul Gauthier: 7
-      Paul Gauthier (llmcode): 53
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 1
-      Paul Gauthier (llmcode): 2
     scripts/blame.py:
       Paul Gauthier: 6
       Paul Gauthier (llmcode): 17
@@ -3444,13 +3444,12 @@
     benchmark/benchmark.py:
       Paul Gauthier: 7
       Paul Gauthier (llmcode): 7
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 1
     llmcode/__init__.py:
       Paul Gauthier: 1
     llmcode/analytics.py:
       Paul Gauthier: 2
-    llmcode/core/args.py:
-      Mir Adnan ALI: 3
-      Paul Gauthier: 1
     llmcode/coders/base_coder.py:
       JeongJuhyeon: 1
       Mir Adnan ALI: 3
@@ -3458,6 +3457,9 @@
       Mir Adnan ALI: 4
       Paul Gauthier: 5
       Paul Gauthier (llmcode): 3
+    llmcode/core/args.py:
+      Mir Adnan ALI: 3
+      Paul Gauthier: 1
     llmcode/core/io.py:
       Mir Adnan ALI: 37
       Paul Gauthier: 8
@@ -3469,8 +3471,6 @@
     llmcode/watch.py:
       Paul Gauthier: 7
       Paul Gauthier (llmcode): 47
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 1
     scripts/blame.py:
       Paul Gauthier (llmcode): 1
     scripts/issues.py:
@@ -3494,9 +3494,6 @@
 - end_date: '2024-12-26'
   end_tag: v0.70.0
   file_counts:
-    docker/benchmark.Dockerfile:
-      Paul Gauthier: 8
-      Paul Gauthier (llmcode): 43
     benchmark/benchmark.py:
       Paul Gauthier: 69
       Paul Gauthier (llmcode): 153
@@ -3519,22 +3516,34 @@
     benchmark/rsync.sh:
       Paul Gauthier: 7
       Paul Gauthier (llmcode): 26
+    docker/benchmark.Dockerfile:
+      Paul Gauthier: 8
+      Paul Gauthier (llmcode): 43
+    docs/site/_includes/head_custom.html:
+      Paul Gauthier (llmcode): 4
+    docs/site/_includes/leaderboard.js:
+      Paul Gauthier (llmcode): 14
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 28
+      Paul Gauthier (llmcode): 2
     llmcode/__init__.py:
       Paul Gauthier: 1
     llmcode/analytics.py:
       Paul Gauthier: 6
       Paul Gauthier (llmcode): 41
-    llmcode/core/args.py:
-      Evan Johnson: 2
     llmcode/coders/search_replace.py:
       Paul Gauthier: 5
     llmcode/commands.py:
       Paul Gauthier (llmcode): 41
-    llmcode/help_pats.py:
-      Paul Gauthier: 3
+    llmcode/core/args.py:
+      Evan Johnson: 2
     llmcode/core/io.py:
       Paul Gauthier: 7
       Paul Gauthier (llmcode): 9
+    llmcode/core/utils.py:
+      Paul Gauthier: 2
+    llmcode/help_pats.py:
+      Paul Gauthier: 3
     llmcode/main.py:
       Paul Gauthier: 15
       Paul Gauthier (llmcode): 5
@@ -3544,25 +3553,16 @@
       Paul Gauthier: 29
     llmcode/repo.py:
       Paul Gauthier: 14
-    llmcode/core/utils.py:
-      Paul Gauthier: 2
     llmcode/watch.py:
       Paul Gauthier: 13
-    docs/site/_includes/head_custom.html:
-      Paul Gauthier (llmcode): 4
-    docs/site/_includes/leaderboard.js:
-      Paul Gauthier (llmcode): 14
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 28
-      Paul Gauthier (llmcode): 2
     scripts/blame.py:
       Paul Gauthier (llmcode): 6
+    scripts/dev/sync_docs.sh:
+      Paul Gauthier: 1
     scripts/my_models.py:
       Paul Gauthier (llmcode): 95
     scripts/update-blame.sh:
       Paul Gauthier (llmcode): 3
-    scripts/dev/sync_docs.sh:
-      Paul Gauthier: 1
     tests/basic/test_analytics.py:
       Paul Gauthier (llmcode): 19
     tests/basic/test_main.py:
@@ -3582,9 +3582,6 @@
 - end_date: '2025-01-10'
   end_tag: v0.71.0
   file_counts:
-    docker/benchmark.Dockerfile:
-      Josh Vera: 1
-      Paul Maunders: 12
     benchmark/benchmark.py:
       Nimesh Ghelani: 1
       Paul Gauthier: 6
@@ -3593,19 +3590,24 @@
       Paul Gauthier (llmcode): 5
     docker/app.Dockerfile:
       Paul Gauthier (llmcode): 32
+    docker/benchmark.Dockerfile:
+      Josh Vera: 1
+      Paul Maunders: 12
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 2
     llmcode/coders/base_coder.py:
       Paul Gauthier: 7
       Paul Gauthier (llmcode): 13
     llmcode/commands.py:
       Paul Gauthier: 1
       Paul Gauthier (llmcode): 22
+    llmcode/core/args.py:
+      Paul Gauthier: 2
     llmcode/core/io.py:
       Paul Gauthier: 3
       Paul Gauthier (llmcode): 16
+    llmcode/core/utils.py:
+      Paul Gauthier: 9
     llmcode/linter.py:
       Aaron Weisberg: 5
     llmcode/main.py:
@@ -3623,8 +3625,6 @@
       Paul Gauthier: 5
     llmcode/run_cmd.py:
       Aaron Weisberg: 2
-    llmcode/core/utils.py:
-      Paul Gauthier: 9
     llmcode/voice.py:
       Paul Gauthier: 11
       Paul Gauthier (llmcode): 13
@@ -3672,10 +3672,10 @@
     docker/app.Dockerfile:
       Paul Gauthier: 2
       Paul Gauthier (llmcode): 6
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 2
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Titusz Pan: 6
     llmcode/coders/base_coder.py:
       Paul Gauthier: 11
     llmcode/coders/single_wholefile_func_coder.py:
@@ -3684,11 +3684,15 @@
       Paul Gauthier: 1
     llmcode/commands.py:
       Paul Gauthier: 3
-    llmcode/history.py:
-      Paul Gauthier: 7
+    llmcode/core/args.py:
+      Titusz Pan: 6
     llmcode/core/io.py:
       Paul Gauthier (llmcode): 14
       Titusz Pan: 2
+    llmcode/core/utils.py:
+      Paul Gauthier: 1
+    llmcode/history.py:
+      Paul Gauthier: 7
     llmcode/main.py:
       Titusz Pan: 1
     llmcode/models.py:
@@ -3700,14 +3704,10 @@
     llmcode/sendchat.py:
       Paul Gauthier: 9
       Paul Gauthier (llmcode): 22
-    llmcode/core/utils.py:
-      Paul Gauthier: 1
-    docs/site/docs/leaderboards/index.md:
+    scripts/dev/sync_docs.sh:
       Paul Gauthier: 2
     scripts/my_models.py:
       Paul Gauthier: 3
-    scripts/dev/sync_docs.sh:
-      Paul Gauthier: 2
     tests/basic/test_io.py:
       Paul Gauthier (llmcode): 39
     tests/basic/test_repomap.py:
@@ -3730,16 +3730,21 @@
       Paul Gauthier (llmcode): 21
     benchmark/rsync.sh:
       Paul Gauthier: 2
-    llmcode/__init__.py:
-      Paul Gauthier: 1
-    llmcode/core/args.py:
+    docs/site/_includes/leaderboard.js:
+      Paul Gauthier (llmcode): 1
+    docs/site/docs/leaderboards/index.md:
       Paul Gauthier: 3
       Paul Gauthier (llmcode): 2
+    llmcode/__init__.py:
+      Paul Gauthier: 1
     llmcode/coders/base_coder.py:
       Paul Gauthier: 37
       Paul Gauthier (llmcode): 26
     llmcode/commands.py:
       xqyz: 1
+    llmcode/core/args.py:
+      Paul Gauthier: 3
+      Paul Gauthier (llmcode): 2
     llmcode/core/io.py:
       Paul Gauthier: 7
     llmcode/main.py:
@@ -3754,11 +3759,6 @@
       Paul Gauthier (llmcode): 6
     llmcode/urls.py:
       Paul Gauthier: 1
-    docs/site/_includes/leaderboard.js:
-      Paul Gauthier (llmcode): 1
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 3
-      Paul Gauthier (llmcode): 2
     tests/basic/test_coder.py:
       Paul Gauthier: 10
       Paul Gauthier (llmcode): 39
@@ -3785,8 +3785,6 @@
       Paul Gauthier (llmcode): 4
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 1
     llmcode/coders/base_coder.py:
       Paul Gauthier: 24
       Paul Gauthier (llmcode): 9
@@ -3796,14 +3794,16 @@
       Paul Gauthier: 2
     llmcode/commands.py:
       Paul Gauthier: 1
+    llmcode/core/args.py:
+      Paul Gauthier: 1
     llmcode/core/exceptions.py:
       Paul Gauthier: 4
       Paul Gauthier (llmcode): 6
-    llmcode/history.py:
-      Paul Gauthier (llmcode): 1
     llmcode/core/io.py:
       Paul Gauthier: 4
       Paul Gauthier (llmcode): 18
+    llmcode/history.py:
+      Paul Gauthier (llmcode): 1
     llmcode/llm.py:
       Paul Gauthier: 3
     llmcode/main.py:
@@ -3847,21 +3847,23 @@
 - end_date: '2025-02-24'
   end_tag: v0.75.0
   file_counts:
-    docker/benchmark.Dockerfile:
-      Paul Gauthier (llmcode): 1
     benchmark/benchmark.py:
       Paul Gauthier: 4
     benchmark/cpp-test.sh:
       Paul Gauthier: 1
+    docker/benchmark.Dockerfile:
+      Paul Gauthier (llmcode): 1
+    docs/site/docs/leaderboards/index.md:
+      Paul Gauthier: 1
     llmcode/__init__.py:
       Paul Gauthier: 1
-    llmcode/core/args.py:
-      Paul Gauthier: 7
     llmcode/coders/base_coder.py:
       Paul Gauthier: 12
       Paul Gauthier (llmcode): 4
     llmcode/commands.py:
       FeepingCreature (llmcode): 6
+    llmcode/core/args.py:
+      Paul Gauthier: 7
     llmcode/core/editor.py:
       Paul Gauthier: 7
       Paul Gauthier (llmcode): 5
@@ -3886,8 +3888,6 @@
       Paul Gauthier (llmcode): 11
     llmcode/special.py:
       Lucas Shadler: 1
-    docs/site/docs/leaderboards/index.md:
-      Paul Gauthier: 1
     scripts/blame.py:
       Paul Gauthier (llmcode): 2
     scripts/issues.py:

@@ -15,7 +15,7 @@ classifiers = [
     "Programming Language :: Python",
     "Topic :: Software Development",
 ]
-requires-python = ">=3.9,<3.13"
+requires-python = ">=3.11,<3.13"
 dynamic = ["dependencies", "optional-dependencies", "version"]
 
 [project.urls]
@@ -47,5 +47,5 @@ build-backend = "setuptools.build_meta"
 write_to = "llmcode/_version.py"
 
 [tool.codetypo]
-skip = "*.svg,Gemfile.lock,docs/site/_site/**"
+skip = "*.svg,Gemfile.lock"
 write-changes = true
