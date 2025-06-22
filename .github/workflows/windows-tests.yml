@@ -41,12 +41,12 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest
-        pip install .
+        python -m pip install pytest
+        python -m pip install .
 
     - name: Run tests
       env:
         LLMCODE_ANALYTICS: false
       run: |
         pytest
-        
+
