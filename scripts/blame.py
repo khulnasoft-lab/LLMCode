@@ -13,14 +13,14 @@ import yaml
 from tqdm import tqdm
 
 website_files = [
-    "llmcode/website/share/index.md",
-    "llmcode/website/_includes/head_custom.html",
-    "llmcode/website/docs/leaderboards/index.md",
+    "docs/site/share/index.md",
+    "docs/site/_includes/head_custom.html",
+    "docs/site/docs/leaderboards/index.md",
 ]
 
 exclude_files = [
-    "llmcode/website/install.ps1",
-    "llmcode/website/install.sh",
+    "docs/site/install.ps1",
+    "docs/site/install.sh",
 ]
 
 

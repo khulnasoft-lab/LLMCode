@@ -1,0 +1,722 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+.site-nav ul li a {
+  background-image: none;
+}
+
+  </style>
+
+  
+
+  
+    <script src="/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>R1+Sonnet set SOTA on llmcode’s polyglot benchmark | llmcode</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="R1+Sonnet set SOTA on llmcode’s polyglot benchmark" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="R1+Sonnet has set a new SOTA on the llmcode polyglot benchmark. At 14X less cost compared to o1." />
+<meta property="og:description" content="R1+Sonnet has set a new SOTA on the llmcode polyglot benchmark. At 14X less cost compared to o1." />
+<link rel="canonical" href="http://0.0.0.0:4000/2025/01/24/r1-sonnet.html" />
+<meta property="og:url" content="http://0.0.0.0:4000/2025/01/24/r1-sonnet.html" />
+<meta property="og:site_name" content="llmcode" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-01-24T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="R1+Sonnet set SOTA on llmcode’s polyglot benchmark" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-01-24T00:00:00+00:00","datePublished":"2025-01-24T00:00:00+00:00","description":"R1+Sonnet has set a new SOTA on the llmcode polyglot benchmark. At 14X less cost compared to o1.","headline":"R1+Sonnet set SOTA on llmcode’s polyglot benchmark","mainEntityOfPage":{"@type":"WebPage","@id":"http://0.0.0.0:4000/2025/01/24/r1-sonnet.html"},"url":"http://0.0.0.0:4000/2025/01/24/r1-sonnet.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+<meta property="og:image" content="http://0.0.0.0:4000/assets/r1-sonnet-sota.jpg">
+<meta property="twitter:image" content="http://0.0.0.0:4000/assets/r1-sonnet-sota.jpg">
+
+<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="http://0.0.0.0:4000/feed.xml">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#157878">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="/assets/icons/site.webmanifest">
+<link rel="mask-icon" href="/assets/icons/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  <div class="side-bar">
+  <div class="site-header" role="banner">
+    <a href="/" class="site-title lh-tight">
+  llmcode
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Toggle menu" aria-pressed="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><a href="/" class="nav-list-link">Home</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Installation category" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+    </button><a href="/docs/install.html" class="nav-list-link">Installation</a><ul class="nav-list"><li class="nav-list-item"><a href="/docs/install/optional.html" class="nav-list-link">Optional steps</a></li><li class="nav-list-item"><a href="/docs/install/docker.html" class="nav-list-link">Llmcode with docker</a></li><li class="nav-list-item"><a href="/docs/install/codespaces.html" class="nav-list-link">GitHub Codespaces</a></li><li class="nav-list-item"><a href="/docs/install/replit.html" class="nav-list-link">Replit</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Usage category" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+    </button><a href="/docs/usage.html" class="nav-list-link">Usage</a><ul class="nav-list"><li class="nav-list-item"><a href="/docs/usage/tips.html" class="nav-list-link">Tips</a></li><li class="nav-list-item"><a href="/docs/usage/commands.html" class="nav-list-link">In-chat commands</a></li><li class="nav-list-item"><a href="/docs/usage/modes.html" class="nav-list-link">Chat modes</a></li><li class="nav-list-item"><a href="/docs/usage/tutorials.html" class="nav-list-link">Tutorial videos</a></li><li class="nav-list-item"><a href="/docs/usage/voice.html" class="nav-list-link">Voice-to-code with llmcode</a></li><li class="nav-list-item"><a href="/docs/usage/images-urls.html" class="nav-list-link">Images &amp; web pages</a></li><li class="nav-list-item"><a href="/docs/usage/caching.html" class="nav-list-link">Prompt caching</a></li><li class="nav-list-item"><a href="/docs/usage/watch.html" class="nav-list-link">Llmcode in your IDE</a></li><li class="nav-list-item"><a href="/docs/usage/browser.html" class="nav-list-link">Llmcode in your browser</a></li><li class="nav-list-item"><a href="/docs/usage/conventions.html" class="nav-list-link">Specifying coding conventions</a></li><li class="nav-list-item"><a href="/docs/usage/copypaste.html" class="nav-list-link">Copy/paste with web chat</a></li><li class="nav-list-item"><a href="/docs/usage/lint-test.html" class="nav-list-link">Linting and testing</a></li><li class="nav-list-item"><a href="/docs/usage/not-code.html" class="nav-list-link">Editing config &amp; text files</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Connecting to LLMs category" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+    </button><a href="/docs/llms.html" class="nav-list-link">Connecting to LLMs</a><ul class="nav-list"><li class="nav-list-item"><a href="/docs/llms/openai.html" class="nav-list-link">OpenAI</a></li><li class="nav-list-item"><a href="/docs/llms/anthropic.html" class="nav-list-link">Anthropic</a></li><li class="nav-list-item"><a href="/docs/llms/gemini.html" class="nav-list-link">Gemini</a></li><li class="nav-list-item"><a href="/docs/llms/groq.html" class="nav-list-link">GROQ</a></li><li class="nav-list-item"><a href="/docs/llms/lm-studio.html" class="nav-list-link">LM Studio</a></li><li class="nav-list-item"><a href="/docs/llms/xai.html" class="nav-list-link">xAI</a></li><li class="nav-list-item"><a href="/docs/llms/azure.html" class="nav-list-link">Azure</a></li><li class="nav-list-item"><a href="/docs/llms/cohere.html" class="nav-list-link">Cohere</a></li><li class="nav-list-item"><a href="/docs/llms/deepseek.html" class="nav-list-link">DeepSeek</a></li><li class="nav-list-item"><a href="/docs/llms/ollama.html" class="nav-list-link">Ollama</a></li><li class="nav-list-item"><a href="/docs/llms/openai-compat.html" class="nav-list-link">OpenAI compatible APIs</a></li><li class="nav-list-item"><a href="/docs/llms/openrouter.html" class="nav-list-link">OpenRouter</a></li><li class="nav-list-item"><a href="/docs/llms/vertex.html" class="nav-list-link">Vertex AI</a></li><li class="nav-list-item"><a href="/docs/llms/bedrock.html" class="nav-list-link">Amazon Bedrock</a></li><li class="nav-list-item"><a href="/docs/llms/other.html" class="nav-list-link">Other LLMs</a></li><li class="nav-list-item"><a href="/docs/llms/warnings.html" class="nav-list-link">Model warnings</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Configuration category" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+    </button><a href="/docs/config.html" class="nav-list-link">Configuration</a><ul class="nav-list"><li class="nav-list-item"><a href="/docs/config/api-keys.html" class="nav-list-link">API Keys</a></li><li class="nav-list-item"><a href="/docs/config/options.html" class="nav-list-link">Options reference</a></li><li class="nav-list-item"><a href="/docs/config/llmcode_conf.html" class="nav-list-link">YAML config file</a></li><li class="nav-list-item"><a href="/docs/config/dotenv.html" class="nav-list-link">Config with .env</a></li><li class="nav-list-item"><a href="/docs/config/editor.html" class="nav-list-link">Editor configuration</a></li><li class="nav-list-item"><a href="/docs/config/reasoning.html" class="nav-list-link">Reasoning models</a></li><li class="nav-list-item"><a href="/docs/config/adv-model-settings.html" class="nav-list-link">Advanced model settings</a></li><li class="nav-list-item"><a href="/docs/config/model-aliases.html" class="nav-list-link">Model Aliases</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Troubleshooting category" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+    </button><a href="/docs/troubleshooting.html" class="nav-list-link">Troubleshooting</a><ul class="nav-list"><li class="nav-list-item"><a href="/docs/troubleshooting/edit-errors.html" class="nav-list-link">File editing problems</a></li><li class="nav-list-item"><a href="/docs/troubleshooting/warnings.html" class="nav-list-link">Model warnings</a></li><li class="nav-list-item"><a href="/docs/troubleshooting/token-limits.html" class="nav-list-link">Token limits</a></li><li class="nav-list-item"><a href="/docs/troubleshooting/imports.html" class="nav-list-link">Dependency versions</a></li><li class="nav-list-item"><a href="/docs/troubleshooting/llmcode-not-found.html" class="nav-list-link">Llmcode not found</a></li><li class="nav-list-item"><a href="/docs/troubleshooting/models-and-keys.html" class="nav-list-link">Models and API keys</a></li><li class="nav-list-item"><a href="/docs/troubleshooting/support.html" class="nav-list-link">Using /help</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Example chat transcripts category" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+    </button><a href="/examples/README.html" class="nav-list-link">Example chat transcripts</a><ul class="nav-list"><li class="nav-list-item"><a href="/examples/hello-world-flask.html" class="nav-list-link">Create a simple flask app with llmcode</a></li><li class="nav-list-item"><a href="/examples/2048-game.html" class="nav-list-link">Modify an open source 2048 game with llmcode</a></li><li class="nav-list-item"><a href="/examples/complex-change.html" class="nav-list-link">A complex multi-file change, with debugging</a></li><li class="nav-list-item"><a href="/examples/add-test.html" class="nav-list-link">Create a “black box” test case</a></li><li class="nav-list-item"><a href="/examples/update-docs.html" class="nav-list-link">Automatically update docs with llmcode</a></li><li class="nav-list-item"><a href="/examples/pong.html" class="nav-list-link">Build pong with llmcode and pygame.</a></li><li class="nav-list-item"><a href="/examples/css-exercises.html" class="nav-list-link">Complete a css exercise with llmcode</a></li><li class="nav-list-item"><a href="/examples/census.html" class="nav-list-link">Download, analyze and plot US Census data</a></li><li class="nav-list-item"><a href="/examples/asciinema.html" class="nav-list-link">Editing an asciinema cast file with llmcode</a></li><li class="nav-list-item"><a href="/examples/hello.html" class="nav-list-link">Hello llmcode!</a></li><li class="nav-list-item"><a href="/examples/no-color.html" class="nav-list-link">Honor the NO_COLOR environment variable</a></li><li class="nav-list-item"><a href="/examples/chat-transcript-css.html" class="nav-list-link">Improve css styling of chat transcripts</a></li><li class="nav-list-item"><a href="/examples/semantic-search-replace.html" class="nav-list-link">Semantic search &amp; replace code with llmcode</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in More info category" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+    </button><a href="/docs/more-info.html" class="nav-list-link">More info</a><ul class="nav-list"><li class="nav-list-item"><a href="/docs/git.html" class="nav-list-link">Git integration</a></li><li class="nav-list-item"><a href="/docs/languages.html" class="nav-list-link">Supported languages</a></li><li class="nav-list-item"><a href="/docs/repomap.html" class="nav-list-link">Repository map</a></li><li class="nav-list-item"><a href="/docs/scripting.html" class="nav-list-link">Scripting llmcode</a></li><li class="nav-list-item"><a href="/docs/more/infinite-output.html" class="nav-list-link">Infinite output</a></li><li class="nav-list-item"><a href="/docs/more/edit-formats.html" class="nav-list-link">Edit formats</a></li><li class="nav-list-item"><a href="/docs/more/analytics.html" class="nav-list-link">Analytics</a></li><li class="nav-list-item"><a href="/docs/legal/privacy.html" class="nav-list-link">Privacy policy</a></li></ul></li><li class="nav-list-item"><a href="/docs/faq.html" class="nav-list-link">FAQ</a></li><li class="nav-list-item"><a href="/HISTORY.html" class="nav-list-link">Release history</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Llmcode LLM Leaderboards category" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+    </button><a href="/docs/leaderboards/" class="nav-list-link">Llmcode LLM Leaderboards</a><ul class="nav-list"><li class="nav-list-item"><a href="/docs/leaderboards/edit.html" class="nav-list-link">Code editing leaderboard</a></li><li class="nav-list-item"><a href="/docs/leaderboards/refactor.html" class="nav-list-link">Refactoring leaderboard</a></li><li class="nav-list-item"><a href="/docs/leaderboards/by-release-date.html" class="nav-list-link">Scores by release date</a></li><li class="nav-list-item"><a href="/docs/leaderboards/notes.html" class="nav-list-link">Benchmark notes</a></li><li class="nav-list-item"><a href="/docs/leaderboards/contrib.html" class="nav-list-link">Contributing results</a></li></ul></li><li class="nav-list-item"><a href="/blog/" class="nav-list-link">Llmcode blog</a></li></ul>
+
+  <ul class="nav-list"><li class="nav-list-item external">
+          <a href="https://github.com/KhulnaSoft/llmcode" class="nav-list-link external"
+            
+          >
+            GitHub
+            <svg viewBox="0 0 24 24" aria-labelledby="svg-external-link-title"><use xlink:href="#svg-external-link"></use></svg>
+          </a>
+        </li><li class="nav-list-item external">
+          <a href="https://discord.gg/Tv2uQnR88V" class="nav-list-link external"
+            
+          >
+            Discord
+            <svg viewBox="0 0 24 24" aria-labelledby="svg-external-link-title"><use xlink:href="#svg-external-link"></use></svg>
+          </a>
+        </li></ul>
+</nav>
+
+
+  
+  
+    <footer class="site-footer">
+    Llmcode is AI pair programming in your terminal.
+    Llmcode is on
+    <a href="https://github.com/KhulnaSoft/llmcode">GitHub</a>
+    and
+    <a href="https://discord.gg/Tv2uQnR88V">Discord</a>.
+</footer>
+
+  
+</div>
+
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search llmcode" aria-label="Search llmcode" autocomplete="off">
+    <label for="search-input" class="search-label"><svg viewBox="0 0 24 24" class="search-icon"><use xlink:href="#svg-search"></use></svg></label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/KhulnaSoft/llmcode" class="site-button"
+          
+        >
+          GitHub
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://discord.gg/Tv2uQnR88V" class="site-button"
+          
+        >
+          Discord
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="/blog/" class="site-button"
+          
+        >
+          Blog
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div class="main-content-wrap">
+      
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <p class="post-date">January 24, 2025</p>
+<h1 class="no_toc" id="r1sonnet-set-sota-on-llmcodes-polyglot-benchmark">
+  
+  
+    <a href="#r1sonnet-set-sota-on-llmcodes-polyglot-benchmark" class="anchor-heading" aria-labelledby="r1sonnet-set-sota-on-llmcodes-polyglot-benchmark"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> R1+Sonnet set SOTA on llmcode’s polyglot benchmark
+  
+  
+</h1>
+    
+
+<canvas id="editChart" width="800" height="450" style="margin-top: 20px"></canvas>
+
+<p>Llmcode supports <a href="https://llmcode.khulnasoft.com/2024/09/26/architect.html">using a pair of models for coding</a>:</p>
+
+<ul>
+  <li>An Architect model is asked to describe how to solve the coding problem. Thinking/reasoning models often work well in this role.</li>
+  <li>An Editor model is given the Architect’s solution and asked to produce specific code editing instructions to apply those changes to existing source files.</li>
+</ul>
+
+<p><strong>R1 as architect with Sonnet as editor has set a new SOTA of 64.0%</strong> on the 
+<a href="/2024/12/21/polyglot.html">llmcode polyglot benchmark</a>.
+They achieve this at <strong>14X less cost</strong> compared to the previous o1 SOTA result.</p>
+
+<p>o1 paired with Sonnet didn’t produce better results than just using o1 alone.
+Using various other models as editor didn’t seem to improve o1 or R1 versus their solo scores.
+This is in contrast to the first wave of thinking models like o1-preview and o1-mini,
+which improved when paired with many different editor models.</p>
+
+<p>o1 was set with reasoning effort high for these tests.</p>
+<h2 id="try-it">
+  
+  
+    <a href="#try-it" class="anchor-heading" aria-labelledby="try-it"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Try it
+  
+  
+</h2>
+    
+
+<p>Once you <a href="https://llmcode.khulnasoft.com/docs/install.html">install llmcode</a>,
+you can use llmcode, R1 and Sonnet like this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">DEEPSEEK_API_KEY</span><span class="o">=</span>&lt;your-key&gt;
+<span class="nb">export </span><span class="nv">ANTHROPIC_API_KEY</span><span class="o">=</span>&lt;your-key&gt;
+
+llmcode <span class="nt">--architect</span> <span class="nt">--model</span> r1 <span class="nt">--editor-model</span> sonnet
+</code></pre></div></div>
+
+<p>Or if you have an <a href="https://openrouter.ai">OpenRouter</a> account:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">OPENROUTER_API_KEY</span><span class="o">=</span>&lt;your-key&gt;
+
+llmcode <span class="nt">--architect</span> <span class="nt">--model</span> openrouter/deepseek/deepseek-r1 <span class="nt">--editor-model</span> openrouter/anthropic/claude-3.5-sonnet
+</code></pre></div></div>
+<h2 id="thinking-output">
+  
+  
+    <a href="#thinking-output" class="anchor-heading" aria-labelledby="thinking-output"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Thinking output
+  
+  
+</h2>
+    
+
+<p>There has been 
+<a href="https://github.com/KhulnaSoft/llmcode/pull/2973">some recent discussion</a>
+about extracting the <code class="language-plaintext highlighter-rouge">&lt;think&gt;</code> tokens from R1’s responses
+and feeding them to Sonnet.
+That was an interesting experiment, for sure.</p>
+
+<p>To be clear, the results above are <em>not</em> using R1’s thinking tokens, just the normal
+final output. 
+R1 is configured in llmcode’s standard architect role with Sonnet as editor.
+The benchmark results that used the thinking tokens appear to be worse than
+the architect/editor results shared here.</p>
+<h2 id="results">
+  
+  
+    <a href="#results" class="anchor-heading" aria-labelledby="results"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Results
+  
+  
+</h2>
+    
+
+<div class="table-wrapper"><table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
+  <thead style="background-color: #f2f2f2;">
+    <tr>
+      <th style="padding: 8px; text-align: left;">Model</th>
+      <th style="padding: 8px; text-align: center;">Percent completed correctly</th>
+      <th style="padding: 8px; text-align: center;">Percent using correct edit format</th>
+      <th style="padding: 8px; text-align: left;">Command</th>
+      <th style="padding: 8px; text-align: center;">Edit format</th>
+      <th style="padding: 8px; text-align: center;">Total Cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    
+      <tr style="border-bottom: 1px solid #ddd;">
+        <td style="padding: 8px;">R1+Sonnet</td>
+        <td style="padding: 8px; text-align: center;">64.0%</td>
+        <td style="padding: 8px; text-align: center;">100.0%</td>
+        <td style="padding: 8px;"><code>llmcode --architect --model r1 --editor-model sonnet</code></td>
+        <td style="padding: 8px; text-align: center;">architect</td>
+        <td style="padding: 8px; text-align: center;">$13.29</td>
+      </tr>
+    
+      <tr style="border-bottom: 1px solid #ddd;">
+        <td style="padding: 8px;">o1</td>
+        <td style="padding: 8px; text-align: center;">61.7%</td>
+        <td style="padding: 8px; text-align: center;">91.5%</td>
+        <td style="padding: 8px;"><code>llmcode --model o1</code></td>
+        <td style="padding: 8px; text-align: center;">diff</td>
+        <td style="padding: 8px; text-align: center;">$186.5</td>
+      </tr>
+    
+      <tr style="border-bottom: 1px solid #ddd;">
+        <td style="padding: 8px;">R1</td>
+        <td style="padding: 8px; text-align: center;">56.9%</td>
+        <td style="padding: 8px; text-align: center;">96.9%</td>
+        <td style="padding: 8px;"><code>llmcode --model r1</code></td>
+        <td style="padding: 8px; text-align: center;">diff</td>
+        <td style="padding: 8px; text-align: center;">$5.42</td>
+      </tr>
+    
+      <tr style="border-bottom: 1px solid #ddd;">
+        <td style="padding: 8px;">Sonnet</td>
+        <td style="padding: 8px; text-align: center;">51.6%</td>
+        <td style="padding: 8px; text-align: center;">99.6%</td>
+        <td style="padding: 8px;"><code>llmcode --model sonnet</code></td>
+        <td style="padding: 8px; text-align: center;">diff</td>
+        <td style="padding: 8px; text-align: center;">$14.41</td>
+      </tr>
+    
+      <tr style="border-bottom: 1px solid #ddd;">
+        <td style="padding: 8px;">DeepSeek V3</td>
+        <td style="padding: 8px; text-align: center;">48.4%</td>
+        <td style="padding: 8px; text-align: center;">98.7%</td>
+        <td style="padding: 8px;"><code>llmcode --model deepseek</code></td>
+        <td style="padding: 8px; text-align: center;">diff</td>
+        <td style="padding: 8px; text-align: center;">$0.34</td>
+      </tr>
+    
+  </tbody>
+</table></div>
+
+<script src="https://unpkg.com/patternomaly/dist/patternomaly.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  var ctx = document.getElementById('editChart').getContext('2d');
+  const blueDiagonalPattern = pattern.draw('diagonal', 'rgba(54, 162, 235, 0.2)');
+  const redDiagonalPattern = pattern.draw('diagonal', 'rgba(255, 99, 132, 0.2)');
+  let displayedData = [];
+
+  const HIGHLIGHT_MODEL = '+';
+  var leaderboardData = {
+    labels: [],
+    datasets: [{
+      label: 'Percent completed correctly',
+      data: [],
+      backgroundColor: function(context) {
+        const row = allData[context.dataIndex];
+        if (row && row.edit_format === 'whole') {
+          return diagonalPattern;
+        }
+        const label = leaderboardData.labels[context.dataIndex] || '';
+        return (label && label.includes(HIGHLIGHT_MODEL)) ? 'rgba(255, 99, 132, 0.2)' : 'rgba(54, 162, 235, 0.2)';
+      },
+      borderColor: function(context) {
+        const label = context.chart.data.labels[context.dataIndex] || '';
+        return (label && label.includes(HIGHLIGHT_MODEL)) ? 'rgba(255, 99, 132, 1)' : 'rgba(54, 162, 235, 1)';
+      },
+      borderWidth: 1
+    }, {
+      label: 'Total Cost ($)',
+      data: [],
+      type: 'scatter',
+      yAxisID: 'y1',
+      backgroundColor: 'rgba(153, 102, 255, 1)',
+      borderColor: '#fff',
+      borderWidth: 1,
+      pointRadius: 5,
+      pointHoverRadius: 7
+    }]
+  };
+
+  var allData = [];
+  
+    allData.push({
+      model: 'R1+Sonnet',
+      pass_rate: 64.0,
+      percent_cases_well_formed: 100.0,
+      edit_format: 'architect',
+      total_cost: 13.2933
+    });
+  
+    allData.push({
+      model: 'o1',
+      pass_rate: 61.7,
+      percent_cases_well_formed: 91.5,
+      edit_format: 'diff',
+      total_cost: 186.4958
+    });
+  
+    allData.push({
+      model: 'R1',
+      pass_rate: 56.9,
+      percent_cases_well_formed: 96.9,
+      edit_format: 'diff',
+      total_cost: 5.4193
+    });
+  
+    allData.push({
+      model: 'Sonnet',
+      pass_rate: 51.6,
+      percent_cases_well_formed: 99.6,
+      edit_format: 'diff',
+      total_cost: 14.4063
+    });
+  
+    allData.push({
+      model: 'DeepSeek V3',
+      pass_rate: 48.4,
+      percent_cases_well_formed: 98.7,
+      edit_format: 'diff',
+      total_cost: 0.3369
+    });
+  
+
+  function updateChart() {
+    var selectedRows = document.querySelectorAll('tr.selected');
+    var showAll = selectedRows.length === 0;
+
+    displayedData = [];
+    leaderboardData.labels = [];
+    leaderboardData.datasets[0].data = [];
+    leaderboardData.datasets[1].data = [];
+
+    allData.forEach(function(row, index) {
+      var rowElement = document.getElementById('edit-row-' + index);
+      if (showAll) {
+        rowElement.classList.remove('selected');
+      }
+      if (showAll || rowElement.classList.contains('selected')) {
+        displayedData.push(row);
+        leaderboardData.labels.push(row.model);
+        leaderboardData.datasets[0].data.push(row.pass_rate);
+        // Only include cost if it's not zero (placeholder for unknown)
+        leaderboardData.datasets[1].data.push(row.total_cost > 0 ? row.total_cost : null);
+      }
+    });
+
+    leaderboardChart.update();
+    leaderboardChart.render();
+  }
+
+  // Use displayedData in the backgroundColor callback instead of allData
+  leaderboardData.datasets[0].backgroundColor = function(context) {
+    const row = displayedData[context.dataIndex];
+    const label = leaderboardData.labels[context.dataIndex] || '';
+    if (label && label.includes(HIGHLIGHT_MODEL)) {
+      if (row && row.edit_format === 'whole') return redDiagonalPattern;
+      else return 'rgba(255, 99, 132, 0.2)';
+    } else if (row && row.edit_format === 'whole') {
+      return blueDiagonalPattern;
+    } else {
+      return 'rgba(54, 162, 235, 0.2)';
+    }
+  };
+
+  var tableBody = document.querySelector('table tbody');
+  allData.forEach(function(row, index) {
+    var tr = tableBody.children[index];
+    if (!tr) {
+      // If the row doesn't exist, create it
+      tr = document.createElement('tr');
+      tableBody.appendChild(tr);
+    }
+    tr.id = 'edit-row-' + index;
+    tr.style.cursor = 'pointer';
+    tr.onclick = function() {
+      this.classList.toggle('selected');
+      updateChart();
+    };
+  });
+
+  var leaderboardChart = new Chart(ctx, {
+    type: 'bar',
+    data: leaderboardData,
+    options: {
+      plugins: {
+        legend: {
+          display: false,
+          labels: {
+            generateLabels: function(chart) {
+              return [
+                {
+                  text: 'Diff-like format',
+                  fillStyle: 'rgba(54, 162, 235, 0.2)',
+                  strokeStyle: 'rgba(54, 162, 235, 1)',
+                  lineWidth: 1
+                },
+                {
+                  text: 'Whole format',
+                  fillStyle: blueDiagonalPattern,
+                  strokeStyle: 'rgba(54, 162, 235, 1)',
+                  lineWidth: 1
+                },
+                {
+                  text: 'Total Cost ($)',
+                  fillStyle: 'rgba(153, 102, 255, 1)',
+                  strokeStyle: '#fff',
+                  lineWidth: 1,
+                  pointStyle: 'circle'
+                }
+              ];
+            }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const datasetLabel = context.dataset.label || '';
+              const value = context.parsed.y;
+              if (datasetLabel === 'Total Cost ($)') {
+                return datasetLabel + ': $' + value.toFixed(2);
+              }
+              return datasetLabel + ': ' + value.toFixed(1) + '%';
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Percent completed correctly'
+          }
+        },
+        y1: {
+          beginAtZero: true,
+          position: 'right',
+          grid: {
+            drawOnChartArea: false
+          },
+          title: {
+            display: true,
+            text: 'Total Cost ($)'
+          }
+        },
+        x: {
+          ticks: {
+            callback: function(value, index) {
+              const label = this.getLabelForValue(value);
+              if (label.length <= "claude-3-5-sonnet".length) {
+                return label;
+              }
+              
+              // Find all possible split positions
+              const splitPositions = [];
+              for (let i = 0; i < label.length; i++) {
+                if (label[i] === '-' || label[i] === ' ') {
+                  splitPositions.push(i);
+                }
+              }
+              
+              if (splitPositions.length === 0) {
+                return label;
+              }
+              
+              // Find split position closest to middle
+              const middle = label.length / 2;
+              const splitIndex = splitPositions.reduce((closest, current) => {
+                return Math.abs(current - middle) < Math.abs(closest - middle) ? current : closest;
+              });
+              
+              return [
+                label.slice(0, splitIndex),
+                label.slice(splitIndex + 1)
+              ];
+            }
+          }
+        }
+      }
+    }
+  });
+
+  updateChart();
+  
+  // Add search functionality for edit table
+  document.getElementById('editSearchInput').addEventListener('keyup', function() {
+    var searchWords = this.value.toLowerCase().split(' ').filter(word => word.length > 0);
+    var tableBody = document.querySelector('table:first-of-type tbody');
+    var rows = tableBody.getElementsByTagName('tr');
+    
+    displayedData = [];
+    leaderboardData.labels = [];
+    leaderboardData.datasets[0].data = [];
+    leaderboardData.datasets[1].data = [];
+    
+    for (var i = 0; i < rows.length; i++) {
+      var rowText = rows[i].textContent;
+      if (searchWords.every(word => rowText.toLowerCase().includes(word))) {
+        rows[i].style.display = '';
+        displayedData.push(allData[i]);
+        leaderboardData.labels.push(allData[i].model);
+        leaderboardData.datasets[0].data.push(allData[i].pass_rate);
+        // Only include cost if it's not zero (placeholder for unknown)
+        leaderboardData.datasets[1].data.push(allData[i].total_cost > 0 ? allData[i].total_cost : null);
+      } else {
+        rows[i].style.display = 'none';
+      }
+    }
+    leaderboardChart.update();
+  });
+});
+
+</script>
+
+<style>
+  tr.selected {
+    color: #0056b3;
+  }
+  table {
+    table-layout: fixed;
+  }
+  td, th {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  td:nth-child(3), td:nth-child(4) {
+    font-size: 12px;
+  }
+</style>
+
+          
+
+          
+        </main>
+        
+
+
+      </div>
+    </div>
+    
+      
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+

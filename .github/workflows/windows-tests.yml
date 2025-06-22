@@ -3,7 +3,7 @@ name: Windows Python Tests
 on:
   push:
     paths-ignore:
-      - 'llmcode/website/**'
+      - 'docs/site/**'
       - 'README.md'
       - 'HISTORY.md'
       - '.github/workflows/*'
@@ -12,7 +12,7 @@ on:
       - main
   pull_request:
     paths-ignore:
-      - 'llmcode/website/**'
+      - 'docs/site/**'
       - 'README.md'
       - 'HISTORY.md'
       - '.github/workflows/*'
@@ -41,12 +41,12 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest
-        pip install .
+        python -m pip install pytest
+        python -m pip install -e .
 
     - name: Run tests
       env:
         LLMCODE_ANALYTICS: false
       run: |
         pytest
-        
+

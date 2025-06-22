@@ -1,20 +1,20 @@
-# Use the official Jekyll image from Docker Hub
+# Use the official Jekyll image
 FROM bretfisher/jekyll-serve
 
-# Set the working directory
+# Set working directory
 WORKDIR /site
 
-# Copy the current directory contents into the container at /srv/jekyll
-COPY website /site
+# Copy updated site location into the container
+COPY docs/site /site
 
-RUN apt-get update && apt-get install libcurl4
+# Optional: install missing dependencies (like libcurl4)
+RUN apt-get update && apt-get install -y libcurl4
 
-# Install any needed packages specified in Gemfile
+# Install Ruby gems defined in the Gemfile
 RUN bundle install --retry 5 --jobs 20
 
-ENTRYPOINT [ "docker-entrypoint.sh" ]
+# Use default entrypoint provided by the base image
+ENTRYPOINT ["docker-entrypoint.sh"]
 
-# bundle exec jekyll serve --force_polling -H 0.0.0.0 -P 4000
-CMD [ "bundle", "exec", "jekyll", "serve", "--verbose", "--trace", "--force_polling", "-H", "0.0.0.0", "-P", "4000" ]
-
-
+# Serve the site
+CMD ["bundle", "exec", "jekyll", "serve", "--verbose", "--trace", "--force_polling", "-H", "0.0.0.0", "-P", "4000"]
