@@ -3,7 +3,7 @@ name: Docker Build Test
 on:
   push:
     paths-ignore:
-      - 'llmcode/website/**'
+      - 'docs/site/**'
       - 'README.md'
       - 'HISTORY.md'
       - '.github/workflows/*'
@@ -12,7 +12,7 @@ on:
       - main
   pull_request:
     paths-ignore:
-      - 'llmcode/website/**'
+      - 'docs/site/**'
       - 'README.md'
       - 'HISTORY.md'
       - '.github/workflows/*'
@@ -47,7 +47,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./docker/Dockerfile
+        file: ./docker/app.Dockerfile
         platforms: linux/amd64,linux/arm64
         push: false
         target: llmcode
@@ -57,7 +57,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./docker/Dockerfile
+        file: ./docker/app.Dockerfile
         platforms: linux/amd64,linux/arm64
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/llmcode:dev
@@ -68,7 +68,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./docker/Dockerfile
+        file: ./docker/app.Dockerfile
         platforms: linux/amd64,linux/arm64
         push: false
         target: llmcode-full
@@ -78,7 +78,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./docker/Dockerfile
+        file: ./docker/app.Dockerfile
         platforms: linux/amd64,linux/arm64
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/llmcode-full:dev

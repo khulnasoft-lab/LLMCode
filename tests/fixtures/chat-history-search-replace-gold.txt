@@ -1,7 +1,7 @@
 
 
 @@@ #### Use the Spinner instead of the inlined custom spinner @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/utils.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/utils.py @@@@@@@@@@@@@@@@@@@@
 def run_install(cmd):
     print()
     print("Installing: ", " ".join(cmd))
@@ -1922,7 +1922,7 @@ def get_counts_for_file(start_tag, end_tag, authors, fname):
 
 
 @@@ #### handle Keys.BracketedPaste and print a when it happens @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.lexers import PygmentsLexer
 from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt
@@ -1934,7 +1934,7 @@ from prompt_toolkit.lexers import PygmentsLexer
 from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt
 from prompt_toolkit.styles import Style
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
             @kb.add("escape", "c-m", eager=True)
             def _(event):
                 event.current_buffer.insert_text("\n")
@@ -1955,7 +1955,7 @@ from prompt_toolkit.styles import Style
 
 
 @@@ #### handle command-v and print @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
             @kb.add(Keys.BracketedPaste)
             def _(event):
                 print("Bracketed paste detected!")
@@ -1978,7 +1978,7 @@ from prompt_toolkit.styles import Style
 
 
 @@@ #### handle alt-v too @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
             @kb.add("c-v")
             def _(event):
                 print("Command-V (Ctrl+V) detected!")
@@ -1996,7 +1996,7 @@ from prompt_toolkit.styles import Style
 
 
 @@@ #### can i make it so each image will have LLMCODE_DOCKER_IMAGE=true set? @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docker/Dockerfile @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docker/app.Dockerfile @@@@@@@@@@@@@@@@@@@@
 FROM base AS llmcode-full
 
 COPY . /tmp/llmcode
@@ -2025,7 +2025,7 @@ RUN playwright install --with-deps chromium
 
 ENTRYPOINT ["/venv/bin/llmcode"]
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docker/Dockerfile @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docker/app.Dockerfile @@@@@@@@@@@@@@@@@@@@
 FROM base AS llmcode
 
 COPY . /tmp/llmcode
@@ -2055,7 +2055,7 @@ ENTRYPOINT ["/venv/bin/llmcode"]
 
 
 @@@ #### no, i mean for processing that run inside the image @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docker/Dockerfile @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docker/app.Dockerfile @@@@@@@@@@@@@@@@@@@@
 FROM python:3.10-slim AS base
 
 RUN apt-get update && \
@@ -2079,7 +2079,7 @@ RUN python -m venv /venv
 ENV PATH="/venv/bin:$PATH"
 ENV LLMCODE_DOCKER_IMAGE=true
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docker/Dockerfile @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docker/app.Dockerfile @@@@@@@@@@@@@@@@@@@@
 FROM base AS llmcode-full
 
 ENV LLMCODE_DOCKER_IMAGE=true
@@ -2090,7 +2090,7 @@ FROM base AS llmcode-full
 
 COPY . /tmp/llmcode
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docker/Dockerfile @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docker/app.Dockerfile @@@@@@@@@@@@@@@@@@@@
 FROM base AS llmcode
 
 ENV LLMCODE_DOCKER_IMAGE=true
@@ -3298,12 +3298,12 @@ pip install flask-socketio
 
 
 @@@ #### make that change @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
 from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt
 @@@@@@@@@@@@@@@@@@@@
 from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confirm
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def confirm_ask(self, question, default="y"):
         self.num_user_asks += 1
 
@@ -3346,7 +3346,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confi
 
         return res
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def tool_output(self, *messages, log_only=False):
         if messages:
             hist = " ".join(messages)
@@ -3384,7 +3384,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confi
 
 
 @@@ #### TypeError: confirm() got an unexpected keyword argument 'default' @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def confirm_ask(self, question, default="y"):
         self.num_user_asks += 1
 
@@ -3438,7 +3438,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confi
 
         return res
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def confirm_ask(self, question, default="y"):
         self.num_user_asks += 1
 
@@ -3495,7 +3495,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confi
 
 
 @@@ #### make tool_output into an sync method like you describe. but it will append the output to a list self.pending_output. the client will poll to collect output periodically. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def tool_output(self, *messages, log_only=False):
         if messages:
             hist = " ".join(messages)
@@ -3521,7 +3521,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confi
         # Append messages to pending_output
         self.pending_output.append(" ".join(str(msg) for msg in messages))
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def __init__(
         self,
         pretty=True,
@@ -3628,7 +3628,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confi
 
         self.pending_output = []
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def append_chat_history(self, text, linebreak=False, blockquote=False, strip=True):
         if blockquote:
             if strip:
@@ -3667,13 +3667,13 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confi
 
 
 @@@ #### make an InputOutputPolling subclass of InputOutput. it should override tool_output, tool_error as async methods. make those methods in io also async. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
 import asyncio
 @@@@@@@@@@@@@@@@@@@@
 import asyncio
 from typing import List
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def tool_error(self, message="", strip=True):
         self.num_error_outputs += 1
 
@@ -3778,7 +3778,7 @@ class InputOutputPolling(InputOutput):
         self.pending_errors.clear()
         return errors
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
 import base64
 import os
 from collections import defaultdict
@@ -4156,7 +4156,7 @@ from llmcode import models, prompts, voice
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
 
 
-@@@ #### /run scripts/pip-compile.sh --upgrade @@@@@@@@@@@@@@@@@@@@
+@@@ #### /run scripts/dev/generate_requirements.sh --upgrade @@@@@@@@@@@@@@@@@@@@
 @@@ SEARCH: requirements/requirements-help.in @@@@@@@@@@@@@@@@@@@@
 -c ../requirements.txt
 #
@@ -4179,15 +4179,15 @@ tokenizers<0.14,>=0.11.1
 
 
 @@@ #### can we get the last modified date from git instead @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <!--[[[cog
 import os
 import datetime
 
 files = [
-    'llmcode/website/docs/leaderboards/index.md',
-    'llmcode/website/_data/edit_leaderboard.yml',
-    'llmcode/website/_data/refactor_leaderboard.yml'
+    'docs/site/docs/leaderboards/index.md',
+    'docs/site/_data/edit_leaderboard.yml',
+    'docs/site/_data/refactor_leaderboard.yml'
 ]
 
 mod_times = [os.path.getmtime(file) for file in files]
@@ -4201,9 +4201,9 @@ import subprocess
 import datetime
 
 files = [
-    'llmcode/website/docs/leaderboards/index.md',
-    'llmcode/website/_data/edit_leaderboard.yml',
-    'llmcode/website/_data/refactor_leaderboard.yml'
+    'docs/site/docs/leaderboards/index.md',
+    'docs/site/_data/edit_leaderboard.yml',
+    'docs/site/_data/refactor_leaderboard.yml'
 ]
 
 def get_last_modified_date(file):
@@ -4323,7 +4323,7 @@ cog.out(f"{latest_mod_date.strftime('%B %d, %Y.')}")
 
 
 @@@ #### update `format_messages` to show all the entries when content is an array @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/utils.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/utils.py @@@@@@@@@@@@@@@@@@@@
     for msg in messages:
         output.append("")
         role = msg["role"].upper()
@@ -5340,7 +5340,7 @@ llmcode/coders/base_coder.py
 
 
 @@@ #### add a --read param like --file, except will pass in `read_only_fnames` @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--file",
         action="append",
@@ -6976,7 +6976,7 @@ class Commands:
 
 
 @@@ #### don't use confirm(), just prompt() with default=y @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def confirm_ask(self, question, default="y"):
         self.num_user_asks += 1
 
@@ -7014,7 +7014,7 @@ class Commands:
 
         return is_yes
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
 from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, confirm, prompt
 @@@@@@@@@@@@@@@@@@@@
 from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt
@@ -7166,7 +7166,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt
 
 
 @@@ #### add --mini to set model to gpt-4o-mini @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     gpt_4o_model = "gpt-4o"
     group.add_argument(
         "--4o",
@@ -7212,7 +7212,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt
 
 
 @@@ #### add --mini to set model to gpt-4o-mini @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     gpt_4o_mini_model = "gpt-4o-mini"
     group.add_argument(
         "--mini",
@@ -7527,7 +7527,7 @@ from llmcode import models, prompts, voice
             self.abs_read_only_fnames,
         )
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def __init__(self, root, rel_fnames, addable_rel_fnames, commands, encoding):
         self.addable_rel_fnames = addable_rel_fnames
         self.rel_fnames = rel_fnames
@@ -7539,7 +7539,7 @@ from llmcode import models, prompts, voice
         self.encoding = encoding
         self.abs_read_only_fnames = abs_read_only_fnames
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def get_input(self, root, rel_fnames, addable_rel_fnames, commands):
         if self.pretty:
             style = dict(style=self.user_input_color) if self.user_input_color else dict()
@@ -7600,7 +7600,7 @@ from llmcode import models, prompts, voice
             root, rel_fnames, addable_rel_fnames, commands, self.encoding, abs_read_only_fnames
         )
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
 class AutoCompleter(Completer):
     def __init__(self, root, rel_fnames, addable_rel_fnames, commands, encoding):
         self.addable_rel_fnames = addable_rel_fnames
@@ -7682,7 +7682,7 @@ class AutoCompleter(Completer):
             tokens = list(lexer.get_tokens(content))
             self.words.update(token[1] for token in tokens if token[0] in Token.Name)
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
 class AutoCompleter(Completer):
     def __init__(self, root, rel_fnames, addable_rel_fnames, commands, encoding, abs_read_only_fnames):
         self.addable_rel_fnames = addable_rel_fnames
@@ -7768,7 +7768,7 @@ class AutoCompleter(Completer):
 
 
 @@@ #### /ex @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def __init__(
         self, root, rel_fnames, addable_rel_fnames, commands, encoding, abs_read_only_fnames
     ):
@@ -7788,12 +7788,12 @@ class AutoCompleter(Completer):
 
 
 @@@ #### to `get_input` too @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def get_input(self, root, rel_fnames, addable_rel_fnames, commands, abs_read_only_fnames):
 @@@@@@@@@@@@@@@@@@@@
     def get_input(self, root, rel_fnames, addable_rel_fnames, commands, abs_read_only_fnames=None):
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
         completer_instance = AutoCompleter(
             root, rel_fnames, addable_rel_fnames, commands, self.encoding, abs_read_only_fnames
         )
@@ -7805,7 +7805,7 @@ class AutoCompleter(Completer):
 
 
 @@@ #### /test pytest tests/basic/test_io.py @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
         all_fnames = [Path(root) / rel_fname for rel_fname in rel_fnames] + list(
             abs_read_only_fnames
         )
@@ -8011,7 +8011,7 @@ llmcode/coders/base_coder.py
 
 
 @@@ #### add bold=false param to `tool_output` @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def tool_output(self, *messages, log_only=False):
         if messages:
             hist = " ".join(messages)
@@ -9539,25 +9539,25 @@ class Coder:
 
 
 @@@ #### the edit leaderboard is wider than the width allocated, so users need to scroll left/right to see it all @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
 @@@@@@@@@@@@@@@@@@@@
 <div style="overflow-x: auto;">
 <table style="width: 100%; min-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 </table>
 @@@@@@@@@@@@@@@@@@@@
 </table>
 </div>
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
 @@@@@@@@@@@@@@@@@@@@
 <div style="overflow-x: auto;">
 <table style="width: 100%; min-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 </table>
 @@@@@@@@@@@@@@@@@@@@
 </table>
@@ -9566,31 +9566,31 @@ class Coder:
 
 
 @@@ #### no, this happens even on wide desktop browsers. it's not just a small screen issue @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <div style="overflow-x: auto;">
 <table style="width: 100%; min-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
 @@@@@@@@@@@@@@@@@@@@
 <table style="width: 100%; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 </table>
 </div>
 @@@@@@@@@@@@@@@@@@@@
 </table>
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <div style="overflow-x: auto;">
 <table style="width: 100%; min-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
 @@@@@@@@@@@@@@@@@@@@
 <table style="width: 100%; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 </table>
 </div>
 @@@@@@@@@@@@@@@@@@@@
 </table>
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <style>
   tr.selected {
     color: #0056b3;
@@ -9613,7 +9613,7 @@ class Coder:
   }
 </style>
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <style>
   tr.selected {
     color: #0056b3;
@@ -9639,7 +9639,7 @@ class Coder:
 
 
 @@@ #### the edit leaderboard is wider than the width allocated, so users need to scroll left/right to see it all. even on desktop browsers that are very wide @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
   <thead style="background-color: #f2f2f2;">
     <tr>
@@ -9690,7 +9690,7 @@ class Coder:
   </table>
 </div>
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
   <thead style="background-color: #f2f2f2;">
     <tr>
@@ -9750,7 +9750,7 @@ class Coder:
 
 To address the issue of the edit leaderboard being wider than the allocated width, we can modify the table styling to make it more responsive and easier to view on various screen sizes. Here's how we can update the code:
 
-llmcode/website/docs/leaderboards/index.md
+docs/site/docs/leaderboards/index.md
 ```html
 <<<<<<< SEARCH
 <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
@@ -9799,7 +9799,7 @@ llmcode/website/docs/leaderboards/index.md
 
 
 @@@ #### the edit leaderboard is wider than the width allocated, so users need to scroll left/right to see it all. even on desktop browsers that are very wide @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
   <thead style="background-color: #f2f2f2;">
     <tr>
@@ -9971,7 +9971,7 @@ llmcode/website/docs/leaderboards/index.md
 
 
 @@@ #### Add --attribute-commit-message-committer and pass to Repo @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--attribute-commit-message",
         action=argparse.BooleanOptionalAction,
@@ -10023,7 +10023,7 @@ llmcode/website/docs/leaderboards/index.md
 
 
 @@@ #### update the docs @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/docs/git.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/docs/git.md @@@@@@@@@@@@@@@@@@@@
 ## Commit attribution
 
 Llmcode marks commits that it either authored or committed.
@@ -10531,7 +10531,7 @@ from llmcode import models, prompts, voice
 
 
 @@@ #### add --chat-mode as an alias for --edit-format @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--edit-format",
         metavar="EDIT_FORMAT",
@@ -10618,7 +10618,7 @@ from llmcode import models, prompts, voice
 
 Certainly! I'll update the documentation to include a small example of the `/code` command. Here's the change:
 
-llmcode/website/docs/usage/modes.md
+docs/site/docs/usage/modes.md
 <source>markdown
 <<<<<<< SEARCH
 - `code` - Llmcode will make changes to your code to satisfy your requests.
@@ -10637,7 +10637,7 @@ send messages in other modes using `/code`, `/ask`, and `/help` commands:
 >>>>>>> REPLACE
 </source>
 
-llmcode/website/docs/usage/modes.md
+docs/site/docs/usage/modes.md
 <source>markdown
 <<<<<<< SEARCH
 
@@ -11584,7 +11584,7 @@ from llmcode.llm import litellm
 
 
 @@@ #### add --deepseek for model deepseek/deepseek-coder @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     gpt_3_model_name = "gpt-3.5-turbo"
     group.add_argument(
         "--35turbo",
@@ -11620,7 +11620,7 @@ from llmcode.llm import litellm
 
 
 @@@ #### add a --deepseek-beta bool arg. describe as uses deepseek coder via the beta api endpoint @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     deepseek_model = "deepseek/deepseek-coder"
     group.add_argument(
         "--deepseek",
@@ -11658,7 +11658,7 @@ from llmcode.llm import litellm
 
 
 @@@ #### add a --deepseek-beta bool arg. describe as uses deepseek coder via the beta api endpoint. in main set the model name and DEEPSEEK_API_BASE=https://api.deepseek.com/beta @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--deepseek",
         action="store_const",
@@ -12628,7 +12628,7 @@ class Analytics:
 
 
 @@@ #### add --analytics which controls whether we track or not. create `Analytics` in main and pass to Coder @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--gui",
         "--browser",
@@ -13351,7 +13351,7 @@ from mixpanel import Mixpanel
 
 
 @@@ #### add a --analytics-log <fname> and pass it to `Analytics` @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--analytics",
         action=argparse.BooleanOptionalAction,
@@ -13379,7 +13379,7 @@ from mixpanel import Mixpanel
 
 
 @@@ #### add --analytics-disable, pass to `Analytics`. If present, add disabled:true to mixpanel.json. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--analytics-log",
         metavar="ANALYTICS_LOG_FILE",
@@ -15624,7 +15624,7 @@ class Coder:
 
 
 @@@ #### move the analytics args to their own section, above Other Settings @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--analytics",
         action=argparse.BooleanOptionalAction,
@@ -15645,7 +15645,7 @@ class Coder:
 
 @@@@@@@@@@@@@@@@@@@@
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group = parser.add_argument_group("Other Settings")
 @@@@@@@@@@@@@@@@@@@@
     group = parser.add_argument_group("Analytics Settings")
@@ -15736,7 +15736,7 @@ class Coder:
 
 
 @@@ #### move the analytics args to their own section, above Other Settings @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--analytics",
         action=argparse.BooleanOptionalAction,
@@ -15757,7 +15757,7 @@ class Coder:
 
 @@@@@@@@@@@@@@@@@@@@
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group = parser.add_argument_group("Other Settings")
 @@@@@@@@@@@@@@@@@@@@
     group = parser.add_argument_group("Analytics Settings")
@@ -15781,7 +15781,7 @@ class Coder:
 
     group = parser.add_argument_group("Other Settings")
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--analytics",
         action=argparse.BooleanOptionalAction,
@@ -15802,7 +15802,7 @@ class Coder:
 
 @@@@@@@@@@@@@@@@@@@@
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group = parser.add_argument_group("Other Settings")
 @@@@@@@@@@@@@@@@@@@@
     group = parser.add_argument_group("Analytics Settings")
@@ -15947,7 +15947,7 @@ from llmcode.analytics import Analytics
 
 
 @@@ #### change --analytics-disable to --disable-analytics @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--analytics-disable",
         action="store_true",
@@ -15973,7 +15973,7 @@ from llmcode.analytics import Analytics
         print("Analytics have been permanently disabled.")
         return
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/docs/more/analytics.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/docs/more/analytics.md @@@@@@@@@@@@@@@@@@@@
 llmcode --analytics-disable
 @@@@@@@@@@@@@@@@@@@@
 llmcode --disable-analytics
@@ -16749,7 +16749,7 @@ class Analytics:
 
 
 @@@ #### do a bar graph with the % code on the y-axis @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
 <canvas id="blameChart" width="800" height="450" style="margin-top: 20px"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment"></script>
@@ -16922,7 +16922,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### SyntaxError: Unexpected number '182'. Expected a parameter pattern or a ')' in parameter list. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                     callbacks: {
                         label: function(context) {
                             var index = context.dataIndex;
@@ -16946,7 +16946,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### switch to a bar graph with the % code on the y-axis @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
 <canvas id="blameChart" width="800" height="450" style="margin-top: 20px"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment"></script>
@@ -17113,7 +17113,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### make the x-axis be the version number @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
     var blameData = {
         datasets: [{
             label: 'Llmcode\'s Contribution to Each Release',
@@ -17191,7 +17191,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### can we label every version on the x-axis? @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                 x: {
                     type: 'category',
                     title: {
@@ -17220,7 +17220,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### The hover is showing "undefined: NaN% (undefined lines)" @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                 tooltip: {
                     callbacks: {
                         label: function(context) {
@@ -17243,7 +17243,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### The tooltip is showing "undefined: NaN% (undefined lines)". You previous fix resulting in no tooltip @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
             plugins: {
                 tooltip: {
                     callbacks: {
@@ -17269,7 +17269,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### ok, try that @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                 tooltip: {
                     callbacks: {
                         label: function(context) {
@@ -17292,7 +17292,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### do that @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                 tooltip: {
                     callbacks: {
                         label: function(context) {
@@ -17318,7 +17318,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### it still shows 0 lines for all tooltips @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                 tooltip: {
                     callbacks: {
                         label: function(context) {
@@ -17345,7 +17345,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### all the tooltips show 0 lines @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                         label: function(context) {
                             var label = context.dataset.label || '';
                             var value = context.parsed.y || 0;
@@ -17365,7 +17365,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### do that @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                 tooltip: {
                     callbacks: {
                         label: function(context) {
@@ -17392,12 +17392,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### lines is just the percent? i want the number of lines from `llmcode_total` in the dataset @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
             data: [{% for row in site.data.blame %}{{ row.llmcode_percentage }},{% endfor %}],
 @@@@@@@@@@@@@@@@@@@@
             data: [{% for row in site.data.blame %}{{ row.llmcode_total }},{% endfor %}],
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                             var value = context.parsed.y || 0;
                             var lines = context.raw || 0;
                             return `${label}: ${Math.round(value)}% (${lines} lines)`;
@@ -17406,17 +17406,17 @@ document.addEventListener('DOMContentLoaded', function () {
                             var percentage = context.raw.llmcode_percentage || 0;
                             return `${label}: ${lines} lines (${percentage.toFixed(2)}%)`;
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                     text: 'Llmcode\'s Contribution to Each Release',
 @@@@@@@@@@@@@@@@@@@@
                     text: 'Llmcode\'s Contribution (Lines of Code) to Each Release',
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                         text: 'Llmcode Contribution (% of code)'
 @@@@@@@@@@@@@@@@@@@@
                         text: 'Llmcode Contribution (Lines of Code)'
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                                 text: 'Y-axis is percent of code, bubble size is lines of code',
 @@@@@@@@@@@@@@@@@@@@
                                 text: 'Y-axis is lines of code, tooltip shows percentage',
@@ -17424,7 +17424,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### the "lines" in the tooltop is just the percent? i want the number of lines from `llmcode_total` in the dataset @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                         label: function(context) {
                             var label = context.dataset.label || '';
                             var value = context.parsed.y || 0;
@@ -17442,7 +17442,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### SyntaxError: Unexpected token '||' @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                         label: function(context) {
                             var label = context.dataset.label || '';
                             var value = context.parsed.y || 0;
@@ -17461,7 +17461,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### can we pass the llmcode_total lines into the context, so we can use it in the tooltip? @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
         datasets: [{
             label: 'Llmcode\'s Contribution to Each Release',
             data: [{% for row in site.data.blame %}{{ row.llmcode_percentage }},{% endfor %}],
@@ -17478,7 +17478,7 @@ document.addEventListener('DOMContentLoaded', function () {
             borderWidth: 1
         }]
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                         label: function(context) {
                             console.log(context);
                             var label = context.dataset.label || '';
@@ -17497,7 +17497,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### add another bar chart which plots the llmcode_total number of lines by release @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
 <canvas id="blameChart" width="800" height="450" style="margin-top: 20px"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment"></script>
@@ -17742,7 +17742,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### can we hide the legends? @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
         options: {
             scales: {
                 x: {
@@ -17792,7 +17792,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     display: false
                 },
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
         options: {
             scales: {
                 x: {
@@ -17845,7 +17845,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### make the charts 20% less tall @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
 <canvas id="blameChart" width="800" height="450" style="margin-top: 20px"></canvas>
 <canvas id="linesChart" width="800" height="450" style="margin-top: 20px"></canvas>
 @@@@@@@@@@@@@@@@@@@@
@@ -19592,7 +19592,7 @@ from .dump import dump  # noqa: F401
 
 
 @@@ #### add a bar graph at the top which plots `pass_rate_1` for each model and edit_format combo. group all the edit_formats for each model together. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
 ---
 title: LLMs are bad at returning code in json
 excerpt: LLMs write worse code if you ask them to return the code wrapped in json via a tool/function call.
@@ -19649,7 +19649,7 @@ graph TD
 
 
 @@@ #### add a bar graph at the top which plots `pass_rate_1` for each model and edit_format combo. group all the edit_formats for each model together. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
 ---
 title: LLMs are bad at returning code in json
 excerpt: LLMs write worse code if you ask them to return the code wrapped in json via a tool/function call.
@@ -19747,7 +19747,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### great, but have it pull the data from the yml file @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     var ctx = document.getElementById('passRateChart').getContext('2d');
@@ -19887,7 +19887,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 Certainly! I'll reorder the edit formats as requested: Markdown, Tool call, Tool call (strict). Here's the *SEARCH/REPLACE block* to make this change:
 
-llmcode/website/_data/code-in-json.yml
+docs/site/_data/code-in-json.yml
 <source>
 <<<<<<< SEARCH
 - dirname: 2024-08-14-18-38-25--json-gpt-4o-2024-08-06-non-strict-func
@@ -19919,9 +19919,9 @@ llmcode/website/_data/code-in-json.yml
 >  
 > ^C again to exit  
 
-To order the edit formats as requested (markdown, tool call, tool call strict), we need to modify the YAML data in the `llmcode/website/_data/code-in-json.yml` file. Here's how we can do that:
+To order the edit formats as requested (markdown, tool call, tool call strict), we need to modify the YAML data in the `docs/site/_data/code-in-json.yml` file. Here's how we can do that:
 
-llmcode/website/_data/code-in-json.yml
+docs/site/_data/code-in-json.yml
 <source>yaml
 <<<<<<< SEARCH
 - dirname: 2024-08-14-18-38-25--json-gpt-4o-2024-08-06-non-strict-func
@@ -19947,12 +19947,12 @@ llmcode/website/_data/code-in-json.yml
 
 # llmcode chat started at 2024-08-14 20:04:37
 
-> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode llmcode/website/_posts/2024-08-14-code-in-json.md --read llmcode/website/_data/code-in-json.yml  
+> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode docs/site/_posts/2024-08-14-code-in-json.md --read docs/site/_data/code-in-json.yml  
 > Llmcode v0.50.2-dev  
 > Models: claude-3-5-sonnet-20240620 with ♾️ diff edit format, weak model claude-3-haiku-20240307  
 > Git repo: .git with 305 files  
 > Repo-map: using 1024 tokens  
-> Added llmcode/website/_posts/2024-08-14-code-in-json.md to the chat.  
+> Added docs/site/_posts/2024-08-14-code-in-json.md to the chat.  
 > Use /help <question> for help, run "llmcode --help" to see cmd line args  
 
 
@@ -19960,7 +19960,7 @@ llmcode/website/_data/code-in-json.yml
 
 
 @@@ #### make the tool+split color the same as tool, but stripe it @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
         backgroundColor: format === 'Markdown' ? 'rgba(54, 162, 235, 0.8)' :
                          format === 'Tool call' ? 'rgba(255, 99, 132, 0.8)' :
                          'rgba(75, 192, 192, 0.8)',
@@ -19975,7 +19975,7 @@ llmcode/website/_data/code-in-json.yml
 
 
 @@@ #### can we actually put a dot or stripe pattern across it. i don't want to mess with its border. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
         backgroundColor: format === 'Markdown' ? 'rgba(54, 162, 235, 0.8)' :
                          format.startsWith('Tool call') ? 'rgba(255, 99, 132, 0.8)' :
                          'rgba(75, 192, 192, 0.8)',
@@ -19996,7 +19996,7 @@ llmcode/website/_data/code-in-json.yml
             }
         },
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
     new Chart(ctx, config);
 @@@@@@@@@@@@@@@@@@@@
     function createStripedCanvas(isStrict) {
@@ -20023,7 +20023,7 @@ llmcode/website/_data/code-in-json.yml
 
     new Chart(ctx, config);
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
         backgroundColor: format === 'Markdown' ? 'rgba(54, 162, 235, 0.8)' :
                          format.startsWith('Tool call') ? 'rgba(255, 99, 132, 0.8)' :
                          'rgba(75, 192, 192, 0.8)',
@@ -20062,7 +20062,7 @@ MODELS="
 
 
 @@@ #### the yml contains multiple datapoints for each model/edit_format. average them for display on the graph. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
     var yamlData = {{ site.data.code-in-json | jsonify }};
     
     var models = [...new Set(yamlData.map(item => item.model))];
@@ -20092,7 +20092,7 @@ MODELS="
 
 
 @@@ #### sort the x-axis by model name @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
     var models = [...new Set(yamlData.map(item => item.model))];
 @@@@@@@@@@@@@@@@@@@@
     var models = [...new Set(yamlData.map(item => item.model))].sort();
@@ -20137,7 +20137,7 @@ def plot_over_time(yaml_file):
 
 
 @@@ #### on narrow screen like phone, the graph looks bad because there's not enough vertical room for the title, legend, x-axis. can we make the graph responsive, so that if its on a very narrow screen the aspect ratio changes to more of a square? @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
     var config = {
         type: 'bar',
         data: data,
@@ -20230,7 +20230,7 @@ def plot_over_time(yaml_file):
         }
     };
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
 <canvas id="passRateChart" width="800" height="400" style="margin-bottom: 20px"></canvas>
 @@@@@@@@@@@@@@@@@@@@
 <div style="position: relative; height: 0; padding-bottom: 50%; margin-bottom: 20px;">
@@ -20240,14 +20240,14 @@ def plot_over_time(yaml_file):
 
 
 @@@ #### no. i just want to increase the height if we are on a small screen. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
 <canvas id="passRateChart" width="800" height="400" style="margin-bottom: 20px"></canvas>
 @@@@@@@@@@@@@@@@@@@@
 <div id="chartContainer" style="position: relative; height: 0; padding-bottom: 50%; margin-bottom: 20px;">
     <canvas id="passRateChart" style="position: absolute; width: 100%; height: 100%;"></canvas>
 </div>
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
     var config = {
         type: 'bar',
         data: data,
@@ -20338,7 +20338,7 @@ def plot_over_time(yaml_file):
 
 
 @@@ #### add a bar graph in the Syntax errors section. for each model/edit_format, plot the total number of syntax_errors+indentation_errors across all runs of that model/edit_format @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
 ## Syntax errors
 
 @@@@@@@@@@@@@@@@@@@@
@@ -20442,7 +20442,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### ReferenceError: Can't find variable: createStripedCanvas @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
     new Chart(ctx, config);
 });
 </script>
@@ -20476,7 +20476,7 @@ function createStripedCanvas(isStrict) {
 
 
 @@@ #### add the number to the top of each bar in both graphs @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
             plugins: {
                 title: {
                     display: true,
@@ -20527,7 +20527,7 @@ function createStripedCanvas(isStrict) {
                 }
             }
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
             plugins: {
                 title: {
                     display: true,
@@ -20581,7 +20581,7 @@ function createStripedCanvas(isStrict) {
 
 
 @@@ #### move the js for figure 1 into the js file @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     var ctx = document.getElementById('passRateChart').getContext('2d');
@@ -20719,7 +20719,7 @@ function createStripedCanvas(isStrict) {
 @@@@@@@@@@@@@@@@@@@@
 <script src="/assets/code-in-json-benchmark.js"></script>
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@@
 document.addEventListener('DOMContentLoaded', function () {
     var ctx = document.getElementById('passRateChart').getContext('2d');
@@ -20835,7 +20835,7 @@ function createStripedCanvas(isStrict) {
 
 
 @@@ #### show the value of each bar at the top of each bar @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
     var config = {
         type: 'bar',
         data: data,
@@ -20941,7 +20941,7 @@ function createStripedCanvas(isStrict) {
         }]
     };
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/code-in-json-syntax.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/code-in-json-syntax.js @@@@@@@@@@@@@@@@@@@@
     var config = {
         type: 'bar',
         data: data,
@@ -21048,7 +21048,7 @@ function createStripedCanvas(isStrict) {
 
 
 @@@ #### do that @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
 <canvas id="passRateChart" width="800" height="400" style="margin-bottom: 20px"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -21368,7 +21368,7 @@ function createStripedCanvas(isStrict) {
 
 
 @@@ #### make the same change to the syntax chart @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/code-in-json-syntax.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/code-in-json-syntax.js @@@@@@@@@@@@@@@@@@@@
 <canvas id="syntaxErrorsChart" width="800" height="400" style="margin-bottom: 20px"></canvas>
   
 <script>
@@ -21394,7 +21394,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var ctx = document.getElementById('syntaxErrorsChart').getContext('2d');
     var chartContainer = document.querySelector('.chart-container');
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/code-in-json-syntax.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/code-in-json-syntax.js @@@@@@@@@@@@@@@@@@@@
     var config = {
         type: 'bar',
         data: data,
@@ -21417,7 +21417,7 @@ document.addEventListener('DOMContentLoaded', function () {
             aspectRatio: getAspectRatio(),
             scales: {
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/code-in-json-syntax.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/code-in-json-syntax.js @@@@@@@@@@@@@@@@@@@@
     new Chart(ctx, config);
 });
 </script>
@@ -21439,7 +21439,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### on the top of the bars, show the percentage numbers with no decimals @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
                         if (data !== null) {
                             ctx.fillStyle = '#000000';
                             ctx.textAlign = 'center';
@@ -21541,7 +21541,7 @@ from pathlib import Path
 
 
 @@@ #### for the number atop the bars, show 1 decimal point if we are on a wide screen (not a phone) @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
         afterDraw: function(chart) {
             var ctx = chart.ctx;
             chart.data.datasets.forEach(function(dataset, i) {
@@ -21579,7 +21579,7 @@ from pathlib import Path
 
 
 @@@ #### just omit the numbers if the screen isn't wide @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/website/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docs/site/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
         afterDraw: function(chart) {
             var ctx = chart.ctx;
             var isWideScreen = window.innerWidth > 768; // Assuming 768px as the breakpoint for wide screens
@@ -22893,7 +22893,7 @@ from pathlib import Path
 
 
 @@@ #### add a --map-refresh switch, pass into `RepoMap`.refresh @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--map-tokens",
         type=int,
@@ -23157,7 +23157,7 @@ llmcode/repomap.py
 
 
 @@@ #### add a --cache-prompts bool, default false. if true, force map_refresh="files". pass cache_prompts into Coder.cache_prompts @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--map-refresh",
         choices=["auto", "always", "files", "manual"],
@@ -24024,9 +24024,9 @@ llmcode/main.py
 >  
 > ^C again to exit  
 
-To enhance the `show_messages` function to handle the case where content is a list of dicts, we need to modify the `format_messages` function in the `llmcode/utils.py` file. Here's the proposed change:
+To enhance the `show_messages` function to handle the case where content is a list of dicts, we need to modify the `format_messages` function in the `llmcode/core/utils.py` file. Here's the proposed change:
 
-llmcode/utils.py
+llmcode/core/utils.py
 ```python
 <<<<<<< SEARCH
 def format_messages(messages, title=None):
@@ -25236,7 +25236,7 @@ pip install pandas
 
 
 @@@ #### in cleanup, ignore recursion errors too @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/utils.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/utils.py @@@@@@@@@@@@@@@@@@@@
     def cleanup(self):
         try:
             self.temp_dir.cleanup()
@@ -25252,7 +25252,7 @@ pip install pandas
 
 
 @@@ #### only call `TemporaryDirectory` with `ignore_cleanup_errors` if python version >= 3.10 @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/utils.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/utils.py @@@@@@@@@@@@@@@@@@@@
 import itertools
 import os
 import subprocess
@@ -25539,7 +25539,7 @@ pytest tests/basic/test_main.py::TestMain::test_return_coder
 
 
 @@@ #### add a --map-multiplier-no-files switch that defaults to 2 @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--cache-prompts",
         action=argparse.BooleanOptionalAction,
@@ -25912,7 +25912,7 @@ class Coder:
 
 
 @@@ #### add a `subject` param to prompt_ask. print it with tool_output bold=true before printing the question @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def prompt_ask(self, question, default=None):
         self.num_user_asks += 1
 
@@ -25943,7 +25943,7 @@ class Coder:
 
 
 @@@ #### add subject to `confirm_ask` too @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def confirm_ask(self, question, default="y"):
         self.num_user_asks += 1
 
@@ -25993,7 +25993,7 @@ class Coder:
 
 
 @@@ #### move the `prompt_toolkit` imports to the top @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
 import base64
 import os
 from collections import defaultdict
@@ -26024,7 +26024,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession
 from prompt_toolkit.styles import Style
 from prompt_toolkit.validation import Validator
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
         from prompt_toolkit.completion import WordCompleter
 
         completer = WordCompleter(["yes", "no"])
@@ -26041,7 +26041,7 @@ from prompt_toolkit.validation import Validator
 
 
 @@@ #### prompt_ask should set the style like `confirm_ask` @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def prompt_ask(self, question, default=None, subject=None):
         self.num_user_asks += 1
 
@@ -26177,7 +26177,7 @@ from prompt_toolkit.validation import Validator
 
 
 @@@ #### when autocompleting filenames, don't wrap them in backticks ` @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
         candidates = [(word, f"`{word}`") for word in candidates]
 
         last_word = words[-1]
@@ -26213,7 +26213,7 @@ from prompt_toolkit.validation import Validator
 
 
 @@@ #### when autocompleting filenames, don't wrap them in backticks `. keep the backticks for other autocompletes, just not filenames @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
                 if rel_fnames:
                     for rel_fname in rel_fnames:
                         yield Completion(
@@ -26235,7 +26235,7 @@ from prompt_toolkit.validation import Validator
                         style='class:completion.filename' if word in self.addable_rel_fnames else 'class:completion.other'
                     )
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
         if self.user_input_color:
             style = Style.from_dict(
                 {
@@ -26266,7 +26266,7 @@ from prompt_toolkit.validation import Validator
 
 
 @@@ #### when autocompleting filenames, don't wrap them in backticks `. keep the backticks for other autocompletes, just not filenames @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
         candidates = [(word, f"`{word}`") for word in candidates]
 
         last_word = words[-1]
@@ -26302,7 +26302,7 @@ from prompt_toolkit.validation import Validator
 
 
 @@@ #### in `confirm_ask`, if the subject is multiline pad all the lines to the length of the longest line. with spaces on the end. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def confirm_ask(self, question, default="y", subject=None):
         self.num_user_asks += 1
 
@@ -26477,7 +26477,7 @@ python -m unittest tests/basic/test_main.py
 
 
 @@@ #### the main prompt sometimes shows 1 file right before the >, and shows multiple files on the line before. always show on line before, even 1 file @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
         rel_fnames = list(rel_fnames)
         show = " ".join(rel_fnames)
         if len(show) > 10:
@@ -26491,7 +26491,7 @@ python -m unittest tests/basic/test_main.py
 
 
 @@@ #### show the coder.edit_format right before the > @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def get_input(self, root, rel_fnames, addable_rel_fnames, commands, abs_read_only_fnames=None):
         if self.pretty:
             style = dict(style=self.user_input_color) if self.user_input_color else dict()
@@ -26704,7 +26704,7 @@ python -m unittest discover tests
 
 
 @@@ #### confirm_ask should take a explicit_yes_required param, default False. if True, then self.yes==True means the answer is no @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def confirm_ask(self, question, default="y", subject=None):
         self.num_user_asks += 1
 
@@ -27102,7 +27102,7 @@ python -m unittest -v tests.basic.test_main.TestMain.test_apply_shell_commands
 
 
 @@@ #### do that @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
 class AutoCompleter(Completer):
     def __init__(
         self, root, rel_fnames, addable_rel_fnames, commands, encoding, abs_read_only_fnames=None
@@ -27118,7 +27118,7 @@ class AutoCompleter(Completer):
         self.addable_rel_fnames = addable_rel_fnames
         self.rel_fnames = rel_fnames
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
                     yield Completion(
                         rel_fname, start_position=-len(last_word), display=rel_fname
                     )
@@ -27137,7 +27137,7 @@ class AutoCompleter(Completer):
                         style=self.style
                     )
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
         if self.user_input_color:
             style = Style.from_dict(
                 {
@@ -27179,7 +27179,7 @@ class AutoCompleter(Completer):
             style=style
         )
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
                     yield Completion(
                         rel_fname, start_position=-len(last_word), display=rel_fname
                     )
@@ -27198,7 +27198,7 @@ class AutoCompleter(Completer):
                         style=self.style
                     )
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
     def get_completions(self, document, complete_event):
         text = document.text_before_cursor
         words = text.split()
@@ -27272,7 +27272,7 @@ class AutoCompleter(Completer):
 
 
 @@@ #### Exception can only concatenate str (not "Style") to str @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
 class AutoCompleter(Completer):
     def __init__(
         self,
@@ -27299,7 +27299,7 @@ class AutoCompleter(Completer):
     ):
         self.style = style if isinstance(style, str) else None
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
                         yield Completion(
                             rel_fname,
                             start_position=-len(last_word),

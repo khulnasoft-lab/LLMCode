@@ -39,7 +39,7 @@ VIDEO END -->
 <!--[[[cog
 # We can't "include" here.
 # Because this page is rendered by GitHub as the repo README
-cog.out(open("llmcode/website/_includes/get-started.md").read())
+cog.out(open("docs/site/_includes/get-started.md").read())
 ]]]-->
 
 If you already have python 3.8-3.13 installed, you can get started quickly like this:

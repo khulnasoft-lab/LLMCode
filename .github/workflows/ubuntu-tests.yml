@@ -3,7 +3,7 @@ name: Ubuntu Python Tests
 on:
   push:
     paths-ignore:
-      - 'llmcode/website/**'
+      - 'docs/site/**'
       - 'README.md'
       - 'HISTORY.md'
       - '.github/workflows/*'
@@ -12,7 +12,7 @@ on:
       - main
   pull_request:
     paths-ignore:
-      - 'llmcode/website/**'
+      - 'docs/site/**'
       - 'README.md'
       - 'HISTORY.md'
       - '.github/workflows/*'

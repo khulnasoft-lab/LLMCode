@@ -102,19 +102,19 @@
 
 # llmcode chat started at 2024-08-05 19:33:32
 
-> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode llmcode/utils.py  
+> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode llmcode/core/utils.py  
 > Llmcode v0.47.2-dev  
 > Models: claude-3-5-sonnet-20240620 with diff edit format, weak model claude-3-haiku-20240307  
 > Git repo: .git with 300 files  
 > Repo-map: using 1024 tokens  
-> Added llmcode/utils.py to the chat.  
+> Added llmcode/core/utils.py to the chat.  
 > Use /help <question> for help, run "llmcode --help" to see cmd line args  
 
 #### Use the Spinner instead of the inlined custom spinner  
 
-Certainly! I'll modify the `run_install` function in the `llmcode/utils.py` file to use the `Spinner` class instead of the inline custom spinner. Here's the change:
+Certainly! I'll modify the `run_install` function in the `llmcode/core/utils.py` file to use the `Spinner` class instead of the inline custom spinner. Here's the change:
 
-llmcode/utils.py
+llmcode/core/utils.py
 ```python
 <<<<<<< SEARCH
 def run_install(cmd):
@@ -207,7 +207,7 @@ def run_install(cmd):
 This change replaces the custom spinner implementation with the `Spinner` class. The new implementation creates a `Spinner` object with the text "Installing...", uses the `step()` method to update the spinner, and calls `end()` when the installation process is complete. This change simplifies the code and makes use of the existing `Spinner` class, which provides a consistent spinner behavior across the application.
 
 > Tokens: 5,244 sent, 604 received. Cost: $0.02 request, $0.02 session.  
-> Applied edit to llmcode/utils.py  
+> Applied edit to llmcode/core/utils.py  
 > Commit fd43cd4 feat: Use the Spinner instead of the inlined custom spinner  
 > You can use /undo to revert and discard commit fd43cd4.  
 
@@ -228,13 +228,13 @@ This change replaces the custom spinner implementation with the `Spinner` class.
 
 It seems like you want to change the greeting to be more casual. The files that are most likely to need changes for this request are:
 
-1. `llmcode/args.py` - This file may contain the function that handles the greeting.
+1. `llmcode/core/args.py` - This file may contain the function that handles the greeting.
 2. `llmcode/commands.py` - This file may also have command-related greetings or messages.
 
 Please add these files to the chat so I can assist you further!
 
 > Tokens: 12,566 sent, 84 received. Cost: $0.0019 request, $0.0019 session.  
-> llmcode/args.py  
+> llmcode/core/args.py  
 > llmcode/commands.py  
 >  
 >  
@@ -260,7 +260,7 @@ LICENSE.txt
 
 llmcode/__main__.py
 
-llmcode/args.py:
+llmcode/core/args.py:
 ⋮...
 │def default_env_file(git_root):
 ⋮...
@@ -303,7 +303,7 @@ llmcode/coders/__init__.py
 
 llmcode/coders/ask_coder.py
 
-llmcode/coders/ask_prompts.py:
+llmcode/prompts/ask_prompts.py:
 ⋮...
 │class AskPrompts(CoderPrompts):
 ⋮...
@@ -544,7 +544,7 @@ llmcode/coders/editblock_func_prompts.py:
 │class EditBlockFunctionPrompts(CoderPrompts):
 ⋮...
 
-llmcode/coders/editblock_prompts.py:
+llmcode/prompts/editblock_prompts.py:
 ⋮...
 │class EditBlockPrompts(CoderPrompts):
 ⋮...
@@ -718,7 +718,7 @@ llmcode/coders/wholefile_func_prompts.py:
 │class WholeFileFunctionPrompts(CoderPrompts):
 ⋮...
 
-llmcode/coders/wholefile_prompts.py:
+llmcode/prompts/wholefile_prompts.py:
 ⋮...
 │class WholeFilePrompts(CoderPrompts):
 ⋮...
@@ -926,7 +926,7 @@ llmcode/history.py:
 │def main():
 ⋮...
 
-llmcode/io.py:
+llmcode/core/io.py:
 ⋮...
 │class AutoCompleter(Completer):
 │    def __init__(self, root, rel_fnames, addable_rel_fnames, commands, encoding):
@@ -1270,7 +1270,7 @@ llmcode/sendchat.py:
 
 llmcode/urls.py
 
-llmcode/utils.py:
+llmcode/core/utils.py:
 ⋮...
 │class IgnorantTemporaryDirectory:
 │    def __init__(self):
@@ -1352,77 +1352,77 @@ llmcode/voice.py:
 │    def raw_record_and_transcribe(self, history, language):
 ⋮...
 
-llmcode/website/HISTORY.md
+docs/site/HISTORY.md
 
-llmcode/website/_includes/blame.md
+docs/site/_includes/blame.md
 
-llmcode/website/_includes/nav_footer_custom.html
+docs/site/_includes/nav_footer_custom.html
 
-llmcode/website/_layouts/redirect.html
+docs/site/_layouts/redirect.html
 
-llmcode/website/_posts/2024-03-08-claude-3.md
+docs/site/_posts/2024-03-08-claude-3.md
 
-llmcode/website/_posts/2024-06-02-main-swe-bench.md
+docs/site/_posts/2024-06-02-main-swe-bench.md
 
-llmcode/website/_posts/2024-07-01-sonnet-not-lazy.md
+docs/site/_posts/2024-07-01-sonnet-not-lazy.md
 
-llmcode/website/_posts/2024-07-25-new-models.md
+docs/site/_posts/2024-07-25-new-models.md
 
-llmcode/website/assets/2024-04-09-gpt-4-turbo.jpg
+docs/site/assets/2024-04-09-gpt-4-turbo.jpg
 
-llmcode/website/assets/llmcode.jpg
+docs/site/assets/llmcode.jpg
 
-llmcode/website/assets/benchmarks-speed-1106.jpg
+docs/site/assets/benchmarks-speed-1106.jpg
 
-llmcode/website/assets/benchmarks-speed-1106.svg
+docs/site/assets/benchmarks-speed-1106.svg
 
-llmcode/website/assets/benchmarks-udiff.svg
+docs/site/assets/benchmarks-udiff.svg
 
-llmcode/website/assets/codespaces.mp4
+docs/site/assets/codespaces.mp4
 
-llmcode/website/assets/figure.png
+docs/site/assets/figure.png
 
-llmcode/website/assets/icons/android-chrome-384x384.png
+docs/site/assets/icons/android-chrome-384x384.png
 
-llmcode/website/assets/icons/mstile-150x150.png
+docs/site/assets/icons/mstile-150x150.png
 
-llmcode/website/assets/icons/site.webmanifest
+docs/site/assets/icons/site.webmanifest
 
-llmcode/website/assets/install.jpg
+docs/site/assets/install.jpg
 
-llmcode/website/assets/linting.jpg
+docs/site/assets/linting.jpg
 
-llmcode/website/assets/sonnet-not-lazy.jpg
+docs/site/assets/sonnet-not-lazy.jpg
 
-llmcode/website/docs/benchmarks-speed-1106.md
+docs/site/docs/benchmarks-speed-1106.md
 
-llmcode/website/docs/benchmarks.md
+docs/site/docs/benchmarks.md
 
-llmcode/website/docs/config/adv-model-settings.md
+docs/site/docs/config/adv-model-settings.md
 
-llmcode/website/docs/config/llmcode_conf.md
+docs/site/docs/config/llmcode_conf.md
 
-llmcode/website/docs/faq.md
+docs/site/docs/faq.md
 
-llmcode/website/docs/git.md
+docs/site/docs/git.md
 
-llmcode/website/docs/llms/cohere.md
+docs/site/docs/llms/cohere.md
 
-llmcode/website/docs/llms/openrouter.md
+docs/site/docs/llms/openrouter.md
 
-llmcode/website/docs/troubleshooting.md
+docs/site/docs/troubleshooting.md
 
-llmcode/website/docs/troubleshooting/support.md
+docs/site/docs/troubleshooting/support.md
 
-llmcode/website/docs/usage/commands.md
+docs/site/docs/usage/commands.md
 
-llmcode/website/docs/usage/lint-test.md
+docs/site/docs/usage/lint-test.md
 
-llmcode/website/docs/usage/modes.md
+docs/site/docs/usage/modes.md
 
-llmcode/website/index.md
+docs/site/index.md
 
-llmcode/website/share/index.md
+docs/site/share/index.md
 
 benchmark/__init__.py
 
@@ -4762,7 +4762,7 @@ To integrate this into the existing codebase, you could add this function to the
 Remember that language detection is not always 100% reliable, and the most foolproof method would be to explicitly ask the user for their preferred language and store that preference.
 
 > Tokens: 13,554 sent, 549 received. Cost: $0.05 request, $0.05 session.  
-> llmcode/utils.py  
+> llmcode/core/utils.py  
 > Add these files to the chat? n  
 
 #### if we can get a language, add it to `platform_text`. but don't assume english as a fallback, just omit the language info. like the other platform_text entries, briefly indicate how the value was obtained.  
@@ -5578,13 +5578,13 @@ This modification will ensure that we only count lines that have actual content,
 
 # llmcode chat started at 2024-08-06 10:25:14
 
-> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode llmcode/repo.py llmcode/utils.py  
+> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode llmcode/repo.py llmcode/core/utils.py  
 > Llmcode v0.47.2-dev  
 > Models: claude-3-5-sonnet-20240620 with diff edit format, weak model claude-3-haiku-20240307  
 > Git repo: .git with 300 files  
 > Repo-map: using 1024 tokens  
 > Added llmcode/repo.py to the chat.  
-> Added llmcode/utils.py to the chat.  
+> Added llmcode/core/utils.py to the chat.  
 > Use /help <question> for help, run "llmcode --help" to see cmd line args  
 
 ####   
@@ -5864,20 +5864,20 @@ This ensures that blank lines or lines containing only whitespace are not counte
 
 # llmcode chat started at 2024-08-06 10:36:19
 
-> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode llmcode/io.py llmcode/commands.py  
+> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode llmcode/core/io.py llmcode/commands.py  
 > Llmcode v0.47.2-dev  
 > Models: claude-3-5-sonnet-20240620 with diff edit format, weak model claude-3-haiku-20240307  
 > Git repo: .git with 300 files  
 > Repo-map: using 1024 tokens  
 > Added llmcode/commands.py to the chat.  
-> Added llmcode/io.py to the chat.  
+> Added llmcode/core/io.py to the chat.  
 > Use /help <question> for help, run "llmcode --help" to see cmd line args  
 
 #### /ask can detect if the user does a paste into the prompt? portably across win/linux/mac  
 
 ####  can detect if the user does a paste into the prompt? portably across win/linux/mac  
 
-To detect if a user pastes text into the prompt, we can modify the `InputOutput` class in the `llmcode/io.py` file. We'll use the `prompt_toolkit` library, which already handles input for our application. Here's how we can implement this feature:
+To detect if a user pastes text into the prompt, we can modify the `InputOutput` class in the `llmcode/core/io.py` file. We'll use the `prompt_toolkit` library, which already handles input for our application. Here's how we can implement this feature:
 
 1. First, let's add a new method to the `InputOutput` class to detect paste events:
 
@@ -5953,7 +5953,7 @@ This implementation should work across Windows, Linux, and macOS, as it uses bot
 
 Note that this method isn't 100% foolproof, as there's no standardized way to detect all paste events across all platforms and terminal emulators. However, it should catch most common paste scenarios.
 
-To implement these changes, you would need to update the `llmcode/io.py` file with the modified `InputOutput` class.
+To implement these changes, you would need to update the `llmcode/core/io.py` file with the modified `InputOutput` class.
 
 > Tokens: 12,788 sent, 653 received. Cost: $0.05 request, $0.05 session.  
 
@@ -5976,19 +5976,19 @@ To implement these changes, you would need to update the `llmcode/io.py` file wi
 
 # llmcode chat started at 2024-08-06 10:53:39
 
-> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode llmcode/io.py  
+> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode llmcode/core/io.py  
 > Llmcode v0.48.1-dev  
 > Models: claude-3-5-sonnet-20240620 with diff edit format, weak model claude-3-haiku-20240307  
 > Git repo: .git with 300 files  
 > Repo-map: using 1024 tokens  
-> Added llmcode/io.py to the chat.  
+> Added llmcode/core/io.py to the chat.  
 > Use /help <question> for help, run "llmcode --help" to see cmd line args  
 
 #### handle Keys.BracketedPaste and print a when it happens  
 
-Certainly! I'll modify the `llmcode/io.py` file to handle the `Keys.BracketedPaste` event and print a message when it happens. Here's the change:
+Certainly! I'll modify the `llmcode/core/io.py` file to handle the `Keys.BracketedPaste` event and print a message when it happens. Here's the change:
 
-llmcode/io.py
+llmcode/core/io.py
 ```python
 <<<<<<< SEARCH
 from prompt_toolkit.key_binding import KeyBindings
@@ -6004,7 +6004,7 @@ from prompt_toolkit.styles import Style
 >>>>>>> REPLACE
 ```
 
-llmcode/io.py
+llmcode/core/io.py
 ```python
 <<<<<<< SEARCH
             @kb.add("escape", "c-m", eager=True)
@@ -6036,15 +6036,15 @@ These changes do the following:
 Now, when a user performs a bracketed paste (which is typically triggered when pasting content into the terminal), the message "Bracketed paste detected!" will be printed, and then the paste operation will proceed normally.
 
 > Tokens: 6,480 sent, 390 received. Cost: $0.03 request, $0.03 session.  
-> Applied edit to llmcode/io.py  
+> Applied edit to llmcode/core/io.py  
 > Commit 36dadc4 feat: Add handling for Keys.BracketedPaste event  
 > You can use /undo to revert and discard commit 36dadc4.  
 
 #### handle command-v and print  
 
-Certainly! I'll modify the `llmcode/io.py` file to handle the Command-V (Ctrl+V) key combination and print a message when it happens. Here's the change:
+Certainly! I'll modify the `llmcode/core/io.py` file to handle the Command-V (Ctrl+V) key combination and print a message when it happens. Here's the change:
 
-llmcode/io.py
+llmcode/core/io.py
 ```python
 <<<<<<< SEARCH
             @kb.add(Keys.BracketedPaste)
@@ -6077,7 +6077,7 @@ This change does the following:
 Now, when a user presses Command-V (on macOS) or Ctrl+V (on other platforms), the message "Command-V (Ctrl+V) detected!" will be printed, and then the paste operation will proceed normally.
 
 > Tokens: 7,038 sent, 301 received. Cost: $0.03 request, $0.05 session.  
-> Applied edit to llmcode/io.py  
+> Applied edit to llmcode/core/io.py  
 > Commit c227fab feat: Add support for Command-V (Ctrl+V) paste  
 > You can use /undo to revert and discard commit c227fab.  
 > Commit 27569a4 style: Fix formatting in io.py  
@@ -6085,9 +6085,9 @@ Now, when a user presses Command-V (on macOS) or Ctrl+V (on other platforms), th
 
 #### handle alt-v too  
 
-Certainly! I'll modify the `llmcode/io.py` file to handle the Alt-V key combination as well. Here's the change:
+Certainly! I'll modify the `llmcode/core/io.py` file to handle the Alt-V key combination as well. Here's the change:
 
-llmcode/io.py
+llmcode/core/io.py
 ```python
 <<<<<<< SEARCH
             @kb.add("c-v")
@@ -6115,7 +6115,7 @@ This change does the following:
 Now, when a user presses either Ctrl+V or Alt+V, the message "Paste detected (Ctrl+V or Alt+V)!" will be printed, and then the paste operation will proceed normally.
 
 > Tokens: 7,503 sent, 254 received. Cost: $0.03 request, $0.08 session.  
-> Applied edit to llmcode/io.py  
+> Applied edit to llmcode/core/io.py  
 > Commit 82474a0 feat: Add support for Alt-V key combination  
 > You can use /undo to revert and discard commit 82474a0.  
 
@@ -6168,31 +6168,31 @@ Hello! How can I assist you today? Since we're working with a git repository, is
 
 To change the default colors in the llmcode project, you would likely need to modify the following file:
 
-llmcode/io.py
+llmcode/core/io.py
 
 This file contains the InputOutput class, which handles input and output operations, including color settings. Specifically, you might want to look for parameters like `user_input_color` and `tool_output_color` in the `__init__` method of the InputOutput class.
 
-However, without seeing the full contents of the file, I can't give you the exact lines to change. If you'd like me to provide more specific guidance, you could add the full contents of `llmcode/io.py` to our chat using the *add command.
+However, without seeing the full contents of the file, I can't give you the exact lines to change. If you'd like me to provide more specific guidance, you could add the full contents of `llmcode/core/io.py` to our chat using the *add command.
 
 > Tokens: 11,827 sent, 134 received. Cost: $0.04 request, $0.04 session.  
-> llmcode/io.py  
+> llmcode/core/io.py  
 > Add these files to the chat? n  
 
 # llmcode chat started at 2024-08-06 11:13:10
 
-> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode docker/Dockerfile  
+> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode docker/app.Dockerfile  
 > Llmcode v0.48.1-dev  
 > Models: claude-3-5-sonnet-20240620 with diff edit format, weak model claude-3-haiku-20240307  
 > Git repo: .git with 300 files  
 > Repo-map: using 1024 tokens  
-> Added docker/Dockerfile to the chat.  
+> Added docker/app.Dockerfile to the chat.  
 > Use /help <question> for help, run "llmcode --help" to see cmd line args  
 
 #### can i make it so each image will have LLMCODE_DOCKER_IMAGE=true set?  
 
 Certainly! I'll add the `LLMCODE_DOCKER_IMAGE=true` environment variable to both the `llmcode-full` and `llmcode` images in the Dockerfile. Here are the changes:
 
-docker/Dockerfile
+docker/app.Dockerfile
 ```dockerfile
 <<<<<<< SEARCH
 FROM base AS llmcode-full
@@ -6225,7 +6225,7 @@ ENTRYPOINT ["/venv/bin/llmcode"]
 >>>>>>> REPLACE
 ```
 
-docker/Dockerfile
+docker/app.Dockerfile
 ```dockerfile
 <<<<<<< SEARCH
 FROM base AS llmcode
@@ -6259,9 +6259,9 @@ ENTRYPOINT ["/venv/bin/llmcode"]
 These changes add the `ENV LLMCODE_DOCKER_IMAGE=true` line to both the `llmcode-full` and `llmcode` image definitions in the Dockerfile. This will set the environment variable `LLMCODE_DOCKER_IMAGE` to `true` for both images when they are built and run.
 
 > Tokens: 13,967 sent, 706 received. Cost: $0.05 request, $0.05 session.  
-> Committing docker/Dockerfile before applying edits.  
+> Committing docker/app.Dockerfile before applying edits.  
 > Commit a01749c fix: Add permissions to Python packages in Docker image  
-> Applied edit to docker/Dockerfile  
+> Applied edit to docker/app.Dockerfile  
 > Commit a369e0c feat: Add LLMCODE_DOCKER_IMAGE=true environment variable to llmcode-full and llmcode Docker images  
 > You can use /undo to revert and discard commit a369e0c.  
 
@@ -6269,7 +6269,7 @@ These changes add the `ENV LLMCODE_DOCKER_IMAGE=true` line to both the `llmcode-
 
 I understand. You want to modify the Dockerfile to set the `LLMCODE_DOCKER_IMAGE` environment variable for processes running inside the Docker image, not just during the build process. Here's the change to accomplish that:
 
-docker/Dockerfile
+docker/app.Dockerfile
 ```dockerfile
 <<<<<<< SEARCH
 FROM python:3.10-slim AS base
@@ -6301,7 +6301,7 @@ This change adds the `ENV LLMCODE_DOCKER_IMAGE=true` line to the base image, whi
 
 Since this environment variable is now set in the base image, we can remove the redundant declarations in the `llmcode-full` and `llmcode` images:
 
-docker/Dockerfile
+docker/app.Dockerfile
 ```dockerfile
 <<<<<<< SEARCH
 FROM base AS llmcode-full
@@ -6316,7 +6316,7 @@ COPY . /tmp/llmcode
 >>>>>>> REPLACE
 ```
 
-docker/Dockerfile
+docker/app.Dockerfile
 ```dockerfile
 <<<<<<< SEARCH
 FROM base AS llmcode
@@ -6334,7 +6334,7 @@ COPY . /tmp/llmcode
 These changes will set the `LLMCODE_DOCKER_IMAGE` environment variable for all processes running inside the Docker container, while avoiding redundant declarations.
 
 > Tokens: 14,859 sent, 447 received. Cost: $0.05 request, $0.10 session.  
-> Applied edit to docker/Dockerfile  
+> Applied edit to docker/app.Dockerfile  
 > Commit 4f6c917 feat: Set LLMCODE_DOCKER_IMAGE environment variable in base image  
 > You can use /undo to revert and discard commit 4f6c917.  
 
@@ -6346,13 +6346,13 @@ These changes will set the `LLMCODE_DOCKER_IMAGE` environment variable for all p
 
 # llmcode chat started at 2024-08-06 11:16:33
 
-> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode docker/Dockerfile llmcode/versioncheck.py  
+> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode docker/app.Dockerfile llmcode/versioncheck.py  
 > Llmcode v0.48.1-dev  
 > Models: claude-3-5-sonnet-20240620 with diff edit format, weak model claude-3-haiku-20240307  
 > Git repo: .git with 300 files  
 > Repo-map: using 1024 tokens  
 > Added llmcode/versioncheck.py to the chat.  
-> Added docker/Dockerfile to the chat.  
+> Added docker/app.Dockerfile to the chat.  
 > Use /help <question> for help, run "llmcode --help" to see cmd line args  
 
 #### if there's a new version and LLMCODE_DOCKER_IMAGE is set, just print out the docker pull command they should use to update it  
@@ -6392,7 +6392,7 @@ Newer llmcode version v{latest_version} is available. To upgrade, run:
 > Git repo: .git with 300 files  
 > Repo-map: using 1024 tokens  
 > Added llmcode/versioncheck.py to the chat.  
-> Added docker/Dockerfile to the chat.  
+> Added docker/app.Dockerfile to the chat.  
 
 #### if there's a new version and LLMCODE_DOCKER_IMAGE is set, just print out the docker pull command they should use to update it  
 
@@ -6914,7 +6914,7 @@ MANIFEST.in
 
 llmcode/__main__.py
 
-llmcode/args.py:
+llmcode/core/args.py:
 ⋮...
 │def default_env_file(git_root):
 ⋮...
@@ -6959,7 +6959,7 @@ llmcode/coders/llmcode/commands.py
 
 llmcode/coders/ask_coder.py
 
-llmcode/coders/ask_prompts.py:
+llmcode/prompts/ask_prompts.py:
 ⋮...
 │class AskPrompts(CoderPrompts):
 ⋮...
@@ -7202,7 +7202,7 @@ llmcode/coders/editblock_func_prompts.py:
 │class EditBlockFunctionPrompts(CoderPrompts):
 ⋮...
 
-llmcode/coders/editblock_prompts.py:
+llmcode/prompts/editblock_prompts.py:
 ⋮...
 │class EditBlockPrompts(CoderPrompts):
 ⋮...
@@ -7376,7 +7376,7 @@ llmcode/coders/wholefile_func_prompts.py:
 │class WholeFileFunctionPrompts(CoderPrompts):
 ⋮...
 
-llmcode/coders/wholefile_prompts.py:
+llmcode/prompts/wholefile_prompts.py:
 ⋮...
 │class WholeFilePrompts(CoderPrompts):
 ⋮...
@@ -7582,7 +7582,7 @@ llmcode/history.py:
 │def main():
 ⋮...
 
-llmcode/io.py:
+llmcode/core/io.py:
 ⋮...
 │class AutoCompleter(Completer):
 │    def __init__(self, root, rel_fnames, addable_rel_fnames, commands, encoding):
@@ -7922,7 +7922,7 @@ llmcode/sendchat.py:
 │def simple_send_with_retries(model_name, messages):
 ⋮...
 
-llmcode/utils.py:
+llmcode/core/utils.py:
 ⋮...
 │class IgnorantTemporaryDirectory:
 │    def __init__(self):
@@ -8004,73 +8004,73 @@ llmcode/voice.py:
 │    def raw_record_and_transcribe(self, history, language):
 ⋮...
 
-llmcode/website/_config.yml
+docs/site/_config.yml
 
-llmcode/website/_includes/env-keys-tip.md
+docs/site/_includes/env-keys-tip.md
 
-llmcode/website/_includes/help.md
+docs/site/_includes/help.md
 
-llmcode/website/_includes/multi-line.md
+docs/site/_includes/multi-line.md
 
-llmcode/website/_posts/2024-04-09-gpt-4-turbo.md
+docs/site/_posts/2024-04-09-gpt-4-turbo.md
 
-llmcode/website/_posts/2024-05-13-models-over-time.md
+docs/site/_posts/2024-05-13-models-over-time.md
 
-llmcode/website/_posts/2024-05-22-swe-bench-lite.md
+docs/site/_posts/2024-05-22-swe-bench-lite.md
 
-llmcode/website/assets/2024-04-09-gpt-4-turbo.jpg
+docs/site/assets/2024-04-09-gpt-4-turbo.jpg
 
-llmcode/website/assets/llmcode-square.jpg
+docs/site/assets/llmcode-square.jpg
 
-llmcode/website/assets/benchmarks.jpg
+docs/site/assets/benchmarks.jpg
 
-llmcode/website/assets/figure.png
+docs/site/assets/figure.png
 
-llmcode/website/assets/icons/favicon.ico
+docs/site/assets/icons/favicon.ico
 
-llmcode/website/assets/install.mp4
+docs/site/assets/install.mp4
 
-llmcode/website/assets/llms.jpg
+docs/site/assets/llms.jpg
 
-llmcode/website/assets/robot-ast.png
+docs/site/assets/robot-ast.png
 
-llmcode/website/assets/screencast.svg
+docs/site/assets/screencast.svg
 
-llmcode/website/assets/screenshot.png
+docs/site/assets/screenshot.png
 
-llmcode/website/assets/swe_bench.jpg
+docs/site/assets/swe_bench.jpg
 
-llmcode/website/assets/swe_bench.svg
+docs/site/assets/swe_bench.svg
 
-llmcode/website/assets/udiffs.jpg
+docs/site/assets/udiffs.jpg
 
-llmcode/website/docs/benchmarks-1106.md
+docs/site/docs/benchmarks-1106.md
 
-llmcode/website/docs/config.md
+docs/site/docs/config.md
 
-llmcode/website/docs/install/codespaces.md
+docs/site/docs/install/codespaces.md
 
-llmcode/website/docs/install/docker.md
+docs/site/docs/install/docker.md
 
-llmcode/website/docs/install/pipx.md
+docs/site/docs/install/pipx.md
 
-llmcode/website/docs/llms/azure.md
+docs/site/docs/llms/azure.md
 
-llmcode/website/docs/llms/editing-format.md
+docs/site/docs/llms/editing-format.md
 
-llmcode/website/docs/llms/openai.md
+docs/site/docs/llms/openai.md
 
-llmcode/website/docs/llms/openrouter.md
+docs/site/docs/llms/openrouter.md
 
-llmcode/website/docs/llms/other.md
+docs/site/docs/llms/other.md
 
-llmcode/website/docs/more-info.md
+docs/site/docs/more-info.md
 
-llmcode/website/docs/repomap.md
+docs/site/docs/repomap.md
 
-llmcode/website/examples/pong.md
+docs/site/examples/pong.md
 
-llmcode/website/index.md
+docs/site/index.md
 
 benchmark/benchmark.py:
 ⋮...
@@ -8199,7 +8199,7 @@ scripts/blame.py:
 │def get_tag_date(tag):
 ⋮...
 
-scripts/pip-compile.sh
+scripts/dev/generate_requirements.sh
 
 scripts/versionbump.py:
 ⋮...
@@ -10621,23 +10621,23 @@ These changes will cache the `TreeContext` for each filename and reuse it, which
 
 # llmcode chat started at 2024-08-08 10:12:44
 
-> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode --edit-format ask llmcode/io.py  
+> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode --edit-format ask llmcode/core/io.py  
 > Llmcode v0.48.2-dev  
 > Models: claude-3-5-sonnet-20240620 with ask edit format, weak model claude-3-haiku-20240307  
 > Git repo: .git with 300 files  
 > Repo-map: using 1024 tokens  
-> Added llmcode/io.py to the chat.  
+> Added llmcode/core/io.py to the chat.  
 > Use /help <question> for help, run "llmcode --help" to see cmd line args  
 
 # llmcode chat started at 2024-08-08 10:12:57
 
-> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode --edit-format ask llmcode/io.py llmcode/coders/base_coder.py  
+> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode --edit-format ask llmcode/core/io.py llmcode/coders/base_coder.py  
 > Llmcode v0.48.2-dev  
 > Models: claude-3-5-sonnet-20240620 with ask edit format, weak model claude-3-haiku-20240307  
 > Git repo: .git with 300 files  
 > Repo-map: using 1024 tokens  
 > Added llmcode/coders/base_coder.py to the chat.  
-> Added llmcode/io.py to the chat.  
+> Added llmcode/core/io.py to the chat.  
 > Use /help <question> for help, run "llmcode --help" to see cmd line args  
 
 #### this app is structured to work well as a cli app. i want to add a web ui as well. but the problem is that Coder expects to use `InputOutput` to ask the user to confirm certain things that come up during the main chat loop. IO uses prompt toolkit to ask the user a question in the terminal and then coder can proceed based on the answer.  
@@ -10665,7 +10665,7 @@ These changes will cache the `TreeContext` for each filename and reuse it, which
 > Git repo: .git with 300 files  
 > Repo-map: using 1024 tokens  
 > Added llmcode/coders/base_coder.py to the chat.  
-> Added llmcode/io.py to the chat.  
+> Added llmcode/core/io.py to the chat.  
 
 #### this app is structured to work well as a cli app. i want to add a web ui as well. but the problem is that Coder expects to use `InputOutput` to ask the user to confirm certain things that come up during the main chat loop. IO uses prompt toolkit to ask the user a question in the terminal and then coder can proceed based on the answer.  
 #### but in a webui, it seems hard for IO to synchronously get an answer from the user. same problem if the app tried to provide an api rather than just run as a terminal app.  
@@ -10678,7 +10678,7 @@ These changes will cache the `TreeContext` for each filename and reuse it, which
 > Git repo: .git with 300 files  
 > Repo-map: using 1024 tokens  
 > Added llmcode/coders/base_coder.py to the chat.  
-> Added llmcode/io.py to the chat.  
+> Added llmcode/core/io.py to the chat.  
 
 #### this app is structured to work well as a cli app. i want to add a web ui as well. but the problem is that Coder expects to use `InputOutput` to ask the user to confirm certain things that come up during the main chat loop. IO uses prompt toolkit to ask the user a question in the terminal and then coder can proceed based on the answer.  
 #### but in a webui, it seems hard for IO to synchronously get an answer from the user. same problem if the app tried to provide an api rather than just run as a terminal app.  
@@ -13737,12 +13737,12 @@ Bonjour! Je comprends que vous n'avez pas encore partagé de fichiers que je peu
 
 # llmcode chat started at 2024-08-08 15:25:01
 
-> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode llmcode/io.py  
+> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode llmcode/core/io.py  
 > Llmcode v0.48.2-dev  
 > Models: claude-3-5-sonnet-20240620 with diff edit format, weak model claude-3-haiku-20240307  
 > Git repo: .git with 303 files  
 > Repo-map: using 1024 tokens  
-> Added llmcode/io.py to the chat.  
+> Added llmcode/core/io.py to the chat.  
 > Use /help <question> for help, run "llmcode --help" to see cmd line args  
 
 #### /ask is there a better way to use prompt-toolkit to confirm_ask?  
@@ -13867,7 +13867,7 @@ This approach leverages prompt-toolkit's built-in functionality for yes/no promp
 
 Certainly! I'll make the change to use the `confirm()` function from prompt-toolkit in the `confirm_ask` method. Here's the *SEARCH/REPLACE block* to implement this change:
 
-llmcode/io.py
+llmcode/core/io.py
 ```python
 <<<<<<< SEARCH
 from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt
@@ -13876,7 +13876,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confi
 >>>>>>> REPLACE
 ```
 
-llmcode/io.py
+llmcode/core/io.py
 ```python
 <<<<<<< SEARCH
     def confirm_ask(self, question, default="y"):
@@ -13927,7 +13927,7 @@ These changes will update the `confirm_ask` method to use the `confirm()` functi
 
 Note that this change assumes the existence of a `get_prompt_style()` method in the `InputOutput` class. If this method doesn't exist, you'll need to add it. Here's a *SEARCH/REPLACE block* to add this method:
 
-llmcode/io.py
+llmcode/core/io.py
 ```python
 <<<<<<< SEARCH
     def tool_output(self, *messages, log_only=False):
@@ -13969,7 +13969,7 @@ llmcode/io.py
 This adds the `get_prompt_style()` method, which will provide consistent styling for the confirm prompt.
 
 > Tokens: 6,936 sent, 785 received. Cost: $0.03 request, $0.09 session.  
-> Applied edit to llmcode/io.py  
+> Applied edit to llmcode/core/io.py  
 > Commit 5ae449c feat: Use prompt-toolkit's confirm() function for yes/no prompts  
 > You can use /undo to revert and discard commit 5ae449c.  
 > Commit 397e4b7 style: format code according to linter rules  
@@ -13981,7 +13981,7 @@ This adds the `get_prompt_style()` method, which will provide consistent styling
 
 I apologize for the error. It seems that the `confirm()` function from prompt-toolkit doesn't accept a `default` argument directly. Let's modify the `confirm_ask` method to handle the default value correctly. Here's the updated *SEARCH/REPLACE block*:
 
-llmcode/io.py
+llmcode/core/io.py
 ```python
 <<<<<<< SEARCH
     def confirm_ask(self, question, default="y"):
@@ -14052,7 +14052,7 @@ This should resolve the TypeError and maintain the desired functionality of the 
 > https://llmcode.khulnasoft.com/docs/troubleshooting/edit-errors.html  
 > # 1 SEARCH/REPLACE block failed to match!  
 >   
-> ## SearchReplaceNoExactMatch: This SEARCH block failed to exactly match lines in llmcode/io.py  
+> ## SearchReplaceNoExactMatch: This SEARCH block failed to exactly match lines in llmcode/core/io.py  
 > <<<<<<< SEARCH  
 >     def confirm_ask(self, question, default="y"):  
 >         self.num_user_asks += 1  

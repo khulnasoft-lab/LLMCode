@@ -1,4 +1,3 @@
-
 [project]
 name = "llmcode"
 description = "Llmcode is AI pair programming in your terminal"
@@ -48,5 +47,5 @@ build-backend = "setuptools.build_meta"
 write_to = "llmcode/_version.py"
 
 [tool.codetypo]
-skip = "*.svg,Gemfile.lock"
+skip = "*.svg,Gemfile.lock,docs/site/_site/**"
 write-changes = true
