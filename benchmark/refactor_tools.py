@@ -132,7 +132,12 @@ def find_non_self_methods(path):
         with open(filename, "r") as file:
             try:
                 node = ast.parse(file.read(), filename=filename)
-            except Exception:
+        try:
+            node = ast.parse(file.read(), filename=filename)
+        except Exception:
+            continue
+        checker.visit(node)
+        # …rest of processing…
                 pass
             checker = SelfUsageChecker()
             checker.visit(node)
