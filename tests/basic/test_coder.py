@@ -317,10 +317,7 @@ class TestCoder(unittest.TestCase):
                 # Simple plain text mentions
                 (f"You should edit {test_files[0]} first", {test_files[0]}),
                 # Multiple files in plain text
-                (
-                    f"Edit both {test_files[0]} and {test_files[1]}",
-                    {test_files[0], test_files[1]},
-                ),
+                (f"Edit both {test_files[0]} and {test_files[1]}", {test_files[0], test_files[1]}),
                 # Files in backticks
                 (f"Check the file `{test_files[2]}`", {test_files[2]}),
                 # Files in code blocks
@@ -876,10 +873,7 @@ two
         # Test various URL formats
         test_cases = [
             ("Check http://example.com, it's cool", "http://example.com"),
-            (
-                "Visit https://www.example.com/page and see stuff",
-                "https://www.example.com/page",
-            ),
+            ("Visit https://www.example.com/page and see stuff", "https://www.example.com/page"),
             (
                 "Go to http://subdomain.example.com:8080/path?query=value, or not",
                 "http://subdomain.example.com:8080/path?query=value",
@@ -889,19 +883,13 @@ two
                 "https://example.com/path#fragment",
             ),
             ("Look at http://localhost:3000", "http://localhost:3000"),
-            (
-                "View https://example.com/setup#whatever",
-                "https://example.com/setup#whatever",
-            ),
+            ("View https://example.com/setup#whatever", "https://example.com/setup#whatever"),
             ("Open http://127.0.0.1:8000/api/v1/", "http://127.0.0.1:8000/api/v1/"),
             (
                 "Try https://example.com/path/to/page.html?param1=value1&param2=value2",
                 "https://example.com/path/to/page.html?param1=value1&param2=value2",
             ),
-            (
-                "Access http://user:password@example.com",
-                "http://user:password@example.com",
-            ),
+            ("Access http://user:password@example.com", "http://user:password@example.com"),
             (
                 "Use https://example.com/path_(with_parentheses)",
                 "https://example.com/path_(with_parentheses)",
@@ -1111,10 +1099,7 @@ This command will print 'Hello, World!' to the console."""
 
             # Set up some real done_messages and cur_messages
             coder.done_messages = [
-                {
-                    "role": "user",
-                    "content": "Hello, can you help me with a Python problem?",
-                },
+                {"role": "user", "content": "Hello, can you help me with a Python problem?"},
                 {
                     "role": "assistant",
                     "content": "Of course! I'd be happy to help. What's the problem you're facing?",
@@ -1135,10 +1120,7 @@ This command will print 'Hello, World!' to the console."""
             ]
 
             coder.cur_messages = [
-                {
-                    "role": "user",
-                    "content": "Can you optimize this function for large numbers?",
-                },
+                {"role": "user", "content": "Can you optimize this function for large numbers?"},
             ]
 
             # Set up real values for the main model
@@ -1311,7 +1293,7 @@ This command will print 'Hello, World!' to the console."""
             "locale.getlocale", side_effect=Exception("locale error")
         ):  # Mock locale to fail
             with patch("os.environ.get") as mock_env_get:
-                mock_env_get.side_effect = lambda key: ("de_DE.UTF-8" if key == "LANG" else None)
+                mock_env_get.side_effect = lambda key: "de_DE.UTF-8" if key == "LANG" else None
                 with patch.object(coder, "normalize_language", return_value="German") as mock_norm:
                     self.assertEqual(coder.get_user_language(), "German")
                     mock_env_get.assert_any_call("LANG")
@@ -1321,7 +1303,7 @@ This command will print 'Hello, World!' to the console."""
         # by os.environ.get, but our code checks in order, so we mock the first one it finds)
         with patch("locale.getlocale", side_effect=Exception("locale error")):
             with patch("os.environ.get") as mock_env_get:
-                mock_env_get.side_effect = lambda key: ("es_ES" if key == "LANGUAGE" else None)
+                mock_env_get.side_effect = lambda key: "es_ES" if key == "LANGUAGE" else None
                 with patch.object(coder, "normalize_language", return_value="Spanish") as mock_norm:
                     self.assertEqual(coder.get_user_language(), "Spanish")
                     mock_env_get.assert_any_call("LANGUAGE")  # LANG would be called first
@@ -1367,10 +1349,7 @@ This command will print 'Hello, World!' to the console."""
 
                 # Mock editor_coder creation and execution
                 mock_editor = MagicMock()
-                with patch(
-                    "llmcode.coders.architect_coder.Coder.create",
-                    return_value=mock_editor,
-                ):
+                with patch("llmcode.coders.architect_coder.Coder.create", return_value=mock_editor):
                     # Set partial response content
                     coder.partial_response_content = "Make these changes to the code"
 
@@ -1409,10 +1388,7 @@ This command will print 'Hello, World!' to the console."""
 
                 # Mock editor_coder creation and execution
                 mock_editor = MagicMock()
-                with patch(
-                    "llmcode.coders.architect_coder.Coder.create",
-                    return_value=mock_editor,
-                ):
+                with patch("llmcode.coders.architect_coder.Coder.create", return_value=mock_editor):
                     # Set partial response content
                     coder.partial_response_content = "Make these changes to the code"
 
@@ -1443,10 +1419,7 @@ This command will print 'Hello, World!' to the console."""
 
                 # Mock editor_coder creation and execution
                 mock_editor = MagicMock()
-                with patch(
-                    "llmcode.coders.architect_coder.Coder.create",
-                    return_value=mock_editor,
-                ):
+                with patch("llmcode.coders.architect_coder.Coder.create", return_value=mock_editor):
                     # Set partial response content
                     coder.partial_response_content = "Make these changes to the code"
 

@@ -13,7 +13,9 @@ _site
 llmcode/__version__.py
 llmcode/_version.py
 .venv/
+venv/
 .#*
 .gitattributes
 tmp.benchmarks/
 .docker_bash_history
+.aider*
