@@ -3,7 +3,7 @@
 llmcode.code-workspace
 *.pyc
 .llmcode*
-llmcode_chat.egg-info/
+llmcode.egg-info/
 build
 dist/
 Gemfile.lock

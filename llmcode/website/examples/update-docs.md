@@ -24,7 +24,7 @@ README.md
 - `--no-auto-commits`: Disable auto commit of changes. Override the default with the environment variable `LLMCODE_AUTO_COMMITS` (default: 1 for enabled, 0 for disabled).
 =======
 - `--input-history-file INPUT_HISTORY_FILE`: Specify the chat input history file (default: .llmcode.input.history). Override the default with the environment variable `LLMCODE_INPUT_HISTORY_FILE`.
-- `--chat-history-file CHAT_HISTORY_FILE`: Specify the chat history file (default: .llm.khulnasoft.com.history.md). Override the default with the environment variable `LLMCODE_CHAT_HISTORY_FILE`.
+- `--chat-history-file CHAT_HISTORY_FILE`: Specify the chat history file (default: .llm.khulnasoft.com.history.md). Override the default with the environment variable `LLMCODE_HISTORY_FILE`.
 - `--model MODEL`: Specify the model to use for the main chat (default: gpt-4). Override the default with the environment variable `LLMCODE_MODEL`.
 - `-3`: Use gpt-3.5-turbo model for the main chat (basically won't work). No environment variable override.
 - `--no-pretty`: Disable pretty, colorized output. Override the default with the environment variable `LLMCODE_PRETTY` (default: 1 for enabled, 0 for disabled).

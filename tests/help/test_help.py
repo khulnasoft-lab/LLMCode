@@ -97,7 +97,9 @@ class TestHelp(unittest.TestCase):
 
     def test_fname_to_url_unix(self):
         # Test relative Unix-style paths
-        self.assertEqual(fname_to_url("website/docs/index.md"), "https://llm.khulnasoft.com/docs")
+        self.assertEqual(
+            fname_to_url("website/docs/index.md"), "https://llm.khulnasoft.com/docs"
+        )
         self.assertEqual(
             fname_to_url("website/docs/usage.md"),
             "https://llm.khulnasoft.com/docs/usage.html",
@@ -113,11 +115,15 @@ class TestHelp(unittest.TestCase):
             fname_to_url("/home/user/project/website/docs/usage.md"),
             "https://llm.khulnasoft.com/docs/usage.html",
         )
-        self.assertEqual(fname_to_url("/home/user/project/website/_includes/header.md"), "")
+        self.assertEqual(
+            fname_to_url("/home/user/project/website/_includes/header.md"), ""
+        )
 
     def test_fname_to_url_windows(self):
         # Test relative Windows-style paths
-        self.assertEqual(fname_to_url(r"website\docs\index.md"), "https://llm.khulnasoft.com/docs")
+        self.assertEqual(
+            fname_to_url(r"website\docs\index.md"), "https://llm.khulnasoft.com/docs"
+        )
         self.assertEqual(
             fname_to_url(r"website\docs\usage.md"),
             "https://llm.khulnasoft.com/docs/usage.html",
@@ -133,7 +139,9 @@ class TestHelp(unittest.TestCase):
             fname_to_url(r"C:\Users\user\project\website\docs\usage.md"),
             "https://llm.khulnasoft.com/docs/usage.html",
         )
-        self.assertEqual(fname_to_url(r"C:\Users\user\project\website\_includes\header.md"), "")
+        self.assertEqual(
+            fname_to_url(r"C:\Users\user\project\website\_includes\header.md"), ""
+        )
 
     def test_fname_to_url_edge_cases(self):
         # Test paths that don't contain 'website'

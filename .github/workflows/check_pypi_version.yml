@@ -1,6 +1,6 @@
 name: Check PyPI Version
 
-# Check to be sure `pip install llmcode-chat` installs the most recently published version.
+# Check to be sure `pip install llmcode` installs the most recently published version.
 # If dependencies get yanked, it may render the latest version uninstallable.
 # See https://github.com/khulnasoft-lab/llmcode/issues/3699 for example.
 
@@ -23,8 +23,8 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install llmcode-chat
-        run: pip install llmcode-chat
+      - name: Install llmcode
+        run: pip install llmcode
 
       - name: Get installed llmcode version
         id: installed_version

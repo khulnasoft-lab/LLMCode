@@ -22,7 +22,7 @@ requires.
 If this happens, you may see errors like these when running pip installs:
 
 ```
-llmcode-chat 0.23.0 requires somepackage==X.Y.Z, but you have somepackage U.W.V which is incompatible.
+llmcode 0.23.0 requires somepackage==X.Y.Z, but you have somepackage U.W.V which is incompatible.
 ```
 
 ## Install with llmcode-install, uv or pipx

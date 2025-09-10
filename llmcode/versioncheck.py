@@ -50,7 +50,7 @@ def install_upgrade(io, latest_version=None):
         io,
         None,
         new_ver_text,
-        ["llmcode-chat"],
+        ["llmcode"],
         self_update=True,
     )
 
@@ -75,7 +75,7 @@ def check_version(io, just_check=False, verbose=False):
     import requests
 
     try:
-        response = requests.get("https://pypi.org/pypi/llmcode-chat/json")
+        response = requests.get("https://pypi.org/pypi/llmcode/json")
         data = response.json()
         latest_version = data["info"]["version"]
         current_version = llmcode.__version__
@@ -84,9 +84,9 @@ def check_version(io, just_check=False, verbose=False):
             io.tool_output(f"Current version: {current_version}")
             io.tool_output(f"Latest version: {latest_version}")
 
-        is_update_available = packaging.version.parse(latest_version) > packaging.version.parse(
-            current_version
-        )
+        is_update_available = packaging.version.parse(
+            latest_version
+        ) > packaging.version.parse(current_version)
     except Exception as err:
         io.tool_error(f"Error checking pypi for new version: {err}")
         return False

@@ -116,7 +116,7 @@ for more details, but
 you can get started quickly with llmcode and Sonnet like this:
 
 ```
-$ python -m pip install -U llmcode-chat
+$ python -m pip install -U llmcode
 
 $ export ANTHROPIC_API_KEY=<key> # Mac/Linux
 $ setx   ANTHROPIC_API_KEY <key> # Windows, restart shell after setx

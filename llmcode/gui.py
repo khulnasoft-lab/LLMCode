@@ -143,7 +143,9 @@ class GUI:
         undone = self.state.last_undone_commit_hash == commit_hash
         if not undone:
             with self.last_undo_empty:
-                if self.button(f"Undo commit `{commit_hash}`", key=f"undo_{commit_hash}"):
+                if self.button(
+                    f"Undo commit `{commit_hash}`", key=f"undo_{commit_hash}"
+                ):
                     self.do_undo(commit_hash)
 
     def do_sidebar(self):
@@ -176,8 +178,12 @@ class GUI:
                 self.button("Create git repo", key=random.random(), help="?")
 
             with st.popover("Update your `.gitignore` file"):
-                st.write("It's best to keep llmcode's internal files out of your git repo.")
-                self.button("Add `.llmcode*` to `.gitignore`", key=random.random(), help="?")
+                st.write(
+                    "It's best to keep llmcode's internal files out of your git repo."
+                )
+                self.button(
+                    "Add `.llmcode*` to `.gitignore`", key=random.random(), help="?"
+                )
 
     def do_add_to_chat(self):
         # with st.expander("Add to the chat", expanded=True):
@@ -252,7 +258,9 @@ class GUI:
         if self.button("Clear chat history", help=text):
             self.coder.done_messages = []
             self.coder.cur_messages = []
-            self.info("Cleared chat history. Now the LLM can't see anything before this line.")
+            self.info(
+                "Cleared chat history. Now the LLM can't see anything before this line."
+            )
 
     def do_show_metrics(self):
         st.metric("Cost of last message send & reply", "$0.0019", help="foo")
@@ -435,7 +443,10 @@ class GUI:
                 role="edit",
                 fnames=self.coder.llmcode_edited_files,
             )
-            if self.state.last_llmcode_commit_hash != self.coder.last_llmcode_commit_hash:
+            if (
+                self.state.last_llmcode_commit_hash
+                != self.coder.last_llmcode_commit_hash
+            ):
                 edit["commit_hash"] = self.coder.last_llmcode_commit_hash
                 edit["commit_message"] = self.coder.last_llmcode_commit_message
                 commits = f"{self.coder.last_llmcode_commit_hash}~1"
@@ -445,7 +456,9 @@ class GUI:
                     self.coder.last_llmcode_commit_hash,
                 )
                 edit["diff"] = diff
-                self.state.last_llmcode_commit_hash = self.coder.last_llmcode_commit_hash
+                self.state.last_llmcode_commit_hash = (
+                    self.coder.last_llmcode_commit_hash
+                )
 
             self.state.messages.append(edit)
             self.show_edit_info(edit)
@@ -484,7 +497,9 @@ class GUI:
         url = self.web_content
 
         if not self.state.scraper:
-            self.scraper = Scraper(print_error=self.info, playwright_available=has_playwright())
+            self.scraper = Scraper(
+                print_error=self.info, playwright_available=has_playwright()
+            )
 
         content = self.scraper.scrape(url) or ""
         if content.strip():

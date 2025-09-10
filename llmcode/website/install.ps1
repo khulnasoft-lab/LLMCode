@@ -424,8 +424,8 @@ function Invoke-Installer($artifacts, $platforms) {
   }
 
   Write-Information ""
-  Write-Information "Installing llmcode-chat..."
-  & "$dest_dir\uv.exe" tool install --force --python python3.12 --with pip llmcode-chat@latest
+  Write-Information "Installing llmcode..."
+  & "$dest_dir\uv.exe" tool install --force --python python3.12 --with pip llmcode@latest
 
   if (-not $NoModifyPath) {
     Add-Ci-Path $dest_dir

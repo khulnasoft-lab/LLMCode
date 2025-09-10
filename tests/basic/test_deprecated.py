@@ -90,7 +90,10 @@ class TestDeprecated(TestCase):
                 # Look for the deprecation warning in all calls
                 deprecation_warning = None
                 for call_args in mock_tool_warning.call_args_list:
-                    if "deprecated" in call_args[0][0] and "--model gpt4" in call_args[0][0]:
+                    if (
+                        "deprecated" in call_args[0][0]
+                        and "--model gpt4" in call_args[0][0]
+                    ):
                         deprecation_warning = call_args[0][0]
                         break
 

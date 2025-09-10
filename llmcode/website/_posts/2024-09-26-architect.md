@@ -356,7 +356,7 @@ o1-preview, o1-mini, GPT-4o and Claude 3.5 Sonnet.
 Run llmcode with `--architect` or get started quickly like this:
 
 ```
-pip install -U llmcode-chat
+pip install -U llmcode
 
 # Change directory into a git repo
 cd /to/your/git/repo

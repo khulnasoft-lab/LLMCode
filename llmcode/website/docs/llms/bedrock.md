@@ -115,10 +115,10 @@ You may need to install the `boto3` package.
 
 ```bash
 # If you installed with llmcode-install or `uv tool`
-uv tool run --from llmcode-chat pip install boto3
+uv tool run --from llmcode pip install boto3
 
 # Or with pipx...
-pipx inject llmcode-chat boto3
+pipx inject llmcode boto3
 
 # Or with pip
 pip install -U boto3

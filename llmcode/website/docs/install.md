@@ -55,7 +55,7 @@ You can install llmcode with uv:
 
 ```bash
 python -m pip install uv  # If you need to install uv
-uv tool install --force --python python3.12 --with pip llmcode-chat@latest
+uv tool install --force --python python3.12 --with pip llmcode@latest
 ```
 
 This will install uv using your existing python version 3.8-3.13,
@@ -72,7 +72,7 @@ You can install llmcode with pipx:
 
 ```bash
 python -m pip install pipx  # If you need to install pipx
-pipx install llmcode-chat
+pipx install llmcode
 ```
 
 You can use pipx to install llmcode with python versions 3.9-3.12.
@@ -96,7 +96,7 @@ to keep llmcode's dependencies separated.
 You can use pip to install llmcode with python versions 3.9-3.12.
 
 ```bash
-python -m pip install -U --upgrade-strategy only-if-needed llmcode-chat
+python -m pip install -U --upgrade-strategy only-if-needed llmcode
 ```
 
 {% include python-m-llmcode.md %}

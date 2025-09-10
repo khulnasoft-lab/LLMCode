@@ -269,7 +269,9 @@ def get_parser(default_config_files, git_root):
     ##########
     group = parser.add_argument_group("History Files")
     default_input_history_file = (
-        os.path.join(git_root, ".llmcode.input.history") if git_root else ".llmcode.input.history"
+        os.path.join(git_root, ".llmcode.input.history")
+        if git_root
+        else ".llmcode.input.history"
     )
     default_chat_history_file = (
         os.path.join(git_root, ".llm.khulnasoft.com.history.md")
@@ -942,7 +944,9 @@ def main():
             print(shtab.complete(parser, shell=shell))
         else:
             print("Error: Please specify a shell for completion.", file=sys.stderr)
-            print(f"Usage: python {sys.argv[0]} completion <shell_name>", file=sys.stderr)
+            print(
+                f"Usage: python {sys.argv[0]} completion <shell_name>", file=sys.stderr
+            )
             print(
                 f"Supported shells are: {', '.join(shtab.SUPPORTED_SHELLS)}",
                 file=sys.stderr,

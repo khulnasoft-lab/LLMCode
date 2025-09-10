@@ -38,12 +38,12 @@ lint:
 	flake8 llmcode tests
 
 format:
-	black llmcode tests
 	isort llmcode tests
+	black llmcode tests
 
 check-codestyle:
-	black --check llmcode tests
 	isort --check-only llmcode tests
+	black --check llmcode tests
 
 # Cleanup
 clean: clean-build clean-pyc clean-test

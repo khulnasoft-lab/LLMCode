@@ -1,6 +1,6 @@
 
 [project]
-name = "llmcode-chat"
+name = "llmcode"
 description = "Llmcode is AI pair programming in your terminal"
 readme = "README.md"
 classifiers = [
@@ -49,3 +49,9 @@ write_to = "llmcode/_version.py"
 [tool.codespell]
 skip = "*.svg,Gemfile.lock,tests/fixtures/*,llmcode/website/assets/*"
 write-changes = true
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["llmcode"]

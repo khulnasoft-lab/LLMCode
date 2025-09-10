@@ -1,4 +1,4 @@
-llama-index-embeddings-huggingface
+llama-index-embeddings-huggingface>=0.6.0
 
 # Because sentence-transformers doesn't like >=2
 numpy<2

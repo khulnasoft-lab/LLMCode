@@ -30,7 +30,7 @@ included for scale.
 You can code with all of these models using llmcode like this:
 
 ```
-$ python -m pip install -U llmcode-chat
+$ python -m pip install -U llmcode
 
 # Change directory into a git repo to work on
 $ cd /to/your/git/repo

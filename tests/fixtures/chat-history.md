@@ -1631,7 +1631,7 @@ tests/scrape/test_scrape.py
 #### /help hi  
 > To use interactive /help you need to install the help extras:  
 >  
-> /Users/gauthier/Projects/llmcode/.venv/bin/python3.12 -m pip install llmcode-chat[help] --extra-index-url https://download.pytorch.org/whl/cpu  
+> /Users/gauthier/Projects/llmcode/.venv/bin/python3.12 -m pip install llmcode[help] --extra-index-url https://download.pytorch.org/whl/cpu  
 > Run pip install? y  
 >  
 >  
@@ -6372,7 +6372,7 @@ llmcode/versioncheck.py
     if not is_update_available:
         return False
 
-    cmd = utils.get_pip_install(["--upgrade", "llmcode-chat"])
+    cmd = utils.get_pip_install(["--upgrade", "llmcode"])
 
     text = f"""
 Newer llmcode version v{latest_version} is available. To upgrade, run:
@@ -6424,7 +6424,7 @@ def check_version(io, just_check=False):
     import requests
 
     try:
-        response = requests.get("https://pypi.org/pypi/llmcode-chat/json")
+        response = requests.get("https://pypi.org/pypi/llmcode/json")
         data = response.json()
         latest_version = data["info"]["version"]
         current_version = llmcode.__version__
@@ -6453,7 +6453,7 @@ def check_version(io, just_check=False):
     if not is_update_available:
         return False
 
-    cmd = utils.get_pip_install(["--upgrade", "llmcode-chat"])
+    cmd = utils.get_pip_install(["--upgrade", "llmcode"])
 
     text = f"""
 Newer llmcode version v{latest_version} is available. To upgrade, run:
@@ -6496,7 +6496,7 @@ def check_version(io, just_check=False):
     import requests
 
     try:
-        response = requests.get("https://pypi.org/pypi/llmcode-chat/json")
+        response = requests.get("https://pypi.org/pypi/llmcode/json")
         data = response.json()
         latest_version = data["info"]["version"]
         current_version = llmcode.__version__
@@ -6535,7 +6535,7 @@ Newer llmcode version v{latest_version} is available. To upgrade, run:
         io.tool_error(text)
         return True
 
-    cmd = utils.get_pip_install(["--upgrade", "llmcode-chat"])
+    cmd = utils.get_pip_install(["--upgrade", "llmcode"])
 
     text = f"""
 Newer llmcode version v{latest_version} is available. To upgrade, run:
@@ -6608,7 +6608,7 @@ This modification ensures that users running llmcode in a Docker container are g
 >  
 > Newer llmcode version v0.48.0 is available. To upgrade, run:  
 >  
-> /venv/bin/python -m pip install --upgrade llmcode-chat  
+> /venv/bin/python -m pip install --upgrade llmcode  
 
 # llmcode chat started at 2024-08-06 14:21:50
 
@@ -9352,7 +9352,7 @@ Got it! Please let me know what changes you would like to make, and I'll identif
 
 > You need to install the llmcode browser feature:  
 >  
-> /Users/gauthier/Projects/llmcode/.venv/bin/python3.12 -m pip install llmcode-chat[browser]  
+> /Users/gauthier/Projects/llmcode/.venv/bin/python3.12 -m pip install llmcode[browser]  
 > Run pip install? yes  
 
 # llmcode chat started at 2024-08-07 11:41:40
@@ -9587,7 +9587,7 @@ SAVE
 __pycache__
 _config.yml~
 llmcode
-llmcode_chat.egg-info
+llmcode.egg-info
 badedit.md~
 benchmark
 branches_to_delete.txt~
@@ -9747,7 +9747,7 @@ README.md
 [34m__pycache__[39;49m[0m
 _config.yml~
 [34mllmcode[39;49m[0m
-[34mllmcode_chat.egg-info[39;49m[0m
+[34mllmcode.egg-info[39;49m[0m
 badedit.md~
 [34mbenchmark[39;49m[0m
 branches_to_delete.txt~
@@ -10223,7 +10223,7 @@ This change will ensure that the code catches the correct exception when a suita
 > Files are in different git repos.
 Traceback (most recent call last):
   File "/Users/gauthier/Projects/llmcode/.venv/bin/llmcode", line 33, in <module>
-    sys.exit(load_entry_point('llmcode-chat', 'console_scripts', 'llmcode')())
+    sys.exit(load_entry_point('llmcode', 'console_scripts', 'llmcode')())
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/Users/gauthier/Projects/llmcode/llmcode/main.py", line 413, in main
     right_repo_root = guessed_wrong_repo(io, git_root, fnames, git_dname)
@@ -10238,7 +10238,7 @@ llmcode.repo.SuitableRepoNotFound
 > Files are in different git repos.  
 > Traceback (most recent call last):  
 > File "/Users/gauthier/Projects/llmcode/.venv/bin/llmcode", line 33, in <module>  
-> sys.exit(load_entry_point('llmcode-chat', 'console_scripts', 'llmcode')())  
+> sys.exit(load_entry_point('llmcode', 'console_scripts', 'llmcode')())  
 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 > File "/Users/gauthier/Projects/llmcode/llmcode/main.py", line 413, in main  
 > right_repo_root = guessed_wrong_repo(io, git_root, fnames, git_dname)  
@@ -34206,7 +34206,7 @@ These changes remove the unused variables, which should resolve the flake8 error
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -34544,7 +34544,7 @@ These changes remove the unused variables, which should resolve the flake8 error
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -34867,7 +34867,7 @@ These changes remove the unused variables, which should resolve the flake8 error
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -35204,7 +35204,7 @@ Here are some relevant links to the Llmcode documentation that might be helpful:
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -35524,7 +35524,7 @@ Here are some relevant links to the Llmcode documentation that might be helpful:
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -35847,7 +35847,7 @@ I'm doing well, thank you! How can I assist you with Llmcode today? If you have 
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -36167,7 +36167,7 @@ I'm doing well, thank you! How can I assist you with Llmcode today? If you have 
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -36487,7 +36487,7 @@ I'm doing well, thank you! How can I assist you with Llmcode today? If you have 
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -36807,7 +36807,7 @@ I'm doing well, thank you! How can I assist you with Llmcode today? If you have 
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -37127,7 +37127,7 @@ I'm doing well, thank you! How can I assist you with Llmcode today? If you have 
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -37447,7 +37447,7 @@ I'm doing well, thank you! How can I assist you with Llmcode today? If you have 
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -37662,7 +37662,7 @@ Hello! How can I assist you today?
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -37957,7 +37957,7 @@ Hello! How can I assist you today with Llmcode?
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -38206,7 +38206,7 @@ Hello! How can I assist you today with Llmcode?
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -38465,7 +38465,7 @@ Hello! How can I assist you today with Llmcode?
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -38714,7 +38714,7 @@ Hello! How can I assist you today with Llmcode?
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -38993,7 +38993,7 @@ Hello! How can I assist you today? If you have any questions about using Llmcode
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -39245,7 +39245,7 @@ Let me know if you have any specific questions and I'll do my best to assist you
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -39490,7 +39490,7 @@ Hello! How can I assist you today? If you have any questions about using Llmcode
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -39735,7 +39735,7 @@ Hello! How can I assist you today with Llmcode? If you have any specific questio
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -39986,7 +39986,7 @@ Hello! How can I assist you today? If you have any questions about using Llmcode
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -40263,7 +40263,7 @@ Let me know if you have any particular questions and I'll do my best to assist!
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -40508,7 +40508,7 @@ Hello! How can I assist you today with Llmcode? If you have any specific questio
 #### `--chat-history-file CHAT_HISTORY_FILE`  
 #### Specify the chat history file (default: .llm.khulnasoft.com.history.md)    
 #### Default: .llm.khulnasoft.com.history.md    
-#### Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+#### Environment variable: `LLMCODE_HISTORY_FILE`  
 #### </doc>  
 ####   
 #### <doc>  
@@ -44119,25 +44119,25 @@ These changes should resolve the UnboundLocalError mentioned in the issue.
 ####   File "<frozen runpy>", line 198, in _run_module_as_main  
 ####   File "<frozen runpy>", line 88, in _run_code  
 ####   File "C:\users\cp\.local\bin\llmcode.exe\__main__.py", line 7, in <module>  
-####   File "C:\Users\cp\pipx\venvs\llmcode-chat\Lib\site-packages\llmcode\main.py", line 620, in main  
+####   File "C:\Users\cp\pipx\venvs\llmcode\Lib\site-packages\llmcode\main.py", line 620, in main  
 ####     coder.run()  
-####   File "C:\Users\cp\pipx\venvs\llmcode-chat\Lib\site-packages\llmcode\coders\base_coder.py", line 685, in run  
+####   File "C:\Users\cp\pipx\venvs\llmcode\Lib\site-packages\llmcode\coders\base_coder.py", line 685, in run  
 ####     self.run_one(user_message, preproc)  
-####   File "C:\Users\cp\pipx\venvs\llmcode-chat\Lib\site-packages\llmcode\coders\base_coder.py", line 717, in run_one  
+####   File "C:\Users\cp\pipx\venvs\llmcode\Lib\site-packages\llmcode\coders\base_coder.py", line 717, in run_one  
 ####     message = self.preproc_user_input(user_message)  
 ####               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
-####   File "C:\Users\cp\pipx\venvs\llmcode-chat\Lib\site-packages\llmcode\coders\base_coder.py", line 709, in preproc_user_input  
+####   File "C:\Users\cp\pipx\venvs\llmcode\Lib\site-packages\llmcode\coders\base_coder.py", line 709, in preproc_user_input  
 ####     self.check_for_urls(inp)  
-####   File "C:\Users\cp\pipx\venvs\llmcode-chat\Lib\site-packages\llmcode\coders\base_coder.py", line 743, in check_for_urls  
+####   File "C:\Users\cp\pipx\venvs\llmcode\Lib\site-packages\llmcode\coders\base_coder.py", line 743, in check_for_urls  
 ####     inp += self.commands.cmd_web(url, paginate=False)  
 ####            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
-####   File "C:\Users\cp\pipx\venvs\llmcode-chat\Lib\site-packages\llmcode\commands.py", line 139, in cmd_web  
+####   File "C:\Users\cp\pipx\venvs\llmcode\Lib\site-packages\llmcode\commands.py", line 139, in cmd_web  
 ####     content = self.scraper.scrape(url) or ""  
 ####               ^^^^^^^^^^^^^^^^^^^^^^^^  
-####   File "C:\Users\cp\pipx\venvs\llmcode-chat\Lib\site-packages\llmcode\scrape.py", line 97, in scrape  
+####   File "C:\Users\cp\pipx\venvs\llmcode\Lib\site-packages\llmcode\scrape.py", line 97, in scrape  
 ####     content, mime_type = self.scrape_with_playwright(url)  
 ####                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
-####   File "C:\Users\cp\pipx\venvs\llmcode-chat\Lib\site-packages\llmcode\scrape.py", line 146, in scrape_with_playwright  
+####   File "C:\Users\cp\pipx\venvs\llmcode\Lib\site-packages\llmcode\scrape.py", line 146, in scrape_with_playwright  
 ####     mime_type = response.header_value("content-type").split(";")[0]  
 ####                 ^^^^^^^^  
 #### UnboundLocalError: cannot access local variable 'response' where it is not associated with a value  
@@ -44946,7 +44946,7 @@ If you have any specific code or requests in mind, feel free to share, and I wil
 #### /help what is this tool?  
 > To use interactive /help you need to install the help extras:  
 >  
-> /usr/local/Cellar/llmcode/0.48.0/libexec/bin/python -m pip install llmcode-chat[help] --extra-index-url https://download.pytorch.org/whl/cpu  
+> /usr/local/Cellar/llmcode/0.48.0/libexec/bin/python -m pip install llmcode[help] --extra-index-url https://download.pytorch.org/whl/cpu  
 > Run pip install? y  
 
 # llmcode chat started at 2024-08-12 14:26:01
@@ -45228,7 +45228,7 @@ This test ensures that when a file in `read_only_fnames` is mentioned, the user 
 #### You can get started quickly like this:  
 ####   
 #### ```  
-#### $ pip install llmcode-chat  
+#### $ pip install llmcode  
 ####   
 #### # Change directory into a git repo  
 #### $ cd /to/your/git/repo  
@@ -45325,7 +45325,7 @@ This test ensures that when a file in `read_only_fnames` is mentioned, the user 
 #### Use the `--browser` switch to launch the browser version of llmcode:  
 ####   
 #### ```  
-#### pip install llmcode-chat  
+#### pip install llmcode  
 ####   
 #### export OPENAI_API_KEY=<key> # Mac/Linux  
 #### setx   OPENAI_API_KEY <key> # Windows, restart shell after setx  
@@ -46239,7 +46239,7 @@ README.md
 You can get started quickly like this:
 
 ```
-python -m pip install llmcode-chat
+python -m pip install llmcode
 
 # Change directory into a git repo
 cd /to/your/git/repo
@@ -46256,7 +46256,7 @@ llmcode
 Vous pouvez commencer rapidement comme ceci :
 
 ```
-python -m pip install llmcode-chat
+python -m pip install llmcode
 
 # Changez de répertoire vers un dépôt git
 cd /vers/votre/depot/git
@@ -46448,9 +46448,9 @@ HISTORY.md
 
 - Default pip install size reduced by 3-12x.
 - Added 3 package extras, which llmcode will offer to install when needed:
-  - `llmcode-chat[help]`
-  - `llmcode-chat[browser]`
-  - `llmcode-chat[playwright]`
+  - `llmcode[help]`
+  - `llmcode[browser]`
+  - `llmcode[playwright]`
 - Improved regex for detecting URLs in user chat messages.
 - Bugfix to globbing logic when absolute paths are included in `/add`.
 - Simplified output of `--models`.
@@ -46907,9 +46907,9 @@ HISTORY.md
 
 - La taille d'installation pip par défaut réduite de 3 à 12 fois.
 - Ajouté 3 extras de paquets, qu'llmcode proposera d'installer au besoin :
-  - `llmcode-chat[help]`
-  - `llmcode-chat[browser]`
-  - `llmcode-chat[playwright]`
+  - `llmcode[help]`
+  - `llmcode[browser]`
+  - `llmcode[playwright]`
 - Amélioration de la regex pour détecter les URL dans les messages de discussion des utilisateurs.
 - Correction de bug dans la logique de globbing lors de l'inclusion de chemins absolus dans `/add`.
 - Sortie simplifiée de `--models`.
@@ -47314,7 +47314,7 @@ If you specifically need to work with images in the VSCode environment, you migh
 
 > You need to install the llmcode browser feature:  
 >  
-> /Users/gauthier/Projects/llmcode/.venv/bin/python3.12 -m pip install llmcode-chat[browser]  
+> /Users/gauthier/Projects/llmcode/.venv/bin/python3.12 -m pip install llmcode[browser]  
 > Run pip install? y  
 
 #### /ex  
@@ -51477,9 +51477,9 @@ HISTORY.md
 
 - La taille d'installation pip par défaut réduite de 3 à 12 fois.
 - Ajouté 3 extras de paquets, qu'llmcode proposera d'installer au besoin :
-  - `llmcode-chat[help]`
-  - `llmcode-chat[browser]`
-  - `llmcode-chat[playwright]`
+  - `llmcode[help]`
+  - `llmcode[browser]`
+  - `llmcode[playwright]`
 - Amélioration de la regex pour détecter les URL dans les messages de discussion des utilisateurs.
 - Correction de bug dans la logique de globbing lors de l'inclusion de chemins absolus dans `/add`.
 - Sortie simplifiée de `--models`.
@@ -51695,9 +51695,9 @@ HISTORY.md
 
 - Réduction de la taille d'installation pip par défaut de 3 à 12x.
 - Ajout de 3 extras de package, que llmcode proposera d'installer si nécessaire :
-  - `llmcode-chat[help]`
-  - `llmcode-chat[browser]`
-  - `llmcode-chat[playwright]`
+  - `llmcode[help]`
+  - `llmcode[browser]`
+  - `llmcode[playwright]`
 - Amélioration de l'expression régulière pour détecter les URLs dans les messages de chat utilisateur.
 - Correction de bogue dans la logique de globbing lorsque des chemins absolus sont inclus dans `/add`.
 - Simplification de la sortie de `--models`.
@@ -55570,9 +55570,9 @@ HISTORY.md
 
 - Taille d'installation pip par défaut réduite de 3 à 12 fois.
 - Ajouté 3 extras de paquets, qu'llmcode proposera d'installer au besoin :
-  - `llmcode-chat[help]`
-  - `llmcode-chat[browser]`
-  - `llmcode-chat[playwright]`
+  - `llmcode[help]`
+  - `llmcode[browser]`
+  - `llmcode[playwright]`
 - Amélioration de la regex pour détecter les URL dans les messages de discussion des utilisateurs.
 - Correction de bug dans la logique de globbing lors de l'inclusion de chemins absolus dans `/add`.
 - Simplification de la sortie de `--models`.
@@ -56198,9 +56198,9 @@ HISTORY.md
 
 - Taille d'installation pip par défaut réduite de 3 à 12 fois.
 - Ajouté 3 extras de paquets, qu'llmcode proposera d'installer au besoin :
-  - `llmcode-chat[help]`
-  - `llmcode-chat[browser]`
-  - `llmcode-chat[playwright]`
+  - `llmcode[help]`
+  - `llmcode[browser]`
+  - `llmcode[playwright]`
 - Amélioration de la regex pour détecter les URL dans les messages de discussion des utilisateurs.
 - Correction de bug dans la logique de globbing lors de l'inclusion de chemins absolus dans `/add`.
 - Simplification de la sortie de `--models`.
@@ -57497,9 +57497,9 @@ HISTORY.md
 
 - Taille d'installation pip par défaut réduite de 3 à 12 fois.
 - Ajouté 3 extras de paquets, qu'llmcode proposera d'installer au besoin :
-  - `llmcode-chat[help]`
-  - `llmcode-chat[browser]`
-  - `llmcode-chat[playwright]`
+  - `llmcode[help]`
+  - `llmcode[browser]`
+  - `llmcode[playwright]`
 - Amélioration de la regex pour détecter les URL dans les messages de discussion des utilisateurs.
 - Correction de bug dans la logique de globbing lors de l'inclusion de chemins absolus dans `/add`.
 - Simplification de la sortie de `--models`.
@@ -58431,9 +58431,9 @@ HISTORY.md
 
 - Taille d'installation pip par défaut réduite de 3 à 12 fois.
 - Ajouté 3 extras de paquets, qu'llmcode proposera d'installer au besoin :
-  - `llmcode-chat[help]`
-  - `llmcode-chat[browser]`
-  - `llmcode-chat[playwright]`
+  - `llmcode[help]`
+  - `llmcode[browser]`
+  - `llmcode[playwright]`
 - Amélioration de la regex pour détecter les URL dans les messages de discussion des utilisateurs.
 - Correction de bug dans la logique de globbing lors de l'inclusion de chemins absolus dans `/add`.
 - Simplification de la sortie de `--models`.
@@ -59122,7 +59122,7 @@ This *SEARCH/REPLACE block* correctly follows the format you specified. It will 
 
 > You need to install the llmcode browser feature:  
 >  
-> /Users/gauthier/Projects/llmcode/.venv/bin/python3.12 -m pip install llmcode-chat[browser]  
+> /Users/gauthier/Projects/llmcode/.venv/bin/python3.12 -m pip install llmcode[browser]  
 > Run pip install? y  
 
 # llmcode chat started at 2024-08-13 07:18:37
@@ -60368,7 +60368,7 @@ pyproject.toml
 ```toml
 <<<<<<< SEARCH
 [project]
-name = "llmcode-chat"
+name = "llmcode"
 =======
 # [[[cog
 # from llmcode.help_pats import exclude_website_pats
@@ -60376,7 +60376,7 @@ name = "llmcode-chat"
 # [[[end]]]
 
 [project]
-name = "llmcode-chat"
+name = "llmcode"
 >>>>>>> REPLACE
 ```
 
@@ -81573,9 +81573,9 @@ HISTORY.md
 
 - Réduction de la taille d'installation pip par défaut de 3 à 12x.
 - Ajout de 3 extras de package, que Llmcode proposera d'installer si nécessaire :
-  - `llmcode-chat[help]`
-  - `llmcode-chat[browser]`
-  - `llmcode-chat[playwright]`
+  - `llmcode[help]`
+  - `llmcode[browser]`
+  - `llmcode[playwright]`
 - Amélioration de l'expression régulière pour détecter les URLs dans les messages de chat utilisateur.
 - Correction de la logique de globbing lorsque des chemins absolus sont inclus dans `/add`.
 - Simplification de la sortie de `--models`.
@@ -83156,7 +83156,7 @@ See https://llm.khulnasoft.com/docs/install/optional.html#enable-playwright for 
 > Scraping https://llm.khulnasoft.com...  
 > For the best web scraping, install Playwright:
 
-/venv/bin/python -m pip install llmcode-chat[playwright]
+/venv/bin/python -m pip install llmcode[playwright]
 /venv/bin/python -m playwright install --with-deps chromium
 
 See https://llm.khulnasoft.com/docs/install/optional.html#enable-playwright for more info.  
@@ -92514,7 +92514,7 @@ Cost: $0.02 message, $0.02 session. Use --no-stream for accurate caching costs.
 
 > Newer llmcode version v0.51.1 is available. To upgrade, run:  
 >  
-> /Users/gauthier/Projects/llmcode/.venv/bin/python3.12 -m pip install --upgrade llmcode-chat  
+> /Users/gauthier/Projects/llmcode/.venv/bin/python3.12 -m pip install --upgrade llmcode  
 
 # llmcode chat started at 2024-08-21 05:37:06
 
@@ -92535,7 +92535,7 @@ Cost: $0.02 message, $0.02 session. Use --no-stream for accurate caching costs.
 # llmcode chat started at 2024-08-21 05:37:10
 
 > Newer llmcode version v0.51.1 is available. To upgrade, run:  
-> /Users/gauthier/Projects/llmcode/.venv/bin/python3.12 -m pip install --upgrade llmcode-chat  
+> /Users/gauthier/Projects/llmcode/.venv/bin/python3.12 -m pip install --upgrade llmcode  
 > Run pip install? n  
 > /Users/gauthier/Projects/llmcode/.venv/bin/llmcode  
 > Llmcode v0.51.2-dev  

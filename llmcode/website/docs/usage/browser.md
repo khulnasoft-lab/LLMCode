@@ -48,7 +48,7 @@ It also supports [connecting to almost any LLM](https://llm.khulnasoft.com/docs/
 Use the `--browser` switch to launch the browser version of llmcode:
 
 ```
-python -m pip install -U llmcode-chat
+python -m pip install -U llmcode
 
 export OPENAI_API_KEY=<key> # Mac/Linux
 setx   OPENAI_API_KEY <key> # Windows, restart shell after setx

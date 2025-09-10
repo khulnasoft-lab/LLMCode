@@ -2120,7 +2120,7 @@ llmcode/versioncheck.py
     if not is_update_available:
         return False
 
-    cmd = utils.get_pip_install(["--upgrade", "llmcode-chat"])
+    cmd = utils.get_pip_install(["--upgrade", "llmcode"])
 
     text = f"""
 Newer llmcode version v{latest_version} is available. To upgrade, run:
@@ -2163,7 +2163,7 @@ def check_version(io, just_check=False):
     import requests
 
     try:
-        response = requests.get("https://pypi.org/pypi/llmcode-chat/json")
+        response = requests.get("https://pypi.org/pypi/llmcode/json")
         data = response.json()
         latest_version = data["info"]["version"]
         current_version = llmcode.__version__
@@ -2192,7 +2192,7 @@ def check_version(io, just_check=False):
     if not is_update_available:
         return False
 
-    cmd = utils.get_pip_install(["--upgrade", "llmcode-chat"])
+    cmd = utils.get_pip_install(["--upgrade", "llmcode"])
 
     text = f"""
 Newer llmcode version v{latest_version} is available. To upgrade, run:
@@ -2235,7 +2235,7 @@ def check_version(io, just_check=False):
     import requests
 
     try:
-        response = requests.get("https://pypi.org/pypi/llmcode-chat/json")
+        response = requests.get("https://pypi.org/pypi/llmcode/json")
         data = response.json()
         latest_version = data["info"]["version"]
         current_version = llmcode.__version__
@@ -2274,7 +2274,7 @@ Newer llmcode version v{latest_version} is available. To upgrade, run:
         io.tool_error(text)
         return True
 
-    cmd = utils.get_pip_install(["--upgrade", "llmcode-chat"])
+    cmd = utils.get_pip_install(["--upgrade", "llmcode"])
 
     text = f"""
 Newer llmcode version v{latest_version} is available. To upgrade, run:
@@ -11795,7 +11795,7 @@ README.md
 You can get started quickly like this:
 
 ```
-python -m pip install llmcode-chat
+python -m pip install llmcode
 
 # Change directory into a git repo
 cd /to/your/git/repo
@@ -11812,7 +11812,7 @@ llmcode
 Vous pouvez commencer rapidement comme ceci :
 
 ```
-python -m pip install llmcode-chat
+python -m pip install llmcode
 
 # Changez de répertoire vers un dépôt git
 cd /vers/votre/depot/git
@@ -12008,9 +12008,9 @@ HISTORY.md
 
 - Default pip install size reduced by 3-12x.
 - Added 3 package extras, which llmcode will offer to install when needed:
-  - `llmcode-chat[help]`
-  - `llmcode-chat[browser]`
-  - `llmcode-chat[playwright]`
+  - `llmcode[help]`
+  - `llmcode[browser]`
+  - `llmcode[playwright]`
 - Improved regex for detecting URLs in user chat messages.
 - Bugfix to globbing logic when absolute paths are included in `/add`.
 - Simplified output of `--models`.
@@ -16081,7 +16081,7 @@ def sanity_check_model(io, model):
 @@@ #### use cog to import `exclude_website_pats` and emit it into the toml @@@@@@@@@@@@@@@@@@@@
 @@@ SEARCH: pyproject.toml @@@@@@@@@@@@@@@@@@@@
 [project]
-name = "llmcode-chat"
+name = "llmcode"
 @@@@@@@@@@@@@@@@@@@@
 # [[[cog
 # from llmcode.help_pats import exclude_website_pats
@@ -16089,7 +16089,7 @@ name = "llmcode-chat"
 # [[[end]]]
 
 [project]
-name = "llmcode-chat"
+name = "llmcode"
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
 @@@ SEARCH: pyproject.toml @@@@@@@@@@@@@@@@@@@@
 [tool.setuptools.exclude-package-data]

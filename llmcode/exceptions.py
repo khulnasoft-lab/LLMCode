@@ -27,7 +27,9 @@ EXCEPTIONS = [
         True,
         "The API provider has refused the request due to a safety policy about the content.",
     ),
-    ExInfo("ContextWindowExceededError", False, None),  # special case handled in base_coder
+    ExInfo(
+        "ContextWindowExceededError", False, None
+    ),  # special case handled in base_coder
     ExInfo(
         "InternalServerError",
         True,
@@ -71,7 +73,9 @@ class LiteLLMExceptions:
         for var in dir(litellm):
             if var.endswith("Error"):
                 if var not in self.exception_info:
-                    raise ValueError(f"{var} is in litellm but not in llmcode's exceptions list")
+                    raise ValueError(
+                        f"{var} is in litellm but not in llmcode's exceptions list"
+                    )
 
         for var in self.exception_info:
             ex = getattr(litellm, var)
@@ -92,7 +96,9 @@ class LiteLLMExceptions:
                     "You need to: pip install google-generativeai",
                 )
             if "boto3" in str(ex):
-                return ExInfo("APIConnectionError", False, "You need to: pip install boto3")
+                return ExInfo(
+                    "APIConnectionError", False, "You need to: pip install boto3"
+                )
             if "OpenrouterException" in str(ex) and "'choices'" in str(ex):
                 return ExInfo(
                     "APIConnectionError",

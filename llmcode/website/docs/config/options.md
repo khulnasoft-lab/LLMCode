@@ -282,7 +282,7 @@ Environment variable: `LLMCODE_INPUT_HISTORY_FILE`
 ### `--chat-history-file CHAT_HISTORY_FILE`
 Specify the chat history file (default: .llm.khulnasoft.com.history.md)  
 Default: .llm.khulnasoft.com.history.md  
-Environment variable: `LLMCODE_CHAT_HISTORY_FILE`  
+Environment variable: `LLMCODE_HISTORY_FILE`  
 
 ### `--restore-chat-history`
 Restore the previous chat history messages (default: False)  
@@ -701,7 +701,7 @@ Environment variable: `LLMCODE_VIM`
 
 ### `--chat-language CHAT_LANGUAGE`
 Specify the language to use in the chat (default: None, uses system settings)  
-Environment variable: `LLMCODE_CHAT_LANGUAGE`  
+Environment variable: `LLMCODE_LANGUAGE`  
 
 ### `--commit-language COMMIT_LANGUAGE`
 Specify the language to use in the commit message (default: None, user language)  

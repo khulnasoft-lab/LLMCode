@@ -38,9 +38,7 @@ The diff needs to apply to a unique set of lines in {path}!
 {original}```
 """
 
-other_hunks_applied = (
-    "Note: some hunks did apply successfully. See the updated source code shown above.\n\n"
-)
+other_hunks_applied = "Note: some hunks did apply successfully. See the updated source code shown above.\n\n"
 
 
 class UnifiedDiffCoder(Coder):
@@ -238,7 +236,9 @@ def make_new_lines_explicit(content, hunk):
     if len(new_before) < len(before) * 0.66:
         return hunk
 
-    new_hunk = difflib.unified_diff(new_before, after, n=max(len(new_before), len(after)))
+    new_hunk = difflib.unified_diff(
+        new_before, after, n=max(len(new_before), len(after))
+    )
     new_hunk = list(new_hunk)[3:]
 
     return new_hunk
@@ -246,7 +246,8 @@ def make_new_lines_explicit(content, hunk):
 
 def cleanup_pure_whitespace_lines(lines):
     res = [
-        line if line.strip() else line[-(len(line) - len(line.rstrip("\r\n")))] for line in lines
+        line if line.strip() else line[-(len(line) - len(line.rstrip("\r\n")))]
+        for line in lines
     ]
     return res
 
@@ -353,7 +354,9 @@ def process_fenced_block(lines, start_line_num):
         b_fname = block[1][4:].strip()
 
         # Check if standard git diff prefixes are present (or /dev/null) and strip them
-        if (a_fname.startswith("a/") or a_fname == "/dev/null") and b_fname.startswith("b/"):
+        if (a_fname.startswith("a/") or a_fname == "/dev/null") and b_fname.startswith(
+            "b/"
+        ):
             fname = b_fname[2:]
         else:
             # Otherwise, assume the path is as intended

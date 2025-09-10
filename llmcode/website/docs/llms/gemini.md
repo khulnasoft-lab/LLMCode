@@ -39,10 +39,10 @@ You may need to install the `google-generativeai` package.
 
 ```bash
 # If you installed with llmcode-install or `uv tool`
-uv tool run --from llmcode-chat pip install google-generativeai
+uv tool run --from llmcode pip install google-generativeai
 
 # Or with pipx...
-pipx inject llmcode-chat google-generativeai
+pipx inject llmcode google-generativeai
 
 # Or with pip
 pip install -U google-generativeai

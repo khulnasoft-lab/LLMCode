@@ -734,7 +734,7 @@ versions.
 
 ### Llmcode v0.57.1
 
-- Fixed dependency conflict between llmcode-chat[help] and [playwright].
+- Fixed dependency conflict between llmcode[help] and [playwright].
 
 ### Llmcode v0.57.0
 
@@ -1043,9 +1043,9 @@ versions.
 
 - Default pip install size reduced by 3-12x.
 - Added 3 package extras, which llmcode will offer to install when needed:
-  - `llmcode-chat[help]`
-  - `llmcode-chat[browser]`
-  - `llmcode-chat[playwright]`
+  - `llmcode[help]`
+  - `llmcode[browser]`
+  - `llmcode[playwright]`
 - Improved regex for detecting URLs in user chat messages.
 - Bugfix to globbing logic when absolute paths are included in `/add`.
 - Simplified output of `--models`.
