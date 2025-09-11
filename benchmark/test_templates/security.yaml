@@ -1,0 +1,375 @@
+name: security
+description: Template for security testing
+framework: pytest
+language: python
+template_code: |
+    import pytest
+    import sys
+    import os
+    import re
+    from unittest.mock import Mock, patch
+    import subprocess
+    
+    # Add project root to path
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+    from {file_name} import {function_or_class_name}
+    
+    def test_sql_injection_prevention():
+        """Test SQL injection prevention"""
+        # Test various SQL injection attempts
+        malicious_inputs = [
+            "'; DROP TABLE users; --",
+            "' OR '1'='1",
+            "'; SELECT * FROM users; --",
+            "' UNION SELECT username, password FROM users; --",
+            "1; DELETE FROM users WHERE 1=1; --",
+            "' OR SLEEP(10); --",
+            "'; WAITFOR DELAY '0:0:10'; --",
+            "' AND (SELECT COUNT(*) FROM information_schema.tables) > 0; --"
+        ]
+        
+        for malicious_input in malicious_inputs:
+            try:
+                result = {function_or_class_name}(malicious_input)
+                # Result should not contain sensitive information
+                assert 'password' not in str(result).lower(), f"SQL injection vulnerability detected with input: {malicious_input}"
+                assert 'users' not in str(result).lower(), f"SQL injection vulnerability detected with input: {malicious_input}"
+            except Exception as e:
+                # Exception should not reveal database structure
+                error_msg = str(e).lower()
+                assert 'table' not in error_msg, f"Error reveals database structure: {e}"
+                assert 'column' not in error_msg, f"Error reveals database structure: {e}"
+                assert 'syntax' not in error_msg, f"Error reveals database structure: {e}"
+    
+    def test_xss_prevention():
+        """Test Cross-Site Scripting (XSS) prevention"""
+        # Test various XSS attempts
+        malicious_inputs = [
+            "<script>alert('XSS')</script>",
+            "javascript:alert('XSS')",
+            "<img src=x onerror=alert('XSS')>",
+            "<svg onload=alert('XSS')>",
+            "'\"><script>alert('XSS')</script>",
+            "<iframe src=javascript:alert('XSS')>",
+            "<body onload=alert('XSS')>",
+            "';alert(String.fromCharCode(88,83,83));//",
+            "<scr<script>ipt>alert('XSS')</scr<script>ipt>"
+        ]
+        
+        for malicious_input in malicious_inputs:
+            result = {function_or_class_name}(malicious_input)
+            result_str = str(result)
+            
+            # Result should not contain unescaped script tags
+            assert '<script>' not in result_str.lower(), f"XSS vulnerability detected with input: {malicious_input}"
+            assert 'javascript:' not in result_str.lower(), f"XSS vulnerability detected with input: {malicious_input}"
+            assert 'onerror=' not in result_str.lower(), f"XSS vulnerability detected with input: {malicious_input}"
+            assert 'onload=' not in result_str.lower(), f"XSS vulnerability detected with input: {malicious_input}"
+    
+    def test_input_validation():
+        """Test input validation"""
+        # Test various invalid inputs
+        invalid_inputs = [
+            None,
+            "",
+            "   ",
+            "{{invalid_input_1}}",
+            "{{invalid_input_2}}",
+            "{{invalid_input_3}}",
+            "{{very_long_input}}" * 1000,  # Very long input
+            "{{special_chars_input}}!@#$%^&*()",
+            "{{unicode_input}}\u0000\u0001\u0002",
+            "{{control_chars_input}}\n\r\t"
+        ]
+        
+        for invalid_input in invalid_inputs:
+            try:
+                result = {function_or_class_name}(invalid_input)
+                # If no exception, result should be safe
+                assert result is not None, f"Invalid input not handled properly: {invalid_input}"
+            except (ValueError, TypeError, AttributeError) as e:
+                # Expected exceptions for invalid input
+                pass
+            except Exception as e:
+                # Unexpected exception might indicate security issue
+                pytest.fail(f"Unexpected exception for invalid input {invalid_input}: {e}")
+    
+    def test_authentication_bypass():
+        """Test authentication bypass prevention"""
+        # Test various authentication bypass attempts
+        bypass_attempts = [
+            {{bypass_attempt_1}},
+            {{bypass_attempt_2}},
+            {{bypass_attempt_3}},
+            {{bypass_attempt_4}},
+            {{bypass_attempt_5}}
+        ]
+        
+        for attempt in bypass_attempts:
+            try:
+                result = {function_or_class_name}(attempt)
+                # Should not grant unauthorized access
+                assert not result, f"Authentication bypass possible with: {attempt}"
+            except Exception as e:
+                # Exception is acceptable for bypass attempts
+                pass
+    
+    def test_authorization_check():
+        """Test authorization check"""
+        # Test with different user roles/permissions
+        test_cases = [
+            ({{unauthorized_user}}, {{protected_resource}}, False),
+            ({{authorized_user}}, {{protected_resource}}, True),
+            ({{admin_user}}, {{protected_resource}}, True),
+            ({{guest_user}}, {{protected_resource}}, False)
+        ]
+        
+        for user, resource, should_succeed in test_cases:
+            try:
+                result = {function_or_class_name}(user, resource)
+                if should_succeed:
+                    assert result, f"Authorized user {user} denied access to {resource}"
+                else:
+                    assert not result, f"Unauthorized user {user} granted access to {resource}"
+            except Exception as e:
+                if should_succeed:
+                    pytest.fail(f"Authorized user {user} encountered error: {e}")
+    
+    def test_sensitive_data_exposure():
+        """Test sensitive data exposure prevention"""
+        # Test with data that should not be exposed
+        sensitive_data = {
+            'password': '{{test_password}}',
+            'credit_card': '{{test_credit_card}}',
+            'ssn': '{{test_ssn}}',
+            'api_key': '{{test_api_key}}',
+            'token': '{{test_token}}'
+        }
+        
+        result = {function_or_class_name}(sensitive_data)
+        result_str = str(result)
+        
+        # Check that sensitive data is not exposed
+        assert '{{test_password}}' not in result_str, "Password exposed in result"
+        assert '{{test_credit_card}}' not in result_str, "Credit card number exposed in result"
+        assert '{{test_ssn}}' not in result_str, "SSN exposed in result"
+        assert '{{test_api_key}}' not in result_str, "API key exposed in result"
+        assert '{{test_token}}' not in result_str, "Token exposed in result"
+        
+        # Check for common sensitive data patterns
+        sensitive_patterns = [
+            r'\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b',  # Credit card
+            r'\b\d{3}[-\s]?\d{2}[-\s]?\d{4}\b',  # SSN
+            r'\b[A-Za-z0-9]{32,}\b',  # API keys/tokens
+            r'password["\']?\s*[:=]\s*["\']?([^"\'\s]+)',  # Password fields
+        ]
+        
+        for pattern in sensitive_patterns:
+            matches = re.findall(pattern, result_str, re.IGNORECASE)
+            assert not matches, f"Sensitive data pattern detected: {pattern}"
+    
+    def test_file_path_traversal():
+        """Test file path traversal prevention"""
+        # Test various path traversal attempts
+        malicious_paths = [
+            "../../../etc/passwd",
+            "..\\..\\..\\windows\\system32\\config\\sam",
+            "/etc/passwd",
+            "C:\\Windows\\System32\\config\\sam",
+            "....//....//....//etc/passwd",
+            "%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fpasswd",
+            "..%2f..%2f..%2fetc%2fpasswd",
+            "/var/www/html/../../../etc/passwd",
+            "C:\\inetpub\\wwwroot\\..\\..\\..\\windows\\system32\\config\\sam"
+        ]
+        
+        for malicious_path in malicious_paths:
+            try:
+                result = {function_or_class_name}(malicious_path)
+                # Should not access system files
+                assert 'root:' not in str(result), f"File path traversal vulnerability detected with: {malicious_path}"
+                assert '[boot loader]' not in str(result), f"File path traversal vulnerability detected with: {malicious_path}"
+            except Exception as e:
+                # Exception is acceptable for path traversal attempts
+                pass
+    
+    def test_command_injection():
+        """Test command injection prevention"""
+        # Test various command injection attempts
+        malicious_commands = [
+            "; ls -la",
+            "| whoami",
+            "&& cat /etc/passwd",
+            "|| rm -rf /",
+            "$(cat /etc/passwd)",
+            "`cat /etc/passwd`",
+            "| dir",
+            "& type C:\\Windows\\System32\\config\\sam",
+            "&& del C:\\Windows\\System32\\*",
+            "$(systeminfo)",
+            "`ipconfig`"
+        ]
+        
+        for malicious_command in malicious_commands:
+            try:
+                result = {function_or_class_name}(malicious_command)
+                result_str = str(result)
+                
+                # Should not execute system commands
+                assert 'root:' not in result_str, f"Command injection vulnerability detected with: {malicious_command}"
+                assert 'administrator' not in result_str.lower(), f"Command injection vulnerability detected with: {malicious_command}"
+                assert 'total ' not in result_str, f"Command injection vulnerability detected with: {malicious_command}"
+            except Exception as e:
+                # Exception is acceptable for command injection attempts
+                pass
+    
+    def test_csrf_protection():
+        """Test Cross-Site Request Forgery (CSRF) protection"""
+        # Test CSRF token validation
+        test_cases = [
+            ({{valid_csrf_token}}, {{valid_session}}, True),
+            ({{invalid_csrf_token}}, {{valid_session}}, False),
+            ({{missing_csrf_token}}, {{valid_session}}, False),
+            ({{valid_csrf_token}}, {{invalid_session}}, False),
+            ({{valid_csrf_token}}, {{missing_session}}, False)
+        ]
+        
+        for csrf_token, session, should_succeed in test_cases:
+            try:
+                result = {function_or_class_name}(csrf_token, session)
+                if should_succeed:
+                    assert result, f"Valid CSRF token rejected"
+                else:
+                    assert not result, f"Invalid CSRF token accepted"
+            except Exception as e:
+                if should_succeed:
+                    pytest.fail(f"Valid CSRF token caused error: {e}")
+    
+    def test_rate_limiting():
+        """Test rate limiting protection"""
+        import time
+        
+        # Test rapid successive requests
+        max_requests = {{max_requests_per_minute}}
+        requests_made = 0
+        
+        start_time = time.time()
+        for i in range(max_requests + 5):  # Try to exceed limit
+            try:
+                result = {function_or_class_name}({{rate_limit_test_param}})
+                if result:
+                    requests_made += 1
+                else:
+                    # Request was rate limited
+                    break
+            except Exception as e:
+                # Exception might indicate rate limiting
+                break
+            
+            # Small delay between requests
+            time.sleep(0.01)
+        
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        
+        # Should not exceed rate limit
+        assert requests_made <= max_requests, f"Rate limiting not enforced: made {requests_made} requests in {elapsed_time:.2f}s"
+    
+    def test_secure_headers():
+        """Test secure HTTP headers"""
+        # This test is for web applications
+        if hasattr({function_or_class_name}, 'get_response_headers'):
+            headers = {function_or_class_name}.get_response_headers()
+            
+            # Check for security headers
+            security_headers = {
+                'X-Content-Type-Options': 'nosniff',
+                'X-Frame-Options': 'DENY',
+                'X-XSS-Protection': '1; mode=block',
+                'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+                'Content-Security-Policy': "default-src 'self'"
+            }
+            
+            for header, expected_value in security_headers.items():
+                if header in headers:
+                    assert expected_value in headers[header], f"Incorrect {header} value: {headers[header]}"
+    
+    def test_error_message_security():
+        """Test error message security"""
+        # Test with inputs that should cause errors
+        error_causing_inputs = [
+            {{error_input_1}},
+            {{error_input_2}},
+            {{error_input_3}}
+        ]
+        
+        for error_input in error_causing_inputs:
+            try:
+                result = {function_or_class_name}(error_input)
+            except Exception as e:
+                error_msg = str(e)
+                
+                # Error message should not reveal sensitive information
+                sensitive_terms = [
+                    'password',
+                    'username',
+                    'email',
+                    'database',
+                    'table',
+                    'column',
+                    'query',
+                    'sql',
+                    'stack',
+                    'traceback',
+                    'internal',
+                    'system',
+                    'admin',
+                    'root'
+                ]
+                
+                for term in sensitive_terms:
+                    assert term not in error_msg.lower(), f"Error message reveals sensitive information: {term} in {error_msg}"
+variables:
+  - function_or_class_name
+  - invalid_input_1
+  - invalid_input_2
+  - invalid_input_3
+  - very_long_input
+  - special_chars_input
+  - unicode_input
+  - control_chars_input
+  - bypass_attempt_1
+  - bypass_attempt_2
+  - bypass_attempt_3
+  - bypass_attempt_4
+  - bypass_attempt_5
+  - unauthorized_user
+  - authorized_user
+  - admin_user
+  - guest_user
+  - protected_resource
+  - test_password
+  - test_credit_card
+  - test_ssn
+  - test_api_key
+  - test_token
+  - max_requests_per_minute
+  - rate_limit_test_param
+  - error_input_1
+  - error_input_2
+  - error_input_3
+dependencies:
+  - pytest
+  - unittest.mock
+  - re
+  - subprocess
+  - time
+tags:
+  - security
+  - sql_injection
+  - xss
+  - authentication
+  - authorization
+  - input_validation
+  - rate_limiting

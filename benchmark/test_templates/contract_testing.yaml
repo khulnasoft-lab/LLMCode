@@ -1,0 +1,643 @@
+name: contract_testing_python
+description: Contract testing template for Python services using Pact
+category: contract
+language: python
+framework: pytest
+template_content: |
+  import pytest
+  import json
+  from pact import Consumer, Provider
+  from {{ consumer_module }} import {{ consumer_client_class }}
+  from {{ provider_module }} import {{ provider_service_class }}
+  
+  
+  @pytest.fixture
+  def pact():
+      """Create Pact contract between consumer and provider"""
+      return Consumer('{{ consumer_name }}').has_pact_with(
+          Provider('{{ provider_name }}'),
+          pact_dir='./pacts',
+          host_name='localhost',
+          port={{ pact_port }}
+      )
+  
+  
+  @pytest.fixture
+  def consumer_client():
+      """Create consumer client instance"""
+      return {{ consumer_client_class }}()
+  
+  
+  @pytest.fixture
+  def provider_service():
+      """Create provider service instance"""
+      return {{ provider_service_class }}()
+  
+  
+  def test_{{ test_name }}_get_contract(pact, consumer_client):
+      """Test GET contract for {{ endpoint_description }}"""
+      expected_response = {{ expected_get_response }}
+      
+      (pact
+       .given('{{ provider_state }}')
+       .upon_receiving('{{ request_description }}')
+       .with_request('GET', '{{ endpoint_path }}')
+       .will_respond_with({{ get_response_status }}, expected_response))
+      
+      with pact:
+          # Make request through consumer client
+          response = consumer_client.{{ consumer_get_method }}('{{ endpoint_path }}')
+          
+          # Verify response
+          assert response.status_code == {{ get_response_status }}
+          assert response.json() == expected_response
+  
+  
+  def test_{{ test_name }}_post_contract(pact, consumer_client):
+      """Test POST contract for {{ endpoint_description }}"""
+      request_body = {{ post_request_body }}
+      expected_response = {{ expected_post_response }}
+      
+      (pact
+       .given('{{ provider_state }}')
+       .upon_receiving('{{ post_request_description }}')
+       .with_request('POST', '{{ endpoint_path }}', body=request_body, headers={{ post_request_headers }})
+       .will_respond_with({{ post_response_status }}, expected_response, headers={{ post_response_headers }}))
+      
+      with pact:
+          # Make request through consumer client
+          response = consumer_client.{{ consumer_post_method }}('{{ endpoint_path }}', json=request_body)
+          
+          # Verify response
+          assert response.status_code == {{ post_response_status }}
+          assert response.json() == expected_response
+  
+  
+  def test_{{ test_name }}_put_contract(pact, consumer_client):
+      """Test PUT contract for {{ endpoint_description }}"""
+      request_body = {{ put_request_body }}
+      expected_response = {{ expected_put_response }}
+      
+      (pact
+       .given('{{ provider_state }}')
+       .upon_receiving('{{ put_request_description }}')
+       .with_request('PUT', '{{ endpoint_path }}/{{ resource_id }}', body=request_body)
+       .will_respond_with({{ put_response_status }}, expected_response))
+      
+      with pact:
+          # Make request through consumer client
+          response = consumer_client.{{ consumer_put_method }}('{{ endpoint_path }}/{{ resource_id }}', json=request_body)
+          
+          # Verify response
+          assert response.status_code == {{ put_response_status }}
+          assert response.json() == expected_response
+  
+  
+  def test_{{ test_name }}_delete_contract(pact, consumer_client):
+      """Test DELETE contract for {{ endpoint_description }}"""
+      (pact
+       .given('{{ provider_state }}')
+       .upon_receiving('{{ delete_request_description }}')
+       .with_request('DELETE', '{{ endpoint_path }}/{{ resource_id }}')
+       .will_respond_with({{ delete_response_status }}))
+      
+      with pact:
+          # Make request through consumer client
+          response = consumer_client.{{ consumer_delete_method }}('{{ endpoint_path }}/{{ resource_id }}')
+          
+          # Verify response
+          assert response.status_code == {{ delete_response_status }}
+  
+  
+  def test_{{ test_name }}_error_contract(pact, consumer_client):
+      """Test error contract for {{ endpoint_description }}"""
+      expected_error_response = {{ expected_error_response }}
+      
+      (pact
+       .given('{{ error_provider_state }}')
+       .upon_receiving('{{ error_request_description }}')
+       .with_request('{{ error_method }}', '{{ error_endpoint_path }}')
+       .will_respond_with({{ error_response_status }}, expected_error_response))
+      
+      with pact:
+          # Make request that should cause error
+          response = consumer_client.{{ consumer_error_method }}('{{ error_endpoint_path }}')
+          
+          # Verify error response
+          assert response.status_code == {{ error_response_status }}
+          assert response.json() == expected_error_response
+  
+  
+  def test_{{ test_name }}_authentication_contract(pact, consumer_client):
+      """Test authentication contract for {{ endpoint_description }}"""
+      {% if requires_auth %}
+      expected_response = {{ expected_auth_response }}
+      
+      (pact
+       .given('{{ auth_provider_state }}')
+       .upon_receiving('{{ auth_request_description }}')
+       .with_request('GET', '{{ auth_endpoint_path }}', headers={{ auth_headers }})
+       .will_respond_with({{ auth_response_status }}, expected_response))
+      
+      with pact:
+          # Make authenticated request
+          response = consumer_client.{{ consumer_auth_method }}('{{ auth_endpoint_path }}', headers={{ auth_headers }})
+          
+          # Verify response
+          assert response.status_code == {{ auth_response_status }}
+          assert response.json() == expected_response
+      {% endif %}
+  
+  
+  def test_{{ test_name }}_pagination_contract(pact, consumer_client):
+      """Test pagination contract for {{ endpoint_description }}"""
+      {% if supports_pagination %}
+      expected_page_response = {{ expected_page_response }}
+      
+      (pact
+       .given('{{ pagination_provider_state }}')
+       .upon_receiving('{{ pagination_request_description }}')
+       .with_request('GET', '{{ pagination_endpoint_path }}', query={{ pagination_query_params }})
+       .will_respond_with({{ pagination_response_status }}, expected_page_response))
+      
+      with pact:
+          # Make paginated request
+          response = consumer_client.{{ consumer_pagination_method }}(
+              '{{ pagination_endpoint_path }}', 
+              params={{ pagination_query_params }}
+          )
+          
+          # Verify paginated response
+          assert response.status_code == {{ pagination_response_status }}
+          data = response.json()
+          assert 'results' in data
+          assert 'count' in data
+          assert 'next' in data
+          assert 'previous' in data
+      {% endif %}
+  
+  
+  def test_{{ test_name }}_filtering_contract(pact, consumer_client):
+      """Test filtering contract for {{ endpoint_description }}"""
+      {% if supports_filtering %}
+      expected_filtered_response = {{ expected_filtered_response }}
+      
+      (pact
+       .given('{{ filtering_provider_state }}')
+       .upon_receiving('{{ filtering_request_description }}')
+       .with_request('GET', '{{ filtering_endpoint_path }}', query={{ filtering_query_params }})
+       .will_respond_with({{ filtering_response_status }}, expected_filtered_response))
+      
+      with pact:
+          # Make filtered request
+          response = consumer_client.{{ consumer_filtering_method }}(
+              '{{ filtering_endpoint_path }}', 
+              params={{ filtering_query_params }}
+          )
+          
+          # Verify filtered response
+          assert response.status_code == {{ filtering_response_status }}
+          data = response.json()
+          # Verify filtering logic
+          {{ filtering_validation }}
+      {% endif %}
+  
+  
+  def test_{{ test_name }}_versioning_contract(pact, consumer_client):
+      """Test API versioning contract for {{ endpoint_description }}"""
+      {% if supports_versioning %}
+      expected_versioned_response = {{ expected_versioned_response }}
+      
+      (pact
+       .given('{{ versioning_provider_state }}')
+       .upon_receiving('{{ versioning_request_description }}')
+       .with_request('GET', '{{ versioning_endpoint_path }}', headers={{ versioning_headers }})
+       .will_respond_with({{ versioning_response_status }}, expected_versioned_response))
+      
+      with pact:
+          # Make versioned request
+          response = consumer_client.{{ consumer_versioning_method }}(
+              '{{ versioning_endpoint_path }}', 
+              headers={{ versioning_headers }}
+          )
+          
+          # Verify versioned response
+          assert response.status_code == {{ versioning_response_status }}
+          data = response.json()
+          # Verify version-specific response structure
+          {{ versioning_validation }}
+      {% endif %}
+  
+  
+  # Provider verification tests
+  class TestProviderVerification:
+      """Provider verification tests"""
+      
+      @pytest.fixture
+      def provider_verifier(self):
+          """Create provider verifier"""
+          from pact import Verifier
+          return Verifier(
+              provider='{{ provider_name }}',
+              provider_base_url='{{ provider_base_url }}'
+          )
+      
+      def test_{{ test_name }}_provider_verification(self, provider_verifier, provider_service):
+          """Verify provider against consumer contracts"""
+          # Start provider service
+          provider_service.start()
+          
+          try:
+              # Verify pacts
+              output, logs = provider_verifier.verify_pacts(
+                  './pacts/{{ consumer_name }}-{{ provider_name }}.json',
+                  verbose=True
+              )
+              
+              # Verify verification succeeded
+              assert output == 0, f"Provider verification failed: {logs}"
+              
+          finally:
+              # Stop provider service
+              provider_service.stop()
+      
+      def test_{{ test_name }}_provider_state_setup(self, provider_service):
+          """Test provider state setup"""
+          {% for state in provider_states %}
+          # Setup provider state: {{ state.name }}
+          provider_service.set_state('{{ state.name }}', {{ state.params }})
+          
+          # Verify state is set correctly
+          {{ state.validation }}
+          {% endfor %}
+      
+      def test_{{ test_name }}_provider_teardown(self, provider_service):
+          """Test provider cleanup"""
+          # Test that provider can be properly cleaned up
+          provider_service.cleanup()
+          
+          # Verify cleanup completed successfully
+          {{ cleanup_validation }}
+variables:
+  - name: consumer_name
+    type: string
+    description: Name of the consumer service
+    default_value: MyConsumer
+  - name: provider_name
+    type: string
+    description: Name of the provider service
+    default_value: MyProvider
+  - name: pact_port
+    type: integer
+    description: Port for Pact mock server
+    default_value: 1234
+  - name: consumer_module
+    type: string
+    description: Module containing consumer client
+    default_value: consumer
+  - name: consumer_client_class
+    type: string
+    description: Consumer client class name
+    default_value: ConsumerClient
+  - name: provider_module
+    type: string
+    description: Module containing provider service
+    default_value: provider
+  - name: provider_service_class
+    type: string
+    description: Provider service class name
+    default_value: ProviderService
+  - name: test_name
+    type: string
+    description: Base name for test functions
+    default_value: my_api
+  - name: endpoint_description
+    type: string
+    description: Description of the endpoint being tested
+    default_value: user management API
+  - name: endpoint_path
+    type: string
+    description: Path of the endpoint
+    default_value: /api/users
+  - name: provider_state
+    type: string
+    description: Provider state for the test
+    default_value: user exists
+  - name: request_description
+    type: string
+    description: Description of the request
+    default_value: request for user data
+  - name: expected_get_response
+    type: dict
+    description: Expected response for GET request
+    default_value:
+      id: 1
+      name: John Doe
+      email: john@example.com
+  - name: get_response_status
+    type: integer
+    description: Expected status code for GET response
+    default_value: 200
+  - name: consumer_get_method
+    type: string
+    description: Method name on consumer client for GET requests
+    default_value: get
+  - name: post_request_body
+    type: dict
+    description: Request body for POST requests
+    default_value:
+      name: Jane Doe
+      email: jane@example.com
+  - name: expected_post_response
+    type: dict
+    description: Expected response for POST requests
+    default_value:
+      id: 2
+      name: Jane Doe
+      email: jane@example.com
+      created_at: "2024-01-01T00:00:00Z"
+  - name: post_response_status
+    type: integer
+    description: Expected status code for POST response
+    default_value: 201
+  - name: post_request_headers
+    type: dict
+    description: Headers for POST requests
+    default_value:
+      Content-Type: application/json
+  - name: post_response_headers
+    type: dict
+    description: Expected headers for POST response
+    default_value:
+      Content-Type: application/json
+  - name: consumer_post_method
+    type: string
+    description: Method name on consumer client for POST requests
+    default_value: post
+  - name: put_request_body
+    type: dict
+    description: Request body for PUT requests
+    default_value:
+      name: John Smith
+      email: john.smith@example.com
+  - name: expected_put_response
+    type: dict
+    description: Expected response for PUT requests
+    default_value:
+      id: 1
+      name: John Smith
+      email: john.smith@example.com
+      updated_at: "2024-01-01T00:00:00Z"
+  - name: put_response_status
+    type: integer
+    description: Expected status code for PUT response
+    default_value: 200
+  - name: resource_id
+    type: string
+    description: ID of the resource for PUT/DELETE operations
+    default_value: "1"
+  - name: put_request_description
+    type: string
+    description: Description of PUT request
+    default_value: request to update user data
+  - name: consumer_put_method
+    type: string
+    description: Method name on consumer client for PUT requests
+    default_value: put
+  - name: delete_response_status
+    type: integer
+    description: Expected status code for DELETE response
+    default_value: 204
+  - name: delete_request_description
+    type: string
+    description: Description of DELETE request
+    default_value: request to delete user
+  - name: consumer_delete_method
+    type: string
+    description: Method name on consumer client for DELETE requests
+    default_value: delete
+  - name: expected_error_response
+    type: dict
+    description: Expected error response
+    default_value:
+      error: Not Found
+      message: User not found
+  - name: error_provider_state
+    type: string
+    description: Provider state for error tests
+    default_value: user does not exist
+  - name: error_request_description
+    type: string
+    description: Description of error request
+    default_value: request for non-existent user
+  - name: error_method
+    type: string
+    description: HTTP method for error test
+    default_value: GET
+  - name: error_endpoint_path
+    type: string
+    description: Endpoint path for error test
+    default_value: /api/users/999
+  - name: error_response_status
+    type: integer
+    description: Expected status code for error response
+    default_value: 404
+  - name: consumer_error_method
+    type: string
+    description: Method name on consumer client for error requests
+    default_value: get
+  - name: requires_auth
+    type: boolean
+    description: Whether endpoint requires authentication
+    default_value: true
+  - name: expected_auth_response
+    type: dict
+    description: Expected response for authenticated request
+    default_value:
+      id: 1
+      name: John Doe
+      email: john@example.com
+  - name: auth_provider_state
+    type: string
+    description: Provider state for auth tests
+    default_value: authenticated user
+  - name: auth_request_description
+    type: string
+    description: Description of authenticated request
+    default_value: authenticated request for user data
+  - name: auth_endpoint_path
+    type: string
+    description: Endpoint path for auth tests
+    default_value: /api/users/me
+  - name: auth_headers
+    type: dict
+    description: Headers for authenticated requests
+    default_value:
+      Authorization: Bearer valid_token
+  - name: auth_response_status
+    type: integer
+    description: Expected status code for authenticated response
+    default_value: 200
+  - name: consumer_auth_method
+    type: string
+    description: Method name on consumer client for authenticated requests
+    default_value: get
+  - name: supports_pagination
+    type: boolean
+    description: Whether endpoint supports pagination
+    default_value: true
+  - name: expected_page_response
+    type: dict
+    description: Expected paginated response
+    default_value:
+      count: 100
+      next: "http://example.com/api/users?page=2"
+      previous: null
+      results:
+        - id: 1
+          name: John Doe
+          email: john@example.com
+  - name: pagination_provider_state
+    type: string
+    description: Provider state for pagination tests
+    default_value: multiple users exist
+  - name: pagination_request_description
+    type: string
+    description: Description of paginated request
+    default_value: request for first page of users
+  - name: pagination_endpoint_path
+    type: string
+    description: Endpoint path for pagination tests
+    default_value: /api/users
+  - name: pagination_query_params
+    type: dict
+    description: Query parameters for pagination
+    default_value:
+      page: 1
+      page_size: 10
+  - name: pagination_response_status
+    type: integer
+    description: Expected status code for paginated response
+    default_value: 200
+  - name: consumer_pagination_method
+    type: string
+    description: Method name on consumer client for paginated requests
+    default_value: get
+  - name: supports_filtering
+    type: boolean
+    description: Whether endpoint supports filtering
+    default_value: true
+  - name: expected_filtered_response
+    type: dict
+    description: Expected filtered response
+    default_value:
+      count: 1
+      results:
+        - id: 1
+          name: John Doe
+          email: john@example.com
+  - name: filtering_provider_state
+    type: string
+    description: Provider state for filtering tests
+    default_value: users with different names exist
+  - name: filtering_request_description
+    type: string
+    description: Description of filtered request
+    default_value: request for users filtered by name
+  - name: filtering_endpoint_path
+    type: string
+    description: Endpoint path for filtering tests
+    default_value: /api/users
+  - name: filtering_query_params
+    type: dict
+    description: Query parameters for filtering
+    default_value:
+      name: John
+  - name: filtering_response_status
+    type: integer
+    description: Expected status code for filtered response
+    default_value: 200
+  - name: consumer_filtering_method
+    type: string
+    description: Method name on consumer client for filtered requests
+    default_value: get
+  - name: filtering_validation
+    type: string
+    description: Validation logic for filtering
+    default_value: |
+      for user in data['results']:
+          assert 'John' in user['name']
+  - name: supports_versioning
+    type: boolean
+    description: Whether endpoint supports versioning
+    default_value: true
+  - name: expected_versioned_response
+    type: dict
+    description: Expected versioned response
+    default_value:
+      data:
+        id: 1
+        attributes:
+          name: John Doe
+          email: john@example.com
+  - name: versioning_provider_state
+    type: string
+    description: Provider state for versioning tests
+    default_value: user exists
+  - name: versioning_request_description
+    type: string
+    description: Description of versioned request
+    default_value: request for user data with version specification
+  - name: versioning_endpoint_path
+    type: string
+    description: Endpoint path for versioning tests
+    default_value: /api/v1/users/1
+  - name: versioning_headers
+    type: dict
+    description: Headers for versioned requests
+    default_value:
+      Accept: application/vnd.api+json; version=1
+  - name: versioning_response_status
+    type: integer
+    description: Expected status code for versioned response
+    default_value: 200
+  - name: consumer_versioning_method
+    type: string
+    description: Method name on consumer client for versioned requests
+    default_value: get
+  - name: versioning_validation
+    type: string
+    description: Validation logic for versioning
+    default_value: |
+      assert 'data' in data
+      assert 'attributes' in data['data']
+  - name: provider_base_url
+    type: string
+    description: Base URL for provider service
+    default_value: http://localhost:8000
+  - name: provider_states
+    type: list
+    description: List of provider states for verification
+    default_value: []
+  - name: cleanup_validation
+    type: string
+    description: Validation logic for cleanup
+    default_value: |
+      assert True  # Placeholder for cleanup validation
+tags:
+  - contract-testing
+  - pact
+  - python
+  - pytest
+  - api
+  - integration
+dependencies:
+  - pytest
+  - pact-python
+  - requests
+complexity: high
+estimated_time: 25m
+author: Llmcode Test Generator
+version: 1.0.0
+created_at: 2024-01-01T00:00:00
+updated_at: 2024-01-01T00:00:00

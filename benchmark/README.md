@@ -144,3 +144,38 @@ You can see examples of the benchmark report yaml in the
 [llmcode leaderboard data files](https://github.com/khulnasoft-lab/llmcode/blob/main/llmcode/website/_data/).
 - These scripts are not intended for use by typical llmcode end users.
 - Some of these tools are written as `bash` scripts, so it will be hard to use them on Windows.
+
+## AI-Powered Test Generation
+
+The benchmark harness also includes capabilities for AI-powered test generation.
+This can be used to automatically create test suites for your codebase.
+
+### Usage
+
+To generate tests, use the `--generate-tests` flag:
+
+```
+./benchmark/benchmark.py --generate-tests --model gpt-4 --threads 10
+```
+
+This will discover all Python source files in your project, generate unit and integration tests for them using the specified model, and save them in the `tmp.benchmarks/generated_tests` directory.
+
+### Test Generation from Templates
+
+You can also generate tests from a predefined set of templates using the `--generate-with-templates` flag:
+
+```
+./benchmark/benchmark.py --generate-with-templates
+```
+
+This will use the templates located in the `benchmark/test_templates` directory to generate tests.
+
+### Coverage Analysis
+
+After generating tests, you can run a coverage analysis to see how well they cover your codebase:
+
+```
+./benchmark/benchmark.py --coverage
+```
+
+This will run the generated tests and output a coverage report.

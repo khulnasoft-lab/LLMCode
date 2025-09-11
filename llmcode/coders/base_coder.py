@@ -2499,12 +2499,18 @@ class Coder:
             self.commands.cmd_diff()
 
     def show_undo_hint(self):
-        if not self.commit_before_message:
+        if not self.llmcode_edited_files:
             return
-        if self.commit_before_message[-1] != self.repo.get_head_commit_sha():
-            self.io.tool_output(
-                "You can use /undo to undo and discard each llmcode commit."
-            )
+
+        if self.commit_before_message:
+            commit_hash = self.commit_before_message.pop(0)
+            if commit_hash != self.repo.get_head_commit_sha():
+                self.io.tool_output(
+                    f"To rollback the changes, you can run: git reset --hard {commit_hash}"
+                )
+                self.io.tool_output("Or, use /undo to undo the last commit.")
+        elif self.repo and self.auto_commits:
+            self.io.tool_output("Use /undo to undo the last commit.")
 
     def dirty_commit(self):
         if not self.need_commit_before_edits:

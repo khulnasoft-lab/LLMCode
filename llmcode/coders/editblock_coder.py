@@ -39,56 +39,61 @@ class EditBlockCoder(Coder):
         return self.apply_edits(edits, dry_run=True)
 
     def apply_edits(self, edits, dry_run=False):
+        if dry_run:
+            return self.apply_edits_dry_run(edits)
+
+        if not edits:
+            return
+
+        diffs = []
+        new_contents = {}
         failed = []
         passed = []
-        updated_edits = []
 
-        for edit in edits:
-            path, original, updated = edit
+        for path, original, updated in edits:
             full_path = self.abs_root_path(path)
-            new_content = None
+            content = self.io.read_text(full_path)
+            if content is None:
+                failed.append((path, original, updated))
+                continue
 
-            if Path(full_path).exists():
-                content = self.io.read_text(full_path)
-                new_content = do_replace(
-                    full_path, content, original, updated, self.fence
-                )
-
-            # If the edit failed, and
-            # this is not a "create a new file" with an empty original...
-            # https://github.com/khulnasoft-lab/llmcode/issues/2258
-            if not new_content and original.strip():
-                # try patching any of the other files in the chat
-                for full_path in self.abs_fnames:
-                    content = self.io.read_text(full_path)
-                    new_content = do_replace(
-                        full_path, content, original, updated, self.fence
-                    )
-                    if new_content:
-                        path = self.get_rel_fname(full_path)
-                        break
-
-            updated_edits.append((path, original, updated))
+            new_content = do_replace(full_path, content, original, updated, self.fence)
 
             if new_content:
-                if not dry_run:
-                    self.io.write_text(full_path, new_content)
-                passed.append(edit)
+                diff = difflib.unified_diff(
+                    content.splitlines(keepends=True),
+                    new_content.splitlines(keepends=True),
+                    fromfile=path,
+                    tofile=path,
+                )
+                diffs.append("".join(diff))
+                new_contents[full_path] = new_content
+                passed.append((path, original, updated))
             else:
-                failed.append(edit)
+                failed.append((path, original, updated))
 
-        if dry_run:
-            return updated_edits
+        if not diffs:
+            self.handle_failed_edits(failed)
+            return
 
+        self.io.tool_output("Proposed changes:")
+        for diff in diffs:
+            self.io.show_diff(diff)
+
+        if self.io.confirm_ask("Apply all changes?"):
+            for full_path, new_content in new_contents.items():
+                self.io.write_text(full_path, new_content)
+            self.handle_failed_edits(failed)
+        else:
+            self.io.tool_output("Changes not applied.")
+
+    def handle_failed_edits(self, failed):
         if not failed:
             return
 
         blocks = "block" if len(failed) == 1 else "blocks"
-
         res = f"# {len(failed)} SEARCH/REPLACE {blocks} failed to match!\n"
-        for edit in failed:
-            path, original, updated = edit
-
+        for path, original, updated in failed:
             full_path = self.abs_root_path(path)
             content = self.io.read_text(full_path)
 
@@ -108,23 +113,14 @@ class EditBlockCoder(Coder):
 {self.fence[1]}
 
 """
-
             if updated in content and updated:
                 res += f"""Are you sure you need this SEARCH/REPLACE block?
 The REPLACE lines are already in {path}!
 
 """
         res += (
-            "The SEARCH section must exactly match an existing block of lines including all white"
-            " space, comments, indentation, docstrings, etc\n"
+            "The SEARCH section must exactly match an existing block of lines including all white" " space, comments, indentation, docstrings, etc\n"
         )
-        if passed:
-            pblocks = "block" if len(passed) == 1 else "blocks"
-            res += f"""
-# The other {len(passed)} SEARCH/REPLACE {pblocks} were applied successfully.
-Don't re-send them.
-Just reply with fixed versions of the {blocks} above that failed to match.
-"""
         raise ValueError(res)
 
 

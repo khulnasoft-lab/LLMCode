@@ -1,0 +1,172 @@
+name: integration_api
+description: Template for integration testing API endpoints
+framework: pytest
+language: python
+template_code: |
+    import pytest
+    import json
+    import sys
+    import os
+    from unittest.mock import Mock, patch
+    
+    # Add project root to path
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+    from {file_name} import {api_class_name}, {app_name}
+    
+    @pytest.fixture
+    def client():
+        """Create test client"""
+        {app_name}.config['TESTING'] = True
+        with {app_name}.test_client() as client:
+            yield client
+    
+    @pytest.fixture
+    def mock_database():
+        """Mock database connection"""
+        with patch('{{database_module}}.get_db_connection') as mock_conn:
+            mock_cursor = Mock()
+            mock_conn.return_value.cursor.return_value = mock_cursor
+            yield mock_cursor
+    
+    def test_api_endpoint_get(client, mock_database):
+        """Test GET endpoint"""
+        # Setup mock response
+        mock_database.fetchall.return_value = [
+            ({{id_field}}, {{name_field}}, {{value_field}}),
+            ({{id_field_2}}, {{name_field_2}}, {{value_field_2}})
+        ]
+        
+        # Make request
+        response = client.get('{{endpoint_path}}')
+        
+        # Verify response
+        assert response.status_code == 200
+        data = json.loads(response.data)
+        assert len(data) == 2
+        assert data[0]['{{response_key}}'] == {{expected_value}}
+    
+    def test_api_endpoint_post(client, mock_database):
+        """Test POST endpoint"""
+        # Setup mock
+        mock_database.fetchone.return_value = ({{new_id}},)
+        
+        # Make request
+        payload = {{
+            '{{payload_key}}': {{payload_value}},
+            '{{payload_key_2}}': {{payload_value_2}}
+        }}
+        response = client.post('{{endpoint_path}}', 
+                              data=json.dumps(payload),
+                              content_type='application/json')
+        
+        # Verify response
+        assert response.status_code == 201
+        data = json.loads(response.data)
+        assert data['{{response_key}}'] == {{new_id}}
+        
+        # Verify database was called
+        mock_database.execute.assert_called_once()
+    
+    def test_api_endpoint_put(client, mock_database):
+        """Test PUT endpoint"""
+        # Setup mock
+        mock_database.rowcount = 1
+        
+        # Make request
+        payload = {{
+            '{{payload_key}}': {{updated_value}}
+        }}
+        response = client.put('{{endpoint_path}}/{{resource_id}}',
+                             data=json.dumps(payload),
+                             content_type='application/json')
+        
+        # Verify response
+        assert response.status_code == 200
+        
+        # Verify database was called
+        mock_database.execute.assert_called_once()
+    
+    def test_api_endpoint_delete(client, mock_database):
+        """Test DELETE endpoint"""
+        # Setup mock
+        mock_database.rowcount = 1
+        
+        # Make request
+        response = client.delete('{{endpoint_path}}/{{resource_id}}')
+        
+        # Verify response
+        assert response.status_code == 204
+        
+        # Verify database was called
+        mock_database.execute.assert_called_once()
+    
+    def test_api_endpoint_not_found(client):
+        """Test 404 response"""
+        response = client.get('{{endpoint_path}}/nonexistent')
+        assert response.status_code == 404
+    
+    def test_api_endpoint_validation_error(client):
+        """Test validation error response"""
+        # Make request with invalid data
+        payload = {{
+            '{{payload_key}}': {{invalid_value}}
+        }}
+        response = client.post('{{endpoint_path}}',
+                              data=json.dumps(payload),
+                              content_type='application/json')
+        
+        # Verify response
+        assert response.status_code == 400
+        data = json.loads(response.data)
+        assert 'error' in data
+    
+    def test_api_endpoint_authentication_error(client):
+        """Test authentication error response"""
+        # Make request without authentication
+        response = client.get('{{protected_endpoint_path}}')
+        
+        # Verify response
+        assert response.status_code == 401
+    
+    def test_api_endpoint_rate_limiting(client):
+        """Test rate limiting"""
+        # Make multiple requests quickly
+        for _ in range({{rate_limit_count}}):
+            response = client.get('{{rate_limited_endpoint}}')
+        
+        # Last request should be rate limited
+        assert response.status_code == 429
+variables:
+  - api_class_name
+  - app_name
+  - database_module
+  - id_field
+  - name_field
+  - value_field
+  - id_field_2
+  - name_field_2
+  - value_field_2
+  - endpoint_path
+  - response_key
+  - expected_value
+  - new_id
+  - payload_key
+  - payload_value
+  - payload_key_2
+  - payload_value_2
+  - updated_value
+  - resource_id
+  - invalid_value
+  - protected_endpoint_path
+  - rate_limit_count
+  - rate_limited_endpoint
+dependencies:
+  - pytest
+  - unittest.mock
+  - json
+tags:
+  - integration
+  - api
+  - http
+  - database

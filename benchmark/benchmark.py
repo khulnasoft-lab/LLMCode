@@ -29,6 +29,8 @@ from llmcode import models, sendchat
 from llmcode.coders import Coder, base_coder
 from llmcode.dump import dump  # noqa: F401
 from llmcode.io import InputOutput
+from test_generator import TestGenerationManager, TestType, CoverageAnalyzer
+
 
 BENCHMARK_DNAME = Path(os.environ.get("LLMCODE_BENCHMARK_DIR", "tmp.benchmarks"))
 
@@ -215,7 +217,99 @@ def main(
     exercises_dir: str = typer.Option(
         EXERCISES_DIR_DEFAULT, "--exercises-dir", help="Directory with exercise files"
     ),
+    generate_tests: bool = typer.Option(
+        False, "--generate-tests", help="Generate tests instead of running benchmarks"
+    ),
+    coverage: bool = typer.Option(
+        False, "--coverage", help="Run coverage analysis on generated tests"
+    ),
+    generate_with_templates: bool = typer.Option(
+        False, "--generate-with-templates", help="Generate tests from templates"
+    ),
 ):
+    if coverage:
+        console = Console()
+        console.print("[bold blue]Running coverage analysis...[/bold blue]")
+        analyzer = CoverageAnalyzer(project_root=".")
+        source_files = [
+            str(p)
+            for p in Path(".").glob("llmcode/**/*.py")
+            if "__" not in str(p)
+        ]
+        test_files = [
+            str(p)
+            for p in (BENCHMARK_DNAME / "generated_tests").glob("*.py")
+        ]
+        if not test_files:
+            console.print("[bold red]No generated tests found to run coverage on.[/bold red]")
+            return 1
+        
+        analysis = analyzer.analyze_coverage(test_files, source_files)
+        
+        table = Table(title="Coverage Analysis")
+        table.add_column("Metric", style="cyan")
+        table.add_column("Value", style="magenta")
+        
+        table.add_row("Total Lines", str(analysis.total_lines))
+        table.add_row("Covered Lines", str(analysis.covered_lines))
+        table.add_row("Missed Lines", str(analysis.missed_lines))
+        table.add_row("Coverage Percentage", f"{analysis.coverage_percentage:.1f}%")
+        table.add_row("Complexity Score", f"{analysis.complexity_score:.2f}")
+        
+        console.print(table)
+        return
+
+    if generate_with_templates:
+        console = Console()
+        console.print("[bold blue]Starting test generation from templates...[/bold blue]")
+        manager = TestGenerationManager(
+            project_root=".",
+            output_dir=str(BENCH-MARK_DNAME / "generated_tests"),
+            enable_ai=False,
+            enable_templates=True,
+        )
+        source_files = manager._discover_source_files()
+        if num_tests > 0:
+            source_files = source_files[:num_tests]
+
+        results = manager.generate_tests_for_project(
+            source_files=source_files,
+            test_types=[TestType.UNIT, TestType.INTEGRATION, TestType.SECURITY],
+            max_workers=threads,
+        )
+        if results:
+            manager.save_generated_tests(results)
+            console.print("[bold green]Template-based test generation completed successfully![/bold green]")
+        else:
+            console.print("[yellow]No tests were generated from templates.[/yellow]")
+        manager.print_statistics()
+        return
+
+    if generate_tests:
+        console = Console()
+        console.print("[bold blue]Starting test generation...[/bold blue]")
+        manager = TestGenerationManager(
+            project_root=".",
+            output_dir=str(BENCHMARK_DNAME / "generated_tests"),
+            model_name=model,
+        )
+        source_files = manager._discover_source_files()
+        if num_tests > 0:
+            source_files = source_files[:num_tests]
+
+        results = manager.generate_tests_for_project(
+            source_files=source_files,
+            test_types=[TestType.UNIT, TestType.INTEGRATION],
+            max_workers=threads,
+        )
+        if results:
+            manager.save_generated_tests(results)
+            console.print("[bold green]Test generation completed successfully![/bold green]")
+        else:
+            console.print("[yellow]No tests were generated.[/yellow]")
+        manager.print_statistics()
+        return
+
     repo = git.Repo(search_parent_directories=True)
     commit_hash = repo.head.object.hexsha[:7]
     if repo.is_dirty():
