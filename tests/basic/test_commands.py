@@ -72,9 +72,7 @@ class TestCommands(TestCase):
             mock_copy.assert_called_once_with("Second assistant message")
 
             # Assert that tool_output was called with the expected preview
-            expected_preview = (
-                "Copied last assistant message to clipboard. Preview: Second assistant message"
-            )
+            expected_preview = "Copied last assistant message to clipboard. Preview: Second assistant message"
             mock_tool_output.assert_any_call(expected_preview)
 
     def test_cmd_copy_with_cur_messages(self):
@@ -107,7 +105,9 @@ class TestCommands(TestCase):
             commands.cmd_copy("")
 
             # Assert pyperclip.copy was called with the last assistant message in cur_messages
-            mock_copy.assert_called_once_with("Latest assistant message in cur_messages")
+            mock_copy.assert_called_once_with(
+                "Latest assistant message in cur_messages"
+            )
 
             # Assert that tool_output was called with the expected preview
             expected_preview = (
@@ -128,7 +128,9 @@ class TestCommands(TestCase):
         with mock.patch.object(io, "tool_error") as mock_tool_error:
             commands.cmd_copy("")
             # Assert tool_error was called indicating no assistant messages
-            mock_tool_error.assert_called_once_with("No assistant messages found to copy.")
+            mock_tool_error.assert_called_once_with(
+                "No assistant messages found to copy."
+            )
 
     def test_cmd_copy_pyperclip_exception(self):
         io = InputOutput(pretty=False, fancy_input=False, yes=True)
@@ -150,10 +152,12 @@ class TestCommands(TestCase):
             commands.cmd_copy("")
 
             # Assert that tool_error was called with the clipboard error message
-            mock_tool_error.assert_called_once_with("Failed to copy to clipboard: Clipboard error")
+            mock_tool_error.assert_called_once_with(
+                "Failed to copy to clipboard: Clipboard error"
+            )
 
     def test_cmd_add_bad_glob(self):
-        # https://github.com/KhulnaSoft/llmcode/issues/293
+        # https://github.com/khulnasoft-lab/llmcode/issues/293
 
         io = InputOutput(pretty=False, fancy_input=False, yes=False)
         from llmcode.coders import Coder
@@ -241,7 +245,9 @@ class TestCommands(TestCase):
         # Check if the files have been added to the chat session
         self.assertIn(str(Path("test_dir/test_file1.txt").resolve()), coder.abs_fnames)
         self.assertIn(str(Path("test_dir/test_file2.txt").resolve()), coder.abs_fnames)
-        self.assertIn(str(Path("test_dir/another_dir/test_file.txt").resolve()), coder.abs_fnames)
+        self.assertIn(
+            str(Path("test_dir/another_dir/test_file.txt").resolve()), coder.abs_fnames
+        )
 
         commands.cmd_drop(str(Path("test_dir/another_dir")))
         self.assertIn(str(Path("test_dir/test_file1.txt").resolve()), coder.abs_fnames)
@@ -396,7 +402,9 @@ class TestCommands(TestCase):
     def test_cmd_add_from_subdir(self):
         repo = git.Repo.init()
         repo.config_writer().set_value("user", "name", "Test User").release()
-        repo.config_writer().set_value("user", "email", "testuser@example.com").release()
+        repo.config_writer().set_value(
+            "user", "email", "testuser@example.com"
+        ).release()
 
         # Create three empty files and add them to the git repository
         filenames = [
@@ -447,7 +455,7 @@ class TestCommands(TestCase):
                 pass
 
             # this was blowing up with GitCommandError, per:
-            # https://github.com/KhulnaSoft/llmcode/issues/201
+            # https://github.com/khulnasoft-lab/llmcode/issues/201
             commands.cmd_add("temp.txt")
 
     def test_cmd_commit(self):
@@ -488,7 +496,7 @@ class TestCommands(TestCase):
             outside_file.touch()
 
             # This should not be allowed!
-            # https://github.com/KhulnaSoft/llmcode/issues/178
+            # https://github.com/khulnasoft-lab/llmcode/issues/178
             commands.cmd_add("../outside.txt")
 
             self.assertEqual(len(coder.abs_fnames), 0)
@@ -512,7 +520,7 @@ class TestCommands(TestCase):
 
             # This should not be allowed!
             # It was blowing up with GitCommandError, per:
-            # https://github.com/KhulnaSoft/llmcode/issues/178
+            # https://github.com/khulnasoft-lab/llmcode/issues/178
             commands.cmd_add("../outside.txt")
 
             self.assertEqual(len(coder.abs_fnames), 0)
@@ -570,7 +578,9 @@ class TestCommands(TestCase):
             io.tool_output = original_tool_output
 
             # Check if the output includes repository map information
-            repo_map_line = next((line for line in output_lines if "repository map" in line), None)
+            repo_map_line = next(
+                (line for line in output_lines if "repository map" in line), None
+            )
             self.assertIsNotNone(
                 repo_map_line, "Repository map information not found in the output"
             )
@@ -751,9 +761,12 @@ class TestCommands(TestCase):
             commands.cmd_load(session_file)
 
             # Verify files were restored correctly
-            added_files = {Path(coder.get_rel_fname(f)).as_posix() for f in coder.abs_fnames}
+            added_files = {
+                Path(coder.get_rel_fname(f)).as_posix() for f in coder.abs_fnames
+            }
             read_only_files = {
-                Path(coder.get_rel_fname(f)).as_posix() for f in coder.abs_read_only_fnames
+                Path(coder.get_rel_fname(f)).as_posix()
+                for f in coder.abs_read_only_fnames
             }
 
             self.assertEqual(added_files, {"file1.txt", "file2.py"})
@@ -807,7 +820,9 @@ class TestCommands(TestCase):
                             if os.path.samefile(saved_path, external_file_path):
                                 break
                     else:
-                        self.fail(f"No matching read-only command found for {external_file_path}")
+                        self.fail(
+                            f"No matching read-only command found for {external_file_path}"
+                        )
 
                 # Clear the current session
                 commands.cmd_reset("")
@@ -819,11 +834,15 @@ class TestCommands(TestCase):
 
                 # Verify files were restored correctly
                 added_files = {coder.get_rel_fname(f) for f in coder.abs_fnames}
-                read_only_files = {coder.get_rel_fname(f) for f in coder.abs_read_only_fnames}
+                read_only_files = {
+                    coder.get_rel_fname(f) for f in coder.abs_read_only_fnames
+                }
 
                 self.assertEqual(added_files, {str(Path("file1.txt"))})
                 self.assertTrue(
-                    any(os.path.samefile(external_file_path, f) for f in read_only_files)
+                    any(
+                        os.path.samefile(external_file_path, f) for f in read_only_files
+                    )
                 )
 
                 # Clean up
@@ -883,7 +902,9 @@ class TestCommands(TestCase):
                             if os.path.samefile(saved_path, external_file1_path):
                                 break
                     else:
-                        self.fail(f"No matching read-only command found for {external_file1_path}")
+                        self.fail(
+                            f"No matching read-only command found for {external_file1_path}"
+                        )
                     # Split commands and check each one
                     for line in commands_text.splitlines():
                         if line.startswith("/read-only "):
@@ -891,7 +912,9 @@ class TestCommands(TestCase):
                             if os.path.samefile(saved_path, external_file2_path):
                                 break
                     else:
-                        self.fail(f"No matching read-only command found for {external_file2_path}")
+                        self.fail(
+                            f"No matching read-only command found for {external_file2_path}"
+                        )
 
                 # Clear the current session
                 commands.cmd_reset("")
@@ -903,12 +926,17 @@ class TestCommands(TestCase):
 
                 # Verify files were restored correctly
                 added_files = {coder.get_rel_fname(f) for f in coder.abs_fnames}
-                read_only_files = {coder.get_rel_fname(f) for f in coder.abs_read_only_fnames}
+                read_only_files = {
+                    coder.get_rel_fname(f) for f in coder.abs_read_only_fnames
+                }
 
                 self.assertEqual(added_files, {str(Path("internal1.txt"))})
                 self.assertTrue(
                     all(
-                        any(os.path.samefile(external_path, fname) for fname in read_only_files)
+                        any(
+                            os.path.samefile(external_path, fname)
+                            for fname in read_only_files
+                        )
                         for external_path in [external_file1_path, external_file2_path]
                     )
                 )
@@ -1059,7 +1087,9 @@ class TestCommands(TestCase):
 
         fname = "file.txt"
         encoding = "utf-16"
-        some_content_which_will_error_if_read_with_encoding_utf8 = "ÅÍÎÏ".encode(encoding)
+        some_content_which_will_error_if_read_with_encoding_utf8 = "ÅÍÎÏ".encode(
+            encoding
+        )
         with open(fname, "wb") as f:
             f.write(some_content_which_will_error_if_read_with_encoding_utf8)
 
@@ -1095,7 +1125,10 @@ class TestCommands(TestCase):
 
             # It's not in the repo, should not do anything
             self.assertFalse(
-                any(os.path.samefile(str(test_file.resolve()), fname) for fname in coder.abs_fnames)
+                any(
+                    os.path.samefile(str(test_file.resolve()), fname)
+                    for fname in coder.abs_fnames
+                )
             )
             self.assertTrue(
                 any(
@@ -1113,7 +1146,10 @@ class TestCommands(TestCase):
 
             # Verify it's now in abs_fnames and not in abs_read_only_fnames
             self.assertTrue(
-                any(os.path.samefile(str(test_file.resolve()), fname) for fname in coder.abs_fnames)
+                any(
+                    os.path.samefile(str(test_file.resolve()), fname)
+                    for fname in coder.abs_fnames
+                )
             )
             self.assertFalse(
                 any(
@@ -1137,7 +1173,35 @@ class TestCommands(TestCase):
             commands.cmd_run("exit 1", add_on_nonzero_exit=True)
 
             # Check that the output was added to cur_messages
-            self.assertTrue(any("exit 1" in msg["content"] for msg in coder.cur_messages))
+            self.assertTrue(
+                any("exit 1" in msg["content"] for msg in coder.cur_messages)
+            )
+
+    def test_cmd_test_returns_output_on_failure(self):
+        with ChdirTemporaryDirectory():
+            io = InputOutput(pretty=False, fancy_input=False, yes=False)
+            from llmcode.coders import Coder
+
+            coder = Coder.create(self.GPT35, None, io)
+            commands = Commands(io, coder)
+
+            # Define a command that prints to stderr and exits with non-zero status
+            test_cmd = "echo 'error output' >&2 && exit 1"
+            expected_output_fragment = "error output"
+
+            # Run cmd_test
+            result = commands.cmd_test(test_cmd)
+
+            # Assert that the result contains the expected output
+            self.assertIsNotNone(result)
+            self.assertIn(expected_output_fragment, result)
+            # Check that the output was also added to cur_messages
+            self.assertTrue(
+                any(
+                    expected_output_fragment in msg["content"]
+                    for msg in coder.cur_messages
+                )
+            )
 
     def test_cmd_add_drop_untracked_files(self):
         with GitTemporaryDirectory():
@@ -1297,6 +1361,41 @@ class TestCommands(TestCase):
 
             # Verify the file was not added
             self.assertEqual(len(coder.abs_fnames), 0)
+
+    def test_cmd_think_tokens(self):
+        io = InputOutput(pretty=False, fancy_input=False, yes=True)
+        coder = Coder.create(self.GPT35, None, io)
+        commands = Commands(io, coder)
+
+        # Test with various formats
+        test_values = {
+            "8k": 8192,  # 8 * 1024
+            "10.5k": 10752,  # 10.5 * 1024
+            "512k": 524288,  # 0.5 * 1024 * 1024
+        }
+
+        for input_value, expected_tokens in test_values.items():
+            with mock.patch.object(io, "tool_output") as mock_tool_output:
+                commands.cmd_think_tokens(input_value)
+
+                # Check that the model's thinking tokens were updated
+                self.assertEqual(
+                    coder.main_model.extra_params["thinking"]["budget_tokens"],
+                    expected_tokens,
+                )
+
+                # Check that the tool output shows the correct value with format
+                # Use the actual input_value (not normalized) in the assertion
+                mock_tool_output.assert_any_call(
+                    f"Set thinking token budget to {expected_tokens:,} tokens ({input_value})."
+                )
+
+        # Test with no value provided - should display current value
+        with mock.patch.object(io, "tool_output") as mock_tool_output:
+            commands.cmd_think_tokens("")
+            mock_tool_output.assert_any_call(
+                mock.ANY
+            )  # Just verify it calls tool_output
 
     def test_cmd_add_llmcodeignored_file(self):
         with GitTemporaryDirectory():
@@ -1581,6 +1680,36 @@ class TestCommands(TestCase):
                 # Clean up: remove the test file from the home directory
                 test_file.unlink()
 
+    # pytest tests/basic/test_commands.py  -k test_cmd_read_only_with_square_brackets
+    def test_cmd_read_only_with_square_brackets(self):
+        with GitTemporaryDirectory() as repo_dir:
+            io = InputOutput(pretty=False, fancy_input=False, yes=False)
+            coder = Coder.create(self.GPT35, None, io)
+            commands = Commands(io, coder)
+
+            # Create test layout
+            test_dir = Path(repo_dir) / "[id]"
+            test_dir.mkdir()
+            test_file = Path(repo_dir) / "[id]" / "page.tsx"
+            test_file.write_text("Test file")
+
+            # Test the /read-only command
+            commands.cmd_read_only("[id]/page.tsx")
+
+            # Check if test file was added to abs_read_only_fnames
+            self.assertTrue(
+                any(
+                    os.path.samefile(str(test_file), fname)
+                    for fname in coder.abs_read_only_fnames
+                )
+            )
+
+            # Test dropping all read-only files
+            commands.cmd_drop("[id]/page.tsx")
+
+            # Check if all files were removed from abs_read_only_fnames
+            self.assertEqual(len(coder.abs_read_only_fnames), 0)
+
     def test_cmd_diff(self):
         with GitTemporaryDirectory() as repo_dir:
             repo = git.Repo(repo_dir)
@@ -1647,6 +1776,108 @@ class TestCommands(TestCase):
                 self.assertIn("-Further modified content", diff_output)
                 self.assertIn("+Final modified content", diff_output)
 
+    def test_cmd_model(self):
+        io = InputOutput(pretty=False, fancy_input=False, yes=True)
+        coder = Coder.create(self.GPT35, None, io)
+        commands = Commands(io, coder)
+
+        # Test switching the main model
+        with self.assertRaises(SwitchCoder) as context:
+            commands.cmd_model("gpt-4")
+
+        # Check that the SwitchCoder exception contains the correct model configuration
+        self.assertEqual(context.exception.kwargs.get("main_model").name, "gpt-4")
+        self.assertEqual(
+            context.exception.kwargs.get("main_model").editor_model.name,
+            self.GPT35.editor_model.name,
+        )
+        self.assertEqual(
+            context.exception.kwargs.get("main_model").weak_model.name,
+            self.GPT35.weak_model.name,
+        )
+        # Check that the edit format is updated to the new model's default
+        self.assertEqual(context.exception.kwargs.get("edit_format"), "diff")
+
+    def test_cmd_model_preserves_explicit_edit_format(self):
+        io = InputOutput(pretty=False, fancy_input=False, yes=True)
+        # Use gpt-3.5-turbo (default 'diff')
+        coder = Coder.create(self.GPT35, None, io)
+        # Explicitly set edit format to something else
+        coder.edit_format = "udiff"
+        commands = Commands(io, coder)
+
+        # Mock sanity check to avoid network calls
+        with mock.patch("llmcode.models.sanity_check_models"):
+            # Test switching the main model to gpt-4 (default 'whole')
+            with self.assertRaises(SwitchCoder) as context:
+                commands.cmd_model("gpt-4")
+
+        # Check that the SwitchCoder exception contains the correct model configuration
+        self.assertEqual(context.exception.kwargs.get("main_model").name, "gpt-4")
+        # Check that the edit format is preserved
+        self.assertEqual(context.exception.kwargs.get("edit_format"), "udiff")
+
+    def test_cmd_editor_model(self):
+        io = InputOutput(pretty=False, fancy_input=False, yes=True)
+        coder = Coder.create(self.GPT35, None, io)
+        commands = Commands(io, coder)
+
+        # Test switching the editor model
+        with self.assertRaises(SwitchCoder) as context:
+            commands.cmd_editor_model("gpt-4")
+
+        # Check that the SwitchCoder exception contains the correct model configuration
+        self.assertEqual(
+            context.exception.kwargs.get("main_model").name, self.GPT35.name
+        )
+        self.assertEqual(
+            context.exception.kwargs.get("main_model").editor_model.name, "gpt-4"
+        )
+        self.assertEqual(
+            context.exception.kwargs.get("main_model").weak_model.name,
+            self.GPT35.weak_model.name,
+        )
+
+    def test_cmd_weak_model(self):
+        io = InputOutput(pretty=False, fancy_input=False, yes=True)
+        coder = Coder.create(self.GPT35, None, io)
+        commands = Commands(io, coder)
+
+        # Test switching the weak model
+        with self.assertRaises(SwitchCoder) as context:
+            commands.cmd_weak_model("gpt-4")
+
+        # Check that the SwitchCoder exception contains the correct model configuration
+        self.assertEqual(
+            context.exception.kwargs.get("main_model").name, self.GPT35.name
+        )
+        self.assertEqual(
+            context.exception.kwargs.get("main_model").editor_model.name,
+            self.GPT35.editor_model.name,
+        )
+        self.assertEqual(
+            context.exception.kwargs.get("main_model").weak_model.name, "gpt-4"
+        )
+
+    def test_cmd_model_updates_default_edit_format(self):
+        io = InputOutput(pretty=False, fancy_input=False, yes=True)
+        # Use gpt-3.5-turbo (default 'diff')
+        coder = Coder.create(self.GPT35, None, io)
+        # Ensure current edit format is the default
+        self.assertEqual(coder.edit_format, self.GPT35.edit_format)
+        commands = Commands(io, coder)
+
+        # Mock sanity check to avoid network calls
+        with mock.patch("llmcode.models.sanity_check_models"):
+            # Test switching the main model to gpt-4 (default 'whole')
+            with self.assertRaises(SwitchCoder) as context:
+                commands.cmd_model("gpt-4")
+
+        # Check that the SwitchCoder exception contains the correct model configuration
+        self.assertEqual(context.exception.kwargs.get("main_model").name, "gpt-4")
+        # Check that the edit format is updated to the new model's default
+        self.assertEqual(context.exception.kwargs.get("edit_format"), "diff")
+
     def test_cmd_ask(self):
         io = InputOutput(pretty=False, fancy_input=False, yes=True)
         coder = Coder.create(self.GPT35, None, io)
@@ -1679,7 +1910,9 @@ class TestCommands(TestCase):
             repo.git.commit("-m", "Add test_file.py")
 
             # Modify the file to make it dirty
-            file_path.write_text("def hello():\n    print('Hello, World!')\n\n# Dirty line\n")
+            file_path.write_text(
+                "def hello():\n    print('Hello, World!')\n\n# Dirty line\n"
+            )
 
             # Mock the linter.lint method
             with mock.patch.object(coder.linter, "lint") as mock_lint:
@@ -1737,6 +1970,225 @@ class TestCommands(TestCase):
             del coder
             del commands
 
+    def test_reset_with_original_read_only_files(self):
+        with GitTemporaryDirectory() as repo_dir:
+            io = InputOutput(pretty=False, fancy_input=False, yes=True)
+            coder = Coder.create(self.GPT35, None, io)
+
+            # Create test files
+            orig_read_only = Path(repo_dir) / "orig_read_only.txt"
+            orig_read_only.write_text("Original read-only file")
+
+            added_file = Path(repo_dir) / "added_file.txt"
+            added_file.write_text("Added file")
+
+            added_read_only = Path(repo_dir) / "added_read_only.txt"
+            added_read_only.write_text("Added read-only file")
+
+            # Initialize commands with original read-only files
+            commands = Commands(
+                io, coder, original_read_only_fnames=[str(orig_read_only)]
+            )
+
+            # Add files to the chat
+            coder.abs_read_only_fnames.add(str(orig_read_only))
+            coder.abs_fnames.add(str(added_file))
+            coder.abs_read_only_fnames.add(str(added_read_only))
+
+            # Add some messages to the chat history
+            coder.cur_messages = [{"role": "user", "content": "Test message"}]
+            coder.done_messages = [{"role": "assistant", "content": "Test response"}]
+
+            # Verify initial state
+            self.assertEqual(len(coder.abs_fnames), 1)
+            self.assertEqual(len(coder.abs_read_only_fnames), 2)
+            self.assertEqual(len(coder.cur_messages), 1)
+            self.assertEqual(len(coder.done_messages), 1)
+
+            # Test reset command
+            commands.cmd_reset("")
+
+            # Verify that original read-only file is preserved
+            # but other files and messages are cleared
+            self.assertEqual(len(coder.abs_fnames), 0)
+            self.assertEqual(len(coder.abs_read_only_fnames), 1)
+            self.assertIn(str(orig_read_only), coder.abs_read_only_fnames)
+            self.assertNotIn(str(added_read_only), coder.abs_read_only_fnames)
+
+            # Chat history should be cleared
+            self.assertEqual(len(coder.cur_messages), 0)
+            self.assertEqual(len(coder.done_messages), 0)
+
+    def test_reset_with_no_original_read_only_files(self):
+        with GitTemporaryDirectory() as repo_dir:
+            io = InputOutput(pretty=False, fancy_input=False, yes=True)
+            coder = Coder.create(self.GPT35, None, io)
+
+            # Create test files
+            added_file = Path(repo_dir) / "added_file.txt"
+            added_file.write_text("Added file")
+
+            added_read_only = Path(repo_dir) / "added_read_only.txt"
+            added_read_only.write_text("Added read-only file")
+
+            # Initialize commands with no original read-only files
+            commands = Commands(io, coder)
+
+            # Add files to the chat
+            coder.abs_fnames.add(str(added_file))
+            coder.abs_read_only_fnames.add(str(added_read_only))
+
+            # Add some messages to the chat history
+            coder.cur_messages = [{"role": "user", "content": "Test message"}]
+            coder.done_messages = [{"role": "assistant", "content": "Test response"}]
+
+            # Verify initial state
+            self.assertEqual(len(coder.abs_fnames), 1)
+            self.assertEqual(len(coder.abs_read_only_fnames), 1)
+            self.assertEqual(len(coder.cur_messages), 1)
+            self.assertEqual(len(coder.done_messages), 1)
+
+            # Test reset command
+            commands.cmd_reset("")
+
+            # Verify that all files and messages are cleared
+            self.assertEqual(len(coder.abs_fnames), 0)
+            self.assertEqual(len(coder.abs_read_only_fnames), 0)
+            self.assertEqual(len(coder.cur_messages), 0)
+            self.assertEqual(len(coder.done_messages), 0)
+
+    def test_cmd_reasoning_effort(self):
+        io = InputOutput(pretty=False, fancy_input=False, yes=True)
+        coder = Coder.create(self.GPT35, None, io)
+        commands = Commands(io, coder)
+
+        # Test with numeric values
+        with mock.patch.object(io, "tool_output") as mock_tool_output:
+            commands.cmd_reasoning_effort("0.8")
+            mock_tool_output.assert_any_call("Set reasoning effort to 0.8")
+
+        # Test with text values (low/medium/high)
+        for effort_level in ["low", "medium", "high"]:
+            with mock.patch.object(io, "tool_output") as mock_tool_output:
+                commands.cmd_reasoning_effort(effort_level)
+                mock_tool_output.assert_any_call(
+                    f"Set reasoning effort to {effort_level}"
+                )
+
+        # Check model's reasoning effort was updated
+        with mock.patch.object(
+            coder.main_model, "set_reasoning_effort"
+        ) as mock_set_effort:
+            commands.cmd_reasoning_effort("0.5")
+            mock_set_effort.assert_called_once_with("0.5")
+
+        # Test with no value provided - should display current value
+        with mock.patch.object(io, "tool_output") as mock_tool_output:
+            commands.cmd_reasoning_effort("")
+            mock_tool_output.assert_any_call("Current reasoning effort: high")
+
+    def test_drop_with_original_read_only_files(self):
+        with GitTemporaryDirectory() as repo_dir:
+            io = InputOutput(pretty=False, fancy_input=False, yes=True)
+            coder = Coder.create(self.GPT35, None, io)
+
+            # Create test files
+            orig_read_only = Path(repo_dir) / "orig_read_only.txt"
+            orig_read_only.write_text("Original read-only file")
+
+            added_file = Path(repo_dir) / "added_file.txt"
+            added_file.write_text("Added file")
+
+            added_read_only = Path(repo_dir) / "added_read_only.txt"
+            added_read_only.write_text("Added read-only file")
+
+            # Initialize commands with original read-only files
+            commands = Commands(
+                io, coder, original_read_only_fnames=[str(orig_read_only)]
+            )
+
+            # Add files to the chat
+            coder.abs_read_only_fnames.add(str(orig_read_only))
+            coder.abs_fnames.add(str(added_file))
+            coder.abs_read_only_fnames.add(str(added_read_only))
+
+            # Verify initial state
+            self.assertEqual(len(coder.abs_fnames), 1)
+            self.assertEqual(len(coder.abs_read_only_fnames), 2)
+
+            # Test bare drop command
+            with mock.patch.object(io, "tool_output") as mock_tool_output:
+                commands.cmd_drop("")
+                mock_tool_output.assert_called_with(
+                    "Dropping all files from the chat session except originally read-only files."
+                )
+
+            # Verify that original read-only file is preserved, but other files are dropped
+            self.assertEqual(len(coder.abs_fnames), 0)
+            self.assertEqual(len(coder.abs_read_only_fnames), 1)
+            self.assertIn(str(orig_read_only), coder.abs_read_only_fnames)
+            self.assertNotIn(str(added_read_only), coder.abs_read_only_fnames)
+
+    def test_drop_specific_original_read_only_file(self):
+        with GitTemporaryDirectory() as repo_dir:
+            io = InputOutput(pretty=False, fancy_input=False, yes=True)
+            coder = Coder.create(self.GPT35, None, io)
+
+            # Create test file
+            orig_read_only = Path(repo_dir) / "orig_read_only.txt"
+            orig_read_only.write_text("Original read-only file")
+
+            # Initialize commands with original read-only files
+            commands = Commands(
+                io, coder, original_read_only_fnames=[str(orig_read_only)]
+            )
+
+            # Add file to the chat
+            coder.abs_read_only_fnames.add(str(orig_read_only))
+
+            # Verify initial state
+            self.assertEqual(len(coder.abs_read_only_fnames), 1)
+
+            # Test specific drop command
+            commands.cmd_drop("orig_read_only.txt")
+
+            # Verify that the original read-only file is dropped when specified explicitly
+            self.assertEqual(len(coder.abs_read_only_fnames), 0)
+
+    def test_drop_with_no_original_read_only_files(self):
+        with GitTemporaryDirectory() as repo_dir:
+            io = InputOutput(pretty=False, fancy_input=False, yes=True)
+            coder = Coder.create(self.GPT35, None, io)
+
+            # Create test files
+            added_file = Path(repo_dir) / "added_file.txt"
+            added_file.write_text("Added file")
+
+            added_read_only = Path(repo_dir) / "added_read_only.txt"
+            added_read_only.write_text("Added read-only file")
+
+            # Initialize commands with no original read-only files
+            commands = Commands(io, coder)
+
+            # Add files to the chat
+            coder.abs_fnames.add(str(added_file))
+            coder.abs_read_only_fnames.add(str(added_read_only))
+
+            # Verify initial state
+            self.assertEqual(len(coder.abs_fnames), 1)
+            self.assertEqual(len(coder.abs_read_only_fnames), 1)
+
+            # Test bare drop command
+            with mock.patch.object(io, "tool_output") as mock_tool_output:
+                commands.cmd_drop("")
+                mock_tool_output.assert_called_with(
+                    "Dropping all files from the chat session."
+                )
+
+            # Verify that all files are dropped
+            self.assertEqual(len(coder.abs_fnames), 0)
+            self.assertEqual(len(coder.abs_read_only_fnames), 0)
+
     def test_cmd_load_with_switch_coder(self):
         with GitTemporaryDirectory() as repo_dir:
             io = InputOutput(pretty=False, fancy_input=False, yes=True)
@@ -1766,3 +2218,113 @@ class TestCommands(TestCase):
                     mock_tool_error.assert_any_call(
                         "Command '/model gpt-4' is only supported in interactive mode, skipping."
                     )
+
+    def test_reset_after_coder_clone_preserves_original_read_only_files(self):
+        with GitTemporaryDirectory() as _:
+            repo_dir = str(".")
+            io = InputOutput(pretty=False, fancy_input=False, yes=True)
+
+            orig_ro_path = Path(repo_dir) / "orig_ro.txt"
+            orig_ro_path.write_text("original read only")
+
+            editable_path = Path(repo_dir) / "editable.txt"
+            editable_path.write_text("editable content")
+
+            other_ro_path = Path(repo_dir) / "other_ro.txt"
+            other_ro_path.write_text("other read only")
+
+            original_read_only_fnames_set = {str(orig_ro_path)}
+
+            # Create the initial Coder
+            orig_coder = Coder.create(
+                main_model=self.GPT35, io=io, fnames=[], repo=None
+            )
+            orig_coder.root = repo_dir  # Set root for path operations
+
+            # Replace its commands object with one that has the original_read_only_fnames
+            orig_coder.commands = Commands(
+                io,
+                orig_coder,
+                original_read_only_fnames=list(original_read_only_fnames_set),
+            )
+            orig_coder.commands.coder = orig_coder
+
+            # Populate coder's file sets
+            orig_coder.abs_read_only_fnames.add(str(orig_ro_path))
+            orig_coder.abs_fnames.add(str(editable_path))
+            orig_coder.abs_read_only_fnames.add(str(other_ro_path))
+
+            # Simulate SwitchCoder by creating a new coder from the original one
+            new_coder = Coder.create(from_coder=orig_coder)
+            new_commands = new_coder.commands
+
+            # Perform /reset
+            new_commands.cmd_reset("")
+
+            # Assertions for /reset
+            self.assertEqual(len(new_coder.abs_fnames), 0)
+            self.assertEqual(len(new_coder.abs_read_only_fnames), 1)
+            # self.assertIn(str(orig_ro_path), new_coder.abs_read_only_fnames)
+            self.assertTrue(
+                any(
+                    os.path.samefile(p, str(orig_ro_path))
+                    for p in new_coder.abs_read_only_fnames
+                ),
+                f"File {str(orig_ro_path)} not found in {new_coder.abs_read_only_fnames}",
+            )
+            self.assertEqual(len(new_coder.done_messages), 0)
+            self.assertEqual(len(new_coder.cur_messages), 0)
+
+    def test_drop_bare_after_coder_clone_preserves_original_read_only_files(self):
+        with GitTemporaryDirectory() as _:
+            repo_dir = str(".")
+            io = InputOutput(pretty=False, fancy_input=False, yes=True)
+
+            orig_ro_path = Path(repo_dir) / "orig_ro.txt"
+            orig_ro_path.write_text("original read only")
+
+            editable_path = Path(repo_dir) / "editable.txt"
+            editable_path.write_text("editable content")
+
+            other_ro_path = Path(repo_dir) / "other_ro.txt"
+            other_ro_path.write_text("other read only")
+
+            original_read_only_fnames_set = {str(orig_ro_path)}
+
+            orig_coder = Coder.create(
+                main_model=self.GPT35, io=io, fnames=[], repo=None
+            )
+            orig_coder.root = repo_dir
+            orig_coder.commands = Commands(
+                io,
+                orig_coder,
+                original_read_only_fnames=list(original_read_only_fnames_set),
+            )
+            orig_coder.commands.coder = orig_coder
+
+            orig_coder.abs_read_only_fnames.add(str(orig_ro_path))
+            orig_coder.abs_fnames.add(str(editable_path))
+            orig_coder.abs_read_only_fnames.add(str(other_ro_path))
+            orig_coder.done_messages = [{"role": "user", "content": "d1"}]
+            orig_coder.cur_messages = [{"role": "user", "content": "c1"}]
+
+            new_coder = Coder.create(from_coder=orig_coder)
+            new_commands = new_coder.commands
+            new_commands.cmd_drop("")
+
+            self.assertEqual(len(new_coder.abs_fnames), 0)
+            self.assertEqual(len(new_coder.abs_read_only_fnames), 1)
+            # self.assertIn(str(orig_ro_path), new_coder.abs_read_only_fnames)
+            self.assertTrue(
+                any(
+                    os.path.samefile(p, str(orig_ro_path))
+                    for p in new_coder.abs_read_only_fnames
+                ),
+                f"File {str(orig_ro_path)} not found in {new_coder.abs_read_only_fnames}",
+            )
+            self.assertEqual(
+                new_coder.done_messages, [{"role": "user", "content": "d1"}]
+            )
+            self.assertEqual(
+                new_coder.cur_messages, [{"role": "user", "content": "c1"}]
+            )

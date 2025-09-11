@@ -2,19 +2,19 @@
 
 global-exclude .DS_Store
 
-recursive-exclude docs/site/examples *
-recursive-exclude docs/site/_posts *
+recursive-exclude llmcode/website/examples *
+recursive-exclude llmcode/website/_posts *
 
-exclude docs/site/HISTORY.md
-exclude docs/site/docs/benchmarks*.md
-exclude docs/site/docs/ctags.md
-exclude docs/site/docs/unified-diffs.md
+exclude llmcode/website/HISTORY.md
+exclude llmcode/website/docs/benchmarks*.md
+exclude llmcode/website/docs/ctags.md
+exclude llmcode/website/docs/unified-diffs.md
 
-exclude docs/site/install.ps1
-exclude docs/site/install.sh
+exclude llmcode/website/install.ps1
+exclude llmcode/website/install.sh
 
-recursive-exclude docs/site/docs/leaderboards *
-recursive-exclude docs/site/assets *
-recursive-exclude docs/site *.js
-recursive-exclude docs/site *.html
-recursive-exclude docs/site *.yml
+recursive-exclude llmcode/website/docs/leaderboards *
+recursive-exclude llmcode/website/assets *
+recursive-exclude llmcode/website *.js
+recursive-exclude llmcode/website *.html
+recursive-exclude llmcode/website *.yml

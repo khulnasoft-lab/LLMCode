@@ -13,14 +13,16 @@ import yaml
 from tqdm import tqdm
 
 website_files = [
-    "docs/site/share/index.md",
-    "docs/site/_includes/head_custom.html",
-    "docs/site/docs/leaderboards/index.md",
+    "llmcode/website/index.html",
+    "llmcode/website/share/index.md",
+    "llmcode/website/_includes/head_custom.html",
+    "llmcode/website/_includes/home.css",
+    "llmcode/website/docs/leaderboards/index.md",
 ]
 
 exclude_files = [
-    "docs/site/install.ps1",
-    "docs/site/install.sh",
+    "llmcode/website/install.ps1",
+    "llmcode/website/install.sh",
 ]
 
 
@@ -63,14 +65,7 @@ def blame(start_tag, end_tag=None):
 
     end_date = get_tag_date(end_tag if end_tag else "HEAD")
 
-    return (
-        all_file_counts,
-        grand_total,
-        total_lines,
-        llmcode_total,
-        llmcode_percentage,
-        end_date,
-    )
+    return all_file_counts, grand_total, total_lines, llmcode_total, llmcode_percentage, end_date
 
 
 def get_all_commit_hashes_between_tags(start_tag, end_tag=None):
@@ -94,8 +89,13 @@ def get_commit_authors(commits):
     commit_to_author = dict()
     for commit in commits:
         author = run(["git", "show", "-s", "--format=%an", commit]).strip()
-        commit_message = run(["git", "show", "-s", "--format=%s", commit]).strip()
-        if commit_message.lower().startswith("llmcode:"):
+        subject = run(["git", "show", "-s", "--format=%s", commit]).strip()
+        full_message = run(["git", "show", "-s", "--format=%B", commit]).strip()
+
+        lower_subject = subject.lower()
+        lower_full = full_message.lower()
+
+        if lower_subject.startswith("llmcode:") or "co-authored-by: llmcode" in lower_full:
             author += " (llmcode)"
         commit_to_author[commit] = author
     return commit_to_author
@@ -111,14 +111,9 @@ def process_all_tags_since(start_tag):
     results = []
     for i in tqdm(range(len(tags) - 1), desc="Processing tags"):
         start_tag, end_tag = tags[i], tags[i + 1]
-        (
-            all_file_counts,
-            grand_total,
-            total_lines,
-            llmcode_total,
-            llmcode_percentage,
-            end_date,
-        ) = blame(start_tag, end_tag)
+        all_file_counts, grand_total, total_lines, llmcode_total, llmcode_percentage, end_date = (
+            blame(start_tag, end_tag)
+        )
         results.append(
             {
                 "start_tag": start_tag,
@@ -197,14 +192,9 @@ def main():
 
         yaml_output = yaml.dump(existing_results, sort_keys=True)
     else:
-        (
-            all_file_counts,
-            grand_total,
-            total_lines,
-            llmcode_total,
-            llmcode_percentage,
-            end_date,
-        ) = blame(args.start_tag, args.end_tag)
+        all_file_counts, grand_total, total_lines, llmcode_total, llmcode_percentage, end_date = (
+            blame(args.start_tag, args.end_tag)
+        )
 
         result = {
             "start_tag": args.start_tag,
@@ -239,9 +229,10 @@ def get_counts_for_file(start_tag, end_tag, authors, fname):
                 [
                     "git",
                     "blame",
-                    "-M",
-                    "-C",
-                    "-C",
+                    "-M100",  # Detect moved lines within a file with 100% similarity
+                    "-C100",  # Detect moves across files with 100% similarity
+                    "-C",  # Increase detection effort
+                    "-C",  # Increase detection effort even more
                     "--abbrev=9",
                     f"{start_tag}..{end_tag}",
                     "--",
@@ -253,9 +244,10 @@ def get_counts_for_file(start_tag, end_tag, authors, fname):
                 [
                     "git",
                     "blame",
-                    "-M",
-                    "-C",
-                    "-C",
+                    "-M100",  # Detect moved lines within a file with 100% similarity
+                    "-C100",  # Detect moves across files with 100% similarity
+                    "-C",  # Increase detection effort
+                    "-C",  # Increase detection effort even more
                     "--abbrev=9",
                     f"{start_tag}..HEAD",
                     "--",

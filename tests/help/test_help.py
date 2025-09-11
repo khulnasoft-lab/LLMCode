@@ -1,5 +1,8 @@
+import time
 import unittest
 from unittest.mock import MagicMock
+
+from requests.exceptions import ConnectionError, ReadTimeout
 
 import llmcode
 from llmcode.coders import Coder
@@ -10,6 +13,40 @@ from llmcode.models import Model
 
 
 class TestHelp(unittest.TestCase):
+    @staticmethod
+    def retry_with_backoff(func, max_time=60, initial_delay=1, backoff_factor=2):
+        """
+        Execute a function with exponential backoff retry logic.
+
+        Args:
+            func: Function to execute
+            max_time: Maximum time in seconds to keep retrying
+            initial_delay: Initial delay between retries in seconds
+            backoff_factor: Multiplier for delay after each retry
+
+        Returns:
+            The result of the function if successful
+
+        Raises:
+            The last exception encountered if all retries fail
+        """
+        start_time = time.time()
+        delay = initial_delay
+        last_exception = None
+
+        while time.time() - start_time < max_time:
+            try:
+                return func()
+            except (ReadTimeout, ConnectionError) as e:
+                last_exception = e
+                time.sleep(delay)
+                delay = min(delay * backoff_factor, 15)  # Cap max delay at 15 seconds
+
+        # If we've exhausted our retry time, raise the last exception
+        if last_exception:
+            raise last_exception
+        raise Exception("Retry timeout exceeded but no exception was caught")
+
     @classmethod
     def setUpClass(cls):
         io = InputOutput(pretty=False, yes=True)
@@ -22,13 +59,17 @@ class TestHelp(unittest.TestCase):
         help_coder_run = MagicMock(return_value="")
         llmcode.coders.HelpCoder.run = help_coder_run
 
-        try:
-            commands.cmd_help("hi")
-        except llmcode.commands.SwitchCoder:
-            pass
-        else:
-            # If no exception was raised, fail the test
-            assert False, "SwitchCoder exception was not raised"
+        def run_help_command():
+            try:
+                commands.cmd_help("hi")
+            except llmcode.commands.SwitchCoder:
+                pass
+            else:
+                # If no exception was raised, fail the test
+                assert False, "SwitchCoder exception was not raised"
+
+        # Use retry with backoff for the help command that loads models
+        cls.retry_with_backoff(run_help_command)
 
         help_coder_run.assert_called_once()
 
@@ -57,47 +98,50 @@ class TestHelp(unittest.TestCase):
     def test_fname_to_url_unix(self):
         # Test relative Unix-style paths
         self.assertEqual(
-            fname_to_url("website/docs/index.md"), "https://llmcode.khulnasoft.com/docs"
+            fname_to_url("website/docs/index.md"), "https://llm.khulnasoft.com/docs"
         )
         self.assertEqual(
             fname_to_url("website/docs/usage.md"),
-            "https://llmcode.khulnasoft.com/docs/usage.html",
+            "https://llm.khulnasoft.com/docs/usage.html",
         )
         self.assertEqual(fname_to_url("website/_includes/header.md"), "")
 
         # Test absolute Unix-style paths
         self.assertEqual(
             fname_to_url("/home/user/project/website/docs/index.md"),
-            "https://llmcode.khulnasoft.com/docs",
+            "https://llm.khulnasoft.com/docs",
         )
         self.assertEqual(
             fname_to_url("/home/user/project/website/docs/usage.md"),
-            "https://llmcode.khulnasoft.com/docs/usage.html",
+            "https://llm.khulnasoft.com/docs/usage.html",
         )
-        self.assertEqual(fname_to_url("/home/user/project/website/_includes/header.md"), "")
+        self.assertEqual(
+            fname_to_url("/home/user/project/website/_includes/header.md"), ""
+        )
 
     def test_fname_to_url_windows(self):
         # Test relative Windows-style paths
         self.assertEqual(
-            fname_to_url(r"website\docs\index.md"),
-            "https://llmcode.khulnasoft.com/docs",
+            fname_to_url(r"website\docs\index.md"), "https://llm.khulnasoft.com/docs"
         )
         self.assertEqual(
             fname_to_url(r"website\docs\usage.md"),
-            "https://llmcode.khulnasoft.com/docs/usage.html",
+            "https://llm.khulnasoft.com/docs/usage.html",
         )
         self.assertEqual(fname_to_url(r"website\_includes\header.md"), "")
 
         # Test absolute Windows-style paths
         self.assertEqual(
             fname_to_url(r"C:\Users\user\project\website\docs\index.md"),
-            "https://llmcode.khulnasoft.com/docs",
+            "https://llm.khulnasoft.com/docs",
         )
         self.assertEqual(
             fname_to_url(r"C:\Users\user\project\website\docs\usage.md"),
-            "https://llmcode.khulnasoft.com/docs/usage.html",
+            "https://llm.khulnasoft.com/docs/usage.html",
         )
-        self.assertEqual(fname_to_url(r"C:\Users\user\project\website\_includes\header.md"), "")
+        self.assertEqual(
+            fname_to_url(r"C:\Users\user\project\website\_includes\header.md"), ""
+        )
 
     def test_fname_to_url_edge_cases(self):
         # Test paths that don't contain 'website'

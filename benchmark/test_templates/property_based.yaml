@@ -1,0 +1,248 @@
+name: property_based_python
+description: Property-based testing template using Hypothesis for Python
+category: property
+language: python
+framework: pytest
+template_content: |
+  import pytest
+  from hypothesis import given, strategies as st
+  from {{ module_name }} import {{ function_name }}
+  
+  
+  @given({{ strategy_args }})
+  def test_{{ function_name }}_property_{{ property_number }}({{ param_names }}):
+      """{{ property_description }}"""
+      # Property: {{ property_statement }}
+      result = {{ function_name }}({{ function_args }})
+      
+      # Property assertion
+      {{ property_assertion }}
+  
+  
+  {% if additional_properties %}
+  {% for prop in additional_properties %}
+  @given({{ prop.strategy_args }})
+  def test_{{ function_name }}_property_{{ prop.property_number }}({{ prop.param_names }}):
+      """{{ prop.property_description }}"""
+      # Property: {{ prop.property_statement }}
+      result = {{ function_name }}({{ prop.function_args }})
+      
+      # Property assertion
+      {{ prop.property_assertion }}
+  {% endfor %}
+  {% endif %}
+  
+  
+  @given({{ edge_case_strategy }})
+  def test_{{ function_name }}_edge_cases({{ edge_case_param }}):
+      """Test edge cases for {{ function_name }}"""
+      # Should handle edge cases gracefully
+      try:
+          result = {{ function_name }}({{ edge_case_param }})
+          {{ edge_case_assertion }}
+      except Exception as e:
+          # If exception is expected, validate it
+          {{ edge_case_exception_handling }}
+  
+  
+  def test_{{ function_name }}_specific_examples():
+      """Test specific examples that might not be caught by property testing"""
+      test_cases = [
+          {% for case in specific_examples %}
+          ({{ case.input }}, {{ case.expected }}),
+          {% endfor %}
+      ]
+      
+      for input_data, expected in test_cases:
+          result = {{ function_name }}(input_data)
+          assert result == expected, f"Failed for input: {input_data}"
+  
+  
+  {% if performance_property %}
+  @given(st.lists(st.integers(), min_size={{ perf_min_size }}, max_size={{ perf_max_size }}))
+  def test_{{ function_name }}_performance_property(data):
+      """Performance property: {{ performance_description }}"""
+      import time
+      
+      start_time = time.time()
+      result = {{ function_name }}(data)
+      end_time = time.time()
+      
+      # Performance assertion
+      assert end_time - start_time < {{ performance_threshold }}, "Performance property violated"
+      
+      # Result correctness
+      {{ performance_correctness_assertion }}
+  {% endif %}
+  
+  
+  {% if stateful_property %}
+  class {{ state_machine_class }}:
+      """State machine for stateful property testing"""
+      
+      def __init__(self):
+          {{ state_initialization }}
+      
+      {% for state_method in stateful_methods %}
+      @given({{ state_method.strategy }})
+      def {{ state_method.name }}(self, {{ state_method.params }}):
+          """{{ state_method.description }}"""
+          {{ state_method.implementation }}
+          
+          # State invariant
+          {{ state_method.invariant }}
+      {% endfor %}
+      
+      def invariant(self):
+          """Global invariant that should always hold"""
+          {{ global_invariant }}
+  
+  
+  def test_{{ function_name }}_stateful_properties():
+      """Test stateful properties"""
+      from hypothesis.stateful import RuleBasedStateMachine, rule
+      
+      class {{ state_machine_class }}(RuleBasedStateMachine):
+          def __init__(self):
+              super().__init__()
+              {{ state_initialization }}
+          
+          {% for rule in stateful_rules %}
+          @rule({{ rule.strategy }})
+          def {{ rule.name }}(self, {{ rule.params }}):
+              """{{ rule.description }}"""
+              {{ rule.implementation }}
+          {% endfor %}
+          
+          def invariant(self):
+              """Global invariant"""
+              {{ global_invariant }}
+      
+      # Run stateful test
+      from hypothesis.stateful import run_state_machine_as_test
+      run_state_machine_as_test({{ state_machine_class }})
+  {% endif %}
+variables:
+  - name: module_name
+    type: string
+    description: Module containing the function to test
+    default_value: my_module
+  - name: function_name
+    type: string
+    description: Name of the function to test
+    default_value: my_function
+  - name: strategy_args
+    type: string
+    description: Hypothesis strategies for function arguments
+    default_value: st.integers(), st.integers()
+  - name: param_names
+    type: string
+    description: Parameter names for the test function
+    default_value: a, b
+  - name: property_number
+    type: integer
+    description: Property number for unique test naming
+    default_value: 1
+  - name: property_description
+    type: string
+    description: Description of the property being tested
+    default_value: Function should satisfy mathematical property
+  - name: property_statement
+    type: string
+    description: Formal statement of the property
+    default_value: f(a, b) == f(b, a)  # Commutativity example
+  - name: function_args
+    type: string
+    description: Arguments to pass to the function
+    default_value: a, b
+  - name: property_assertion
+    type: string
+    description: Assertion that validates the property
+    default_value: assert result == function_name(b, a)  # Commutativity check
+  - name: additional_properties
+    type: list
+    description: List of additional properties to test
+    default_value: []
+  - name: edge_case_strategy
+    type: string
+    description: Strategy for generating edge cases
+    default_value: st.one_of(st.none(), st.just(0), st.just(""), st.lists(st.just(0), max_size=0))
+  - name: edge_case_param
+    type: string
+    description: Parameter name for edge case testing
+    default_value: edge_input
+  - name: edge_case_assertion
+    type: string
+    description: Assertion for edge case handling
+    default_value: assert result is not None
+  - name: edge_case_exception_handling
+    type: string
+    description: Exception handling for edge cases
+    default_value: assert isinstance(e, ValueError)
+  - name: specific_examples
+    type: list
+    description: Specific test cases that might not be caught by property testing
+    default_value: []
+  - name: performance_property
+    type: boolean
+    description: Whether to include performance property testing
+    default_value: false
+  - name: perf_min_size
+    type: integer
+    description: Minimum size for performance testing
+    default_value: 100
+  - name: perf_max_size
+    type: integer
+    description: Maximum size for performance testing
+    default_value: 1000
+  - name: performance_description
+    type: string
+    description: Description of performance property
+    default_value: Function should complete within reasonable time for large inputs
+  - name: performance_threshold
+    type: float
+    description: Performance threshold in seconds
+    default_value: 1.0
+  - name: performance_correctness_assertion
+    type: string
+    description: Assertion for result correctness in performance test
+    default_value: assert len(result) == len(data)
+  - name: stateful_property
+    type: boolean
+    description: Whether to include stateful property testing
+    default_value: false
+  - name: state_machine_class
+    type: string
+    description: Name of the state machine class
+    default_value: MyStateMachine
+  - name: state_initialization
+    type: string
+    description: Initialization code for state machine
+    default_value: self.state = []
+  - name: stateful_methods
+    type: list
+    description: List of stateful methods
+    default_value: []
+  - name: stateful_rules
+    type: list
+    description: List of stateful rules
+    default_value: []
+  - name: global_invariant
+    type: string
+    description: Global invariant that should always hold
+    default_value: assert len(self.state) >= 0
+tags:
+  - property-based
+  - hypothesis
+  - python
+  - pytest
+  - testing
+dependencies:
+  - pytest
+  - hypothesis
+complexity: high
+estimated_time: 20m
+author: Llmcode Test Generator
+version: 1.0.0
+created_at: 2024-01-01T00:00:00
+updated_at: 2024-01-01T00:00:00

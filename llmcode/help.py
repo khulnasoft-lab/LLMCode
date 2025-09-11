@@ -78,7 +78,7 @@ def fname_to_url(filepath):
     # Ensure the URL starts and ends with '/'
     url_path = url_path.strip("/")
 
-    return f"https://llmcode.khulnasoft.com/{url_path}"
+    return f"https://llm.khulnasoft.com/{url_path}"
 
 
 def get_index():

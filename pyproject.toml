@@ -1,3 +1,4 @@
+
 [project]
 name = "llmcode"
 description = "Llmcode is AI pair programming in your terminal"
@@ -11,15 +12,14 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python",
     "Topic :: Software Development",
 ]
-requires-python = ">=3.9,<3.13"
+requires-python = ">=3.10,<3.14"
 dynamic = ["dependencies", "optional-dependencies", "version"]
 
 [project.urls]
-Homepage = "https://github.com/KhulnaSoft/llmcode"
+Homepage = "https://github.com/khulnasoft-lab/llmcode"
 
 [project.scripts]
 llmcode = "llmcode.main:main"
@@ -46,6 +46,12 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools_scm]
 write_to = "llmcode/_version.py"
 
-[tool.codetypo]
-skip = "*.svg,Gemfile.lock,docs/site/_site/**"
+[tool.codespell]
+skip = "*.svg,Gemfile.lock,tests/fixtures/*,llmcode/website/assets/*"
 write-changes = true
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["llmcode"]

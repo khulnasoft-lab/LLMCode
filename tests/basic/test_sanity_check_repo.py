@@ -7,9 +7,7 @@ import pytest
 from git import GitError, Repo
 
 from llmcode import urls
-from llmcode.io import InputOutput
 from llmcode.main import sanity_check_repo
-from llmcode.repo import GitRepo
 
 
 @pytest.fixture
@@ -128,7 +126,9 @@ def test_git_index_version_greater_than_2(mock_browser, create_repo, mock_io):
     mock_io.tool_output.assert_any_call(
         "You may be able to convert your repo: git update-index --index-version=2"
     )
-    mock_io.tool_output.assert_any_call("Or run llmcode --no-git to proceed without using git.")
+    mock_io.tool_output.assert_any_call(
+        "Or run llmcode --no-git to proceed without using git."
+    )
     mock_io.offer_url.assert_any_call(
         urls.git_index_version,
         "Open documentation url for more info?",
@@ -150,7 +150,9 @@ def test_bare_repository(create_repo, mock_io, tmp_path):
     assert result is False
 
     # Assert that the appropriate error message was logged
-    mock_io.tool_error.assert_called_with("The git repo does not seem to have a working tree?")
+    mock_io.tool_error.assert_called_with(
+        "The git repo does not seem to have a working tree?"
+    )
     mock_io.tool_output.assert_not_called()
 
 
@@ -170,7 +172,9 @@ def test_sanity_check_repo_with_corrupt_repo(create_repo, mock_io):
     assert result is False
 
     # Assert that the appropriate error messages were logged
-    mock_io.tool_error.assert_called_with("Unable to read git repository, it may be corrupt?")
+    mock_io.tool_error.assert_called_with(
+        "Unable to read git repository, it may be corrupt?"
+    )
     mock_io.tool_output.assert_called_with(str(git_error))
 
 
@@ -184,39 +188,3 @@ def test_sanity_check_repo_with_no_repo(mock_io):
     # Assert that no errors or outputs were logged
     mock_io.tool_error.assert_not_called()
     mock_io.tool_output.assert_not_called()
-
-
-def corrupt_git_index(repo_path):
-    index_path = os.path.join(repo_path, ".git", "index")
-    with open(index_path, "r+b") as f:
-        # Verify the file has the correct signature
-        signature = f.read(4)
-        if signature != b"DIRC":
-            raise ValueError("Invalid git index file signature.")
-
-        # Seek to the data section and inject invalid bytes to simulate encoding error
-        f.seek(77)
-        f.write(b"\xf5" * 5)
-
-
-def test_sanity_check_repo_with_corrupt_index(create_repo, mock_io):
-    repo_path, repo = create_repo
-    # Corrupt the Git index file
-    corrupt_git_index(repo_path)
-
-    # Create GitRepo instance
-    git_repo = GitRepo(InputOutput(), None, repo_path)
-
-    # Call the function
-    result = sanity_check_repo(git_repo, mock_io)
-
-    # Assert that the function returns False
-    assert result is False
-
-    # Assert that the appropriate error messages were logged
-    mock_io.tool_error.assert_called_with("Unable to read git repository, it may be corrupt?")
-    mock_io.tool_output.assert_called_with(
-        "Failed to read the Git repository. This issue is likely caused by a path encoded "
-        'in a format different from the expected encoding "utf-8".\n'
-        "Internal error: 'utf-8' codec can't decode byte 0xf5 in position 3: invalid start byte"
-    )

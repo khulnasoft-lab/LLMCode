@@ -7,6 +7,7 @@ import warnings
 from dataclasses import dataclass
 from pathlib import Path
 
+import oslex
 from grep_ast import TreeContext, filename_to_lang
 from grep_ast.tsl import get_parser  # noqa: E402
 
@@ -44,7 +45,7 @@ class Linter:
             return fname
 
     def run_cmd(self, cmd, rel_fname, code):
-        cmd += " " + rel_fname
+        cmd += " " + oslex.quote(rel_fname)
 
         returncode = 0
         stdout = ""
@@ -273,7 +274,9 @@ def find_filenames_and_linenums(text, fnames):
     Search text for all occurrences of <filename>:\\d+ and make a list of them
     where <filename> is one of the filenames in the list `fnames`.
     """
-    pattern = re.compile(r"(\b(?:" + "|".join(re.escape(fname) for fname in fnames) + r"):\d+\b)")
+    pattern = re.compile(
+        r"(\b(?:" + "|".join(re.escape(fname) for fname in fnames) + r"):\d+\b)"
+    )
     matches = pattern.findall(text)
     result = {}
     for match in matches:

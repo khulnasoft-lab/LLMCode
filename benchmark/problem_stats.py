@@ -15,7 +15,7 @@ HARD_SET_NUM = 3  # Number of models that defines the hard set threshold
 
 def get_dirs_from_leaderboard():
     # Load the leaderboard data
-    with open("docs/site/_data/polyglot_leaderboard.yml") as f:
+    with open("llmcode/website/_data/polyglot_leaderboard.yml") as f:
         leaderboard = yaml.safe_load(f)
     return [(entry["dirname"], entry["model"]) for entry in leaderboard]
 
@@ -92,7 +92,7 @@ def analyze_exercise_solutions(dirs=None, topn=None, copy_hard_set=False):
                     (
                         entry["pass_rate_2"]
                         for entry in yaml.safe_load(
-                            open("docs/site/_data/polyglot_leaderboard.yml")
+                            open("llmcode/website/_data/polyglot_leaderboard.yml")
                         )
                         if entry["dirname"] == dirname
                     ),
@@ -117,10 +117,7 @@ def analyze_exercise_solutions(dirs=None, topn=None, copy_hard_set=False):
                 try:
                     all_exercises.add(result["testcase"] + "/" + result["language"])
                 except KeyError:
-                    print(
-                        f"Warning: Missing testcase in {dirname}",
-                        json.dumps(result, indent=4),
-                    )
+                    print(f"Warning: Missing testcase in {dirname}", json.dumps(result, indent=4))
 
     for (dirname, model), results, _ in valid_entries:
         if not results:
@@ -346,9 +343,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--topn", type=int, help="Only consider top N models by pass rate")
     parser.add_argument(
-        "dirs",
-        nargs="*",
-        help="Directories to analyze (optional, defaults to leaderboard entries)",
+        "dirs", nargs="*", help="Directories to analyze (optional, defaults to leaderboard entries)"
     )
     parser.add_argument(
         "--copy-hard-set",

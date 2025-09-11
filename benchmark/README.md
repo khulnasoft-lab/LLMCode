@@ -17,7 +17,7 @@ the LLM's coding ability, but also its capacity to *edit existing code*
 and *format those code edits* so that llmcode can save the
 edits to the local source files.
 
-See [this writeup for a longer discussion about the benchmark](https://llmcode.khulnasoft.com/2024/12/21/polyglot.html).
+See [this writeup for a longer discussion about the benchmark](https://llm.khulnasoft.com/2024/12/21/polyglot.html).
 
 The benchmark is intended to be run *inside a docker container*.
 This is because the benchmarking harness will be
@@ -43,14 +43,14 @@ These steps only need to be done once.
 
 ```
 # Clone the llmcode repo
-git clone git@github.com:KhulnaSoft/llmcode.git
+git clone https://github.com/khulnasoft-lab/llmcode.git
 
 # Create the scratch dir to hold benchmarking results inside the main llmcode dir:
 cd llmcode
 mkdir tmp.benchmarks
 
 # Clone the repo with the exercises
-git clone https://github.com/KhulnaSoft/polyglot-benchmark tmp.benchmarks/polyglot-benchmark
+git clone https://github.com/khulnasoft-lab/polyglot-benchmark tmp.benchmarks/polyglot-benchmark
 
 # Build the docker container
 ./benchmark/docker_build.sh
@@ -82,6 +82,7 @@ You can run `./benchmark/benchmark.py --help` for a list of all the arguments, b
 - `--threads` specifies how many exercises to benchmark in parallel. Start with a single thread if you are working out the kinks on your benchmarking setup or working with a new model, etc. Once you are getting reliable results, you can speed up the process by running with more threads. 10 works well against the OpenAI APIs.
 - `--num-tests` specifies how many of the tests to run before stopping. This is another way to start gently as you debug your benchmarking setup.
 - `--keywords` filters the tests to run to only the ones whose name match the supplied argument (similar to `pytest -k xxxx`).
+- `--read-model-settings=<filename.yml>` specify model settings, see here: https://llm.khulnasoft.com/docs/config/adv-model-settings.html#model-settings
 
 ### Benchmark report
 
@@ -134,12 +135,47 @@ This way the `model`, `edit_format` and `commit_hash`
 should be enough to reliably reproduce any benchmark run.
 
 You can see examples of the benchmark report yaml in the
-[llmcode leaderboard data files](https://github.com/KhulnaSoft/llmcode/blob/main/docs/site/_data/).
+[llmcode leaderboard data files](https://github.com/khulnasoft-lab/llmcode/blob/main/llmcode/website/_data/).
 
 
 ## Limitations, notes
 
 - Contributions of benchmark results are welcome! Submit results by opening a PR with edits to the
-[llmcode leaderboard data files](https://github.com/KhulnaSoft/llmcode/blob/main/docs/site/_data/).
+[llmcode leaderboard data files](https://github.com/khulnasoft-lab/llmcode/blob/main/llmcode/website/_data/).
 - These scripts are not intended for use by typical llmcode end users.
 - Some of these tools are written as `bash` scripts, so it will be hard to use them on Windows.
+
+## AI-Powered Test Generation
+
+The benchmark harness also includes capabilities for AI-powered test generation.
+This can be used to automatically create test suites for your codebase.
+
+### Usage
+
+To generate tests, use the `--generate-tests` flag:
+
+```
+./benchmark/benchmark.py --generate-tests --model gpt-4 --threads 10
+```
+
+This will discover all Python source files in your project, generate unit and integration tests for them using the specified model, and save them in the `tmp.benchmarks/generated_tests` directory.
+
+### Test Generation from Templates
+
+You can also generate tests from a predefined set of templates using the `--generate-with-templates` flag:
+
+```
+./benchmark/benchmark.py --generate-with-templates
+```
+
+This will use the templates located in the `benchmark/test_templates` directory to generate tests.
+
+### Coverage Analysis
+
+After generating tests, you can run a coverage analysis to see how well they cover your codebase:
+
+```
+./benchmark/benchmark.py --coverage
+```
+
+This will run the generated tests and output a coverage report.

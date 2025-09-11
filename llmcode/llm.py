@@ -6,7 +6,7 @@ from llmcode.dump import dump  # noqa: F401
 
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
 
-LLMCODE_SITE_URL = "https://llmcode.khulnasoft.com"
+LLMCODE_SITE_URL = "https://llm.khulnasoft.com"
 LLMCODE_APP_NAME = "Llmcode"
 
 os.environ["OR_SITE_URL"] = LLMCODE_SITE_URL

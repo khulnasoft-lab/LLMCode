@@ -14,9 +14,10 @@ repos:
     hooks:
       - id: flake8
         args: ["--show-source"]
-  - repo: https://github.com/khulnasoft/codetypo
-    rev: v2.3.0
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.6
     hooks:
-      - id: codetypo
+      - id: codespell
+        args: ["--skip", "llmcode/website/docs/languages.md"]
         additional_dependencies:
           - tomli

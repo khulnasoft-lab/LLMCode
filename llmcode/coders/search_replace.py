@@ -109,7 +109,7 @@ class RelativeIndenter:
         """
 
         if self.marker in text:
-            raise ValueError("Text already contains the outdent marker: {self.marker}")
+            raise ValueError(f"Text already contains the outdent marker: {self.marker}")
 
         lines = text.splitlines(keepends=True)
 
@@ -235,20 +235,6 @@ Left
 Left
 """
 
-"""
-ri = RelativeIndenter([example])
-dump(example)
-
-rel_example = ri.make_relative(example)
-dump(repr(rel_example))
-
-abs_example = ri.make_absolute(rel_example)
-dump(abs_example)
-
-
-sys.exit()
-"""
-
 
 def relative_indent(texts):
     ri = RelativeIndenter(texts)
@@ -349,7 +335,7 @@ def lines_to_chars(lines, mapping):
     return new_text
 
 
-def dmp_lines_apply(texts, remap=True):
+def dmp_lines_apply(texts):
     debug = False
     # debug = True
 
@@ -421,7 +407,9 @@ def diff_lines(search_text, replace_text):
     dmp = diff_match_patch()
     dmp.Diff_Timeout = 5
     # dmp.Diff_EditCost = 16
-    search_lines, replace_lines, mapping = dmp.diff_linesToChars(search_text, replace_text)
+    search_lines, replace_lines, mapping = dmp.diff_linesToChars(
+        search_text, replace_text
+    )
 
     diff_lines = dmp.diff_main(search_lines, replace_lines, None)
     dmp.diff_cleanupSemantic(diff_lines)
@@ -655,8 +643,6 @@ def proc(dname):
         (dmp_lines_apply, all_preprocs),
     ]
 
-    _strategies = editblock_strategies  # noqa: F841
-
     short_names = dict(
         search_and_replace="sr",
         git_cherry_pick_osr_onto_o="cp_o",
@@ -736,14 +722,18 @@ def main(dnames):
     # Sort directories by decreasing number of 'pass' results
     pass_counts = {
         dname: sum(
-            res == "pass" for dname_result, _, res in all_results if str(dname) == str(dname_result)
+            res == "pass"
+            for dname_result, _, res in all_results
+            if str(dname) == str(dname_result)
         )
         for dname in directories
     }
     directories.sort(key=lambda dname: pass_counts[dname], reverse=True)
 
     # Create a results matrix
-    results_matrix = {dname: {method: "" for method in methods} for dname in directories}
+    results_matrix = {
+        dname: {method: "" for method in methods} for dname in directories
+    }
 
     # Populate the results matrix
     for dname, method, res in all_results:

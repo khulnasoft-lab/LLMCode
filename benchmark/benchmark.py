@@ -29,6 +29,8 @@ from llmcode import models, sendchat
 from llmcode.coders import Coder, base_coder
 from llmcode.dump import dump  # noqa: F401
 from llmcode.io import InputOutput
+from test_generator import TestGenerationManager, TestType, CoverageAnalyzer
+
 
 BENCHMARK_DNAME = Path(os.environ.get("LLMCODE_BENCHMARK_DIR", "tmp.benchmarks"))
 
@@ -167,10 +169,7 @@ def main(
         0, "--sleep", help="Sleep seconds between tests when single threaded"
     ),
     languages: str = typer.Option(
-        None,
-        "--languages",
-        "-l",
-        help="Only run tests for specific languages (comma separated)",
+        None, "--languages", "-l", help="Only run tests for specific languages (comma separated)"
     ),
     edit_format: str = typer.Option(None, "--edit-format", "-e", help="Edit format"),
     editor_model: str = typer.Option(None, "--editor-model", help="Editor model name"),
@@ -178,33 +177,21 @@ def main(
     replay: str = typer.Option(
         None,
         "--replay",
-        help=(
-            "Replay previous .llmcode.khulnasoft.com.history.md responses from previous"
-            " benchmark run"
-        ),
+        help="Replay previous .llm.khulnasoft.com.history.md responses from previous benchmark run",
     ),
     keywords: str = typer.Option(
-        None,
-        "--keywords",
-        "-k",
-        help="Only run tests that contain keywords (comma sep)",
+        None, "--keywords", "-k", help="Only run tests that contain keywords (comma sep)"
     ),
     clean: bool = typer.Option(
-        False,
-        "--clean",
-        "-c",
-        help="Discard the existing testdir and make a clean copy",
+        False, "--clean", "-c", help="Discard the existing testdir and make a clean copy"
     ),
     cont: bool = typer.Option(False, "--cont", help="Continue the (single) matching testdir"),
-    make_new: bool = typer.Option(False, "--new", "-n", help="Make a new dated testdir"),
+    make_new: bool = typer.Option(False, "--new", help="Make a new dated testdir"),
     no_unit_tests: bool = typer.Option(False, "--no-unit-tests", help="Do not run unit tests"),
     no_llmcode: bool = typer.Option(False, "--no-llmcode", help="Do not run llmcode"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output"),
     stats_only: bool = typer.Option(
-        False,
-        "--stats",
-        "-s",
-        help="Do not run tests, just collect stats on completed tests",
+        False, "--stats", "-s", help="Do not run tests, just collect stats on completed tests"
     ),
     stats_languages: str = typer.Option(
         None,
@@ -221,10 +208,108 @@ def main(
     read_model_settings: str = typer.Option(
         None, "--read-model-settings", help="Load llmcode model settings from YAML file"
     ),
+    reasoning_effort: Optional[str] = typer.Option(
+        None, "--reasoning-effort", help="Set reasoning effort for models that support it"
+    ),
+    thinking_tokens: Optional[int] = typer.Option(
+        None, "--thinking-tokens", help="Set thinking tokens for models that support it"
+    ),
     exercises_dir: str = typer.Option(
         EXERCISES_DIR_DEFAULT, "--exercises-dir", help="Directory with exercise files"
     ),
+    generate_tests: bool = typer.Option(
+        False, "--generate-tests", help="Generate tests instead of running benchmarks"
+    ),
+    coverage: bool = typer.Option(
+        False, "--coverage", help="Run coverage analysis on generated tests"
+    ),
+    generate_with_templates: bool = typer.Option(
+        False, "--generate-with-templates", help="Generate tests from templates"
+    ),
 ):
+    if coverage:
+        console = Console()
+        console.print("[bold blue]Running coverage analysis...[/bold blue]")
+        analyzer = CoverageAnalyzer(project_root=".")
+        source_files = [
+            str(p)
+            for p in Path(".").glob("llmcode/**/*.py")
+            if "__" not in str(p)
+        ]
+        test_files = [
+            str(p)
+            for p in (BENCHMARK_DNAME / "generated_tests").glob("*.py")
+        ]
+        if not test_files:
+            console.print("[bold red]No generated tests found to run coverage on.[/bold red]")
+            return 1
+        
+        analysis = analyzer.analyze_coverage(test_files, source_files)
+        
+        table = Table(title="Coverage Analysis")
+        table.add_column("Metric", style="cyan")
+        table.add_column("Value", style="magenta")
+        
+        table.add_row("Total Lines", str(analysis.total_lines))
+        table.add_row("Covered Lines", str(analysis.covered_lines))
+        table.add_row("Missed Lines", str(analysis.missed_lines))
+        table.add_row("Coverage Percentage", f"{analysis.coverage_percentage:.1f}%")
+        table.add_row("Complexity Score", f"{analysis.complexity_score:.2f}")
+        
+        console.print(table)
+        return
+
+    if generate_with_templates:
+        console = Console()
+        console.print("[bold blue]Starting test generation from templates...[/bold blue]")
+        manager = TestGenerationManager(
+            project_root=".",
+            output_dir=str(BENCH-MARK_DNAME / "generated_tests"),
+            enable_ai=False,
+            enable_templates=True,
+        )
+        source_files = manager._discover_source_files()
+        if num_tests > 0:
+            source_files = source_files[:num_tests]
+
+        results = manager.generate_tests_for_project(
+            source_files=source_files,
+            test_types=[TestType.UNIT, TestType.INTEGRATION, TestType.SECURITY],
+            max_workers=threads,
+        )
+        if results:
+            manager.save_generated_tests(results)
+            console.print("[bold green]Template-based test generation completed successfully![/bold green]")
+        else:
+            console.print("[yellow]No tests were generated from templates.[/yellow]")
+        manager.print_statistics()
+        return
+
+    if generate_tests:
+        console = Console()
+        console.print("[bold blue]Starting test generation...[/bold blue]")
+        manager = TestGenerationManager(
+            project_root=".",
+            output_dir=str(BENCHMARK_DNAME / "generated_tests"),
+            model_name=model,
+        )
+        source_files = manager._discover_source_files()
+        if num_tests > 0:
+            source_files = source_files[:num_tests]
+
+        results = manager.generate_tests_for_project(
+            source_files=source_files,
+            test_types=[TestType.UNIT, TestType.INTEGRATION],
+            max_workers=threads,
+        )
+        if results:
+            manager.save_generated_tests(results)
+            console.print("[bold green]Test generation completed successfully![/bold green]")
+        else:
+            console.print("[yellow]No tests were generated.[/yellow]")
+        manager.print_statistics()
+        return
+
     repo = git.Repo(search_parent_directories=True)
     commit_hash = repo.head.object.hexsha[:7]
     if repo.is_dirty():
@@ -303,10 +388,7 @@ def main(
         dir_files = set(fn.name for fn in dirname.glob("*"))
         original_files = set(fn.name for fn in original_dname.glob("*"))
         if dir_files != original_files:
-            print(
-                "ERROR: will not delete dir that does not look like original tests",
-                dirname,
-            )
+            print("ERROR: will not delete dir that does not look like original tests", dirname)
             return
 
         dest = dirname.parent / "OLD" / dirname.name
@@ -382,6 +464,8 @@ def main(
                 editor_edit_format,
                 num_ctx,
                 sleep,
+                reasoning_effort,
+                thinking_tokens,
             )
 
             all_results.append(results)
@@ -404,6 +488,10 @@ def main(
                 replay,
                 editor_model,
                 editor_edit_format,
+                num_ctx,
+                sleep,
+                reasoning_effort,
+                thinking_tokens,
             )
         all_results = run_test_threaded.gather(tqdm=True)
 
@@ -443,7 +531,7 @@ def show_diffs(dirnames):
         print()
         print(testcase)
         for outcome, dirname in zip(all_outcomes, dirnames):
-            print(outcome, f"{dirname}/{testcase}/.llmcode.khulnasoft.com.history.md")
+            print(outcome, f"{dirname}/{testcase}/.llm.khulnasoft.com.history.md")
 
     changed = set(testcases) - unchanged
     print()
@@ -500,7 +588,11 @@ def summarize_results(dirname, stats_languages=None):
     res.syntax_errors = 0
     res.indentation_errors = 0
     res.lazy_comments = 0
+    res.prompt_tokens = 0
+    res.completion_tokens = 0
 
+    res.reasoning_effort = None
+    res.thinking_tokens = None
     variants = defaultdict(set)
 
     for results in all_results:
@@ -528,6 +620,12 @@ def summarize_results(dirname, stats_languages=None):
 
         res.syntax_errors += results.get("syntax_errors", 0)
         res.indentation_errors += results.get("indentation_errors", 0)
+
+        res.prompt_tokens += results.get("prompt_tokens", 0)
+        res.completion_tokens += results.get("completion_tokens", 0)
+
+        res.reasoning_effort = results.get("reasoning_effort")
+        res.thinking_tokens = results.get("thinking_tokens")
 
         for key in "model edit_format commit_hash editor_model editor_edit_format".split():
             val = results.get(key)
@@ -572,6 +670,11 @@ def summarize_results(dirname, stats_languages=None):
         setattr(res, key, val)
         console.print(f"  {key}: {val}", style=style)
 
+    if res.reasoning_effort is not None:
+        print(f"  reasoning_effort: {res.reasoning_effort}")
+    if res.thinking_tokens is not None:
+        print(f"  thinking_tokens: {res.thinking_tokens}")
+
     for i in range(tries):
         print(f"  pass_rate_{i + 1}: {percents[i]:.1f}")
     for i in range(tries):
@@ -588,6 +691,8 @@ def summarize_results(dirname, stats_languages=None):
     show("syntax_errors")
     show("indentation_errors")
     show("exhausted_context_windows")
+    show("prompt_tokens", red=None)
+    show("completion_tokens", red=None)
     show("test_timeouts")
     print(f"  total_tests: {res.total_tests}")
 
@@ -643,7 +748,7 @@ def get_replayed_content(replay_dname, test_dname):
     dump(replay_dname, test_dname)
 
     test_name = test_dname.name
-    replay_fname = replay_dname / test_name / ".llmcode.khulnasoft.com.history.md"
+    replay_fname = replay_dname / test_name / ".llm.khulnasoft.com.history.md"
     dump(replay_fname)
 
     res = replay_fname.read_text()
@@ -657,15 +762,14 @@ def get_replayed_content(replay_dname, test_dname):
 def run_test(original_dname, testdir, *args, **kwargs):
     try:
         return run_test_real(original_dname, testdir, *args, **kwargs)
-    except Exception as err:
+    except Exception:
         print("=" * 40)
         print("Test failed")
-        print(err)
         traceback.print_exc()
 
         testdir = Path(testdir)
         results_fname = testdir / ".llmcode.results.json"
-        results_fname.write_text(json.dumps(dict(exception=str(err))))
+        results_fname.write_text(json.dumps(dict(exception=traceback.format_exc())))
 
 
 def run_test_real(
@@ -683,6 +787,8 @@ def run_test_real(
     editor_edit_format,
     num_ctx=None,
     sleep=0,
+    reasoning_effort: Optional[str] = None,
+    thinking_tokens: Optional[int] = None,
     read_model_settings=None,
 ):
     if not os.path.isdir(testdir):
@@ -691,7 +797,7 @@ def run_test_real(
 
     testdir = Path(testdir)
 
-    history_fname = testdir / ".llmcode.khulnasoft.com.history.md"
+    history_fname = testdir / ".llm.khulnasoft.com.history.md"
 
     results_fname = testdir / ".llmcode.results.json"
     if results_fname.exists():
@@ -774,7 +880,7 @@ def run_test_real(
     instructions += prompts.instructions_addendum.format(file_list=file_list)
 
     io = InputOutput(
-        pretty=True,
+        pretty=False,
         yes=True,
         chat_history_file=history_fname,
     )
@@ -787,7 +893,14 @@ def run_test_real(
         weak_model=weak_model_name,
         editor_model=editor_model,
         editor_edit_format=editor_edit_format,
+        verbose=verbose,
     )
+
+    if reasoning_effort is not None:
+        main_model.set_reasoning_effort(reasoning_effort)
+
+    if thinking_tokens is not None:
+        main_model.set_thinking_tokens(thinking_tokens)
 
     dump(main_model.max_chat_history_tokens)
 
@@ -939,6 +1052,10 @@ def run_test_real(
         syntax_errors=syntax_errors,
         indentation_errors=indentation_errors,
         lazy_comments=lazy_comments,  # Add the count of pattern matches to the results
+        reasoning_effort=reasoning_effort,
+        prompt_tokens=coder.total_tokens_sent,
+        completion_tokens=coder.total_tokens_received,
+        thinking_tokens=thinking_tokens,
         chat_hashes=list(
             zip(
                 coder.chat_completion_call_hashes,

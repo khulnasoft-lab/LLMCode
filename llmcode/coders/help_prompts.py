@@ -14,8 +14,8 @@ Use the provided llmcode documentation *if it is relevant to the user's question
 Include a bulleted list of urls to the llmcode docs that might be relevant for the user to read.
 Include *bare* urls. *Do not* make [markdown links](http://...).
 For example:
-- https://llmcode.khulnasoft.com/docs/usage.html
-- https://llmcode.khulnasoft.com/docs/faq.html
+- https://llm.khulnasoft.com/docs/usage.html
+- https://llm.khulnasoft.com/docs/faq.html
 
 If you don't know the answer, say so and suggest some relevant llmcode doc urls.
 

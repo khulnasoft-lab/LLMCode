@@ -3,6 +3,6 @@
 set -e
 
 docker build \
-       --file docker/benchmark.Dockerfile \
+       --file benchmark/Dockerfile \
        -t llmcode-benchmark \
        .

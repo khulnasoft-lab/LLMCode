@@ -1,0 +1,70 @@
+name: unit_function
+description: Template for unit testing individual functions
+framework: pytest
+language: python
+template_code: |
+    import pytest
+    import sys
+    import os
+    
+    # Add project root to path
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+    from {file_name} import {function_name}
+    
+    def test_{function_name}_basic():
+        """Test basic functionality of {function_name}"""
+        # Arrange
+        input_data = {{sample_input}}
+        
+        # Act
+        result = {function_name}(input_data)
+        
+        # Assert
+        assert result is not None
+        assert isinstance(result, {{expected_type}})
+    
+    def test_{function_name}_edge_cases():
+        """Test edge cases for {function_name}"""
+        # Test with empty input
+        result = {function_name}({{empty_input}})
+        assert result == {{expected_empty_result}}
+        
+        # Test with None input
+        with pytest.raises({{expected_exception}}):
+            {function_name}(None)
+    
+    def test_{function_name}_error_handling():
+        """Test error handling in {function_name}"""
+        # Test with invalid input
+        with pytest.raises({{expected_exception}}):
+            {function_name}({{invalid_input}})
+    
+    def test_{function_name}_performance():
+        """Test performance of {function_name}"""
+        import time
+        
+        # Test with large input
+        large_input = {{large_input}}
+        start_time = time.time()
+        result = {function_name}(large_input)
+        end_time = time.time()
+        
+        assert result is not None
+        assert end_time - start_time < {{max_execution_time}}
+variables:
+  - function_name
+  - sample_input
+  - expected_type
+  - empty_input
+  - expected_empty_result
+  - expected_exception
+  - invalid_input
+  - large_input
+  - max_execution_time
+dependencies:
+  - pytest
+tags:
+  - unit
+  - function
+  - basic

@@ -1,9 +1,345 @@
 # Release history
 
-### main branch
+### Llmcode v0.86.0
+
+- Expanded GPT-5 model support across family variants and providers (OpenAI, Azure, OpenRouter), including dated and chat/mini/nano variants.
+- Llmcode wrote 88% of the code in this release.
+
+### Llmcode v0.85.5
+
+- Enforced diff edit format for GPT-5 models.
+- Added support for the reasoning_effort setting for GPT-5 models.
+- Fixed model detection to correctly apply GPT-5 settings to versioned names (gpt-5 and gpt-5-2025-08-07).
+
+### Llmcode v0.85.4
+
+- Added support for openai/gpt-5
+- Fixed analytics to support the latest PostHog SDK event-capture API.
+- Disabled temperature when using GPT-5 models for more deterministic outputs.
+
+### Llmcode v0.85.3
+
+- Bumped dependencies to pick up latest litellm==1.75.0.
+
+### Llmcode v0.85.2
+
+- Added support for Grok-4 via `xai/grok-4` and `openrouter/x-ai/grok-4` model names.
+- Added support for `gemini/gemini-2.5-flash-lite-preview-06-17` model, by Tamir Zahavi-Brunner.
+- `/clear` now prints “All chat history cleared.” so you know it worked, by Zexin Yuan.
+- `/undo` output now shows only the first line of each commit message, making it easier to read.
+- Fixed an issue where new settings for an existing model didn't replace the old ones, by Andrew Grigorev.
+- Added support for `openrouter/moonshotai/kimi-k2` model, by Jack Harrington.
+
+### Llmcode v0.85.1
+
+- Display model announcements with no-arg `/model` command.
+
+### Llmcode v0.85.0
+
+- Support for Responses API models like o1-pro, o3-pro.
+- Updated pricing for o3.
+- Added support for new Gemini models including `gemini-2.5-pro`, `gemini-2.5-flash`, and `gemini-2.5-pro-preview-06-05` with thinking tokens support.
+- Updated model aliases: `flash` now points to `gemini-2.5-flash` and `gemini` now points to `gemini-2.5-pro`.
+- Added `--add-gitignore-files` flag to enable adding files listed in .gitignore to Llmcode's editing scope, by omarcinkonis.
+- Added `--commit-language` option to specify the language for commit messages, by Kyosuke Takayama.
+- Enhanced thinking tokens support: can now be disabled by setting to 0, and improved help text with examples.
+- Added MATLAB language support for repository maps, by Matthew Tofano.
+- Added support for OpenAI o3-pro model across multiple providers.
+- Improved GitHub Copilot token handling with better validation and error messages, by Vincent Taverna and Sebastian Estrella.
+- Fixed encoding issues in git diff output and LLM history logging.
+- Enhanced commit message generation to use system prompt prefixes, by Luke Reeves.
+- Improved inline code rendering in Rich markdown output, by Vamsi Talupula.
+- Fixed Vertex AI model name prefixes in settings, by Wietse Venema.
+- Improved `/read-only` command to resolve literal paths correctly, by Matteo Landi.
+- Skip expensive file tracking operations when `--skip-sanity-check-repo` is enabled for better performance, by Makar Ivashko.
+- Ensure pip is available before package installation.
+- Auto-create parent directories for chat history files to prevent startup errors, by contributor.
+- Fixed search block regex to accept optional closing tags when working with HTML content, by Mathis Beer.
+- Co-authored-by attribution is now enabled by default for commit messages.
+- Added Clojure language support for repository maps, by Garrett Hopper.
+- Added custom PostHog analytics configuration options with `--analytics-posthog-host` and `--analytics-posthog-project-api-key` flags, by Vasil Markoukin.
+- Optimized chat history summarization performance, by jayeshthk.
+- Improved kebab-case identifier recognition in repository maps for better code analysis.
+- Increased max tokens for Deepseek models to 65536 for better performance.
+- Llmcode wrote 21% of the code in this release.
+
+### Llmcode v0.84.0
+
+- Added support for new Claude models including the Sonnet 4 and Opus 4 series (e.g., `claude-sonnet-4-20250514`,
+`claude-opus-4-20250514`) across various providers. The default `sonnet` and `opus` aliases were updated to these newer
+versions.
+- Added support for the `vertex_ai/gemini-2.5-flash-preview-05-20` model.
+- Fixed OpenRouter token cost calculation for improved accuracy.
+- Updated default OpenRouter models during onboarding to `deepseek/deepseek-r1:free` for the free tier and
+`anthropic/claude-sonnet-4` for paid tiers.
+- Automatically refresh GitHub Copilot tokens when used as OpenAI API keys, by Lih Chen.
+- Llmcode wrote 79% of the code in this release.
+
+### Llmcode v0.83.2
+
+- Bumped configargparse to 1.7.1 as 1.7 was pulled.
+- Added shell tab completion for file path arguments (by saviour) and for `--edit-format`/`--editor-edit-format` options.
+- Improved OpenRouter model metadata handling by introducing a local cache, increasing reliability and performance.
+- The `/settings` command now displays detailed metadata for active main, editor, and weak models.
+- Fixed an issue where files explicitly added via the command line were not correctly ignored if listed in `.gitignore`.
+- Improved automatic commit messages by providing more context during their generation, by wangboxue.
+
+### Llmcode v0.83.1
+
+- Improved user language detection by correctly normalizing hyphenated language codes (e.g., `en-US` to `en`) and enhancing the validation of locale results.
+- Prevented Llmcode from instructing the LLM to reply in 'C' or 'POSIX' when these are detected as the system locale.
+- Displayed a spinner with the model name when generating commit messages.
+
+### Llmcode v0.83.0
+
+- Added support for `gemini-2.5-pro-preview-05-06` models.
+- Added support for `qwen3-235b` models.
+- Added repo-map support for OCaml and OCaml interface files, by Andrey Popp.
+- Added a spinner animation while waiting for the LLM to start streaming its response.
+- Updated the spinner animation to a Knight Rider style.
+- Introduced `--attribute-co-authored-by` option to add co-author trailer to commit messages, by Andrew Grigorev.
+- Updated Gemini model aliases (e.g., `gemini`, `gemini-2.5-pro`) to point to the `05-06` preview versions.
+- Marked Gemini 2.5 Pro preview models as `overeager` by default.
+- Commit message prompt specifies the user's language.
+- Updated the default weak model for Gemini 2.5 Pro models to `gemini/gemini-2.5-flash-preview-04-17`.
+- Corrected `gemini-2.5-pro-exp-03-25` model settings to reflect its lack of support for `thinking_budget`.
+- Ensured model-specific system prompt prefixes are placed on a new line before the main system prompt.
+- Added tracking of total tokens sent and received, now included in benchmark statistics.
+- Automatically fetch model parameters (context window, pricing) for OpenRouter models directly from their website, by Stefan Hladnik.
+- Enabled support for `thinking_tokens` and `reasoning_effort` parameters for OpenRouter models.
+- Improved cost calculation using `litellm.completion_cost` where available.
+- Added model settings for `openrouter/google/gemini-2.5-pro-preview-03-25`.
+- Added `--disable-playwright` flag to prevent Playwright installation prompts and usage, by Andrew Grigorev.
+- The `llmcode scrape` command-line tool will now use Playwright for web scraping if it is available, by Jon Keys.
+- Fixed linter command execution on Windows by adopting `oslex` for argument quoting, by Titusz Pan.
+- Improved cross-platform display of shell commands by using `oslex` for robust argument quoting, by Titusz Pan.
+- Improved `/ask` mode to instruct the LLM to elide unchanging code in its responses.
+- Ensured web scraping in the GUI also respects Playwright availability and the `--disable-playwright` flag.
+- Improved display of filenames in the prompt header using rich Text formatting.
+- Enabled `reasoning_effort` for Gemini 2.5 Flash models.
+- Added a `--shell-completions` argument to generate shell completion scripts (e.g., for bash, zsh).
+- Explicit `--attribute-author` or `--attribute-committer` flags now override the default behavior when `--attribute-co-authored-by` is used, allowing finer control over commit attribution, by Andrew Grigorev.
+- Fixed an issue where read-only status of files might not be preserved correctly by some commands (e.g. `/drop` after adding a read-only file).
+- The `llmcode-args` utility (or `python -m llmcode.args`) now defaults to printing a sample YAML configuration if no arguments are provided.
+- Displayed token count progress and the name of the file or identifier being processed during repo map updates.
+- Extended the waiting spinner to also show for non-streaming responses and further enhanced its animation with console width clipping, cursor hiding, and a more continuous appearance.
+- Dropped support for Python 3.9.
+- Llmcode wrote 55% of the code in this release.
+
+### Llmcode v0.82.3
+
+- Add support for `gemini-2.5-flash-preview-04-17` models.
+- Improved robustness of edit block parsing when filenames start with backticks or fences.
+- Add new `udiff-simple` edit format, for Gemini 2.5 Pro.
+- Update default weak/editor models for Gemini 2.5 Pro models to use `gemini-2.5-flash-preview-04-17`.
+- Instruct models to reply in the user's detected system language.
+- Fix parsing of diffs for newly created files (`--- /dev/null`).
+- Add markdown syntax highlighting support when editing multi-line commit messages via `/commit`, by Kay Gosho.
+- Set Gemini 2.5 Pro models to use the `overeager` prompt setting by default.
+- Add common file types (`.svg`, `.pdf`) to the default list of ignored files for AI comment scanning (`--watch`).
+- Skip scanning files larger than 1MB for AI comments (`--watch`).
+
+### Llmcode v0.82.2
+
+- Fix editing shell files with diff-fenced, by zjy1412.
+- Improve robustness of patch application by allowing multiple update/delete actions for the same file within a single response.
+- Update prompts to instruct LLMs to consolidate all edits for a given file into a single block within the patch.
+
+### Llmcode v0.82.1
+
+- Added support for `o3` and `o4-mini` including provider-specific versions for OpenAI, OpenRouter, and Azure.
+- Added support for Azure specific `gpt-4.1` and `gpt-4.1-mini` models.
+- Disabled streaming for `o3` models since you need identity verification to stream.
+- Fixed handling of file paths in unified diffs, especially those generated by git.
+
+### Llmcode v0.82.0
+
+- Support for GPT 4.1, mini and nano.
+- Added new `patch` edit format for OpenAI's GPT-4.1 model.
+- Improved support for using architect mode with Gemini 2.5 Pro.
+- Added new `editor-diff`, `editor-whole`, and `editor-diff-fenced` edit formats.
+- Bugfix for automatically selecting the best edit format to use in architect mode.
+- Added support for `grok-3-fast-beta` and `grok-3-mini-fast-beta` models.
+- Llmcode wrote 92% of the code in this release.
+
+### Llmcode v0.81.3
+
+- Commit messages generated by llmcode are no longer forced to be entirely lowercase, by Peter Hadlaw.
+- Updated default settings for Grok models.
+
+### Llmcode v0.81.2
+
+- Add support for `xai/grok-3-beta`, `xai/grok-3-mini-beta`, `openrouter/x-ai/grok-3-beta`, `openrouter/x-ai/grok-3-mini-beta`, and `openrouter/openrouter/optimus-alpha` models.
+- Add alias "grok3" for `xai/grok-3-beta`.
+- Add alias "optimus" for `openrouter/openrouter/optimus-alpha`.
+- Fix URL extraction from error messages.
+- Allow adding files by full path even if a file with the same basename is already in the chat.
+- Fix quoting of values containing '#' in the sample `llmcode.conf.yml`.
+- Add support for Fireworks AI model 'deepseek-v3-0324', by Felix Lisczyk.
+- Commit messages generated by llmcode are now lowercase, by Anton Ödman.
+
+### Llmcode v0.81.1
+
+- Added support for the `gemini/gemini-2.5-pro-preview-03-25` model.
+- Updated the `gemini` alias to point to `gemini/gemini-2.5-pro-preview-03-25`.
+- Added the `gemini-exp` alias for `gemini/gemini-2.5-pro-exp-03-25`.
+
+### Llmcode v0.81.0
+
+- Added support for the `openrouter/openrouter/quasar-alpha` model.
+  - Run with `llmcode --model quasar`
+- Offer OpenRouter OAuth authentication if an OpenRouter model is specified but the API key is missing.
+- Prevent retrying API calls when the provider reports insufficient credits.
+- Improve URL detection to exclude trailing double quotes.
+- Llmcode wrote 86% of the code in this release.
+
+### Llmcode v0.80.4
+
+- Bumped deps to pickup litellm change to properly display the root cause of OpenRouter "choices" errors.
+
+### Llmcode v0.80.3
+
+- Improve error message for OpenRouter API connection issues to mention potential rate limiting or upstream provider issues.
+- Configure weak models (`gemini/gemini-2.0-flash` and `openrouter/google/gemini-2.0-flash-exp:free`) for Gemini 2.5 Pro models.
+- Add model metadata for `openrouter/google/gemini-2.0-flash-exp:free`.
+
+### Llmcode v0.80.2
+
+- Bumped deps.
+
+### Llmcode v0.80.1
+
+- Updated deps for yanked fsspec and aiohttp packages #3699
+- Removed redundant dependency check during OpenRouter OAuth flow, by Claudia Pellegrino.
+
+### Llmcode v0.80.0
+
+- OpenRouter OAuth integration:
+  - Offer to OAuth against OpenRouter if no model and keys are provided.
+  - Select OpenRouter default model based on free/paid tier status if `OPENROUTER_API_KEY` is set and no model is specified.
+- Prioritize `gemini/gemini-2.5-pro-exp-03-25` if `GEMINI_API_KEY` is set, and `vertex_ai/gemini-2.5-pro-exp-03-25` if `VERTEXAI_PROJECT` is set, when no model is specified.
+- Validate user-configured color settings on startup and warn/disable invalid ones.
+- Warn at startup if `--stream` and `--cache-prompts` are used together, as cost estimates may be inaccurate.
+- Boost repomap ranking for files whose path components match identifiers mentioned in the chat.
+- Change web scraping timeout from an error to a warning, allowing scraping to continue with potentially incomplete content.
+- Left-align markdown headings in the terminal output, by Peter Schilling.
+- Update edit format to the new model's default when switching models with `/model`, if the user was using the old model's default format.
+- Add `Ctrl-X Ctrl-E` keybinding to edit the current input buffer in an external editor, by Matteo Landi.
+- Fix linting errors for filepaths containing shell metacharacters, by Mir Adnan ALI.
+- Add the `openrouter/deepseek-chat-v3-0324:free` model.
+- Add repomap support for the Scala language, by Vasil Markoukin.
+- Fixed bug in `/run` that was preventing auto-testing.
+- Fix bug preventing `UnboundLocalError` during git tree traversal.
+- Handle `GitCommandNotFound` error if git is not installed or not in PATH.
+- Handle `FileNotFoundError` if the current working directory is deleted while llmcode is running.
+- Fix completion menu current item color styling, by Andrey Ivanov.
+- Llmcode wrote 87% of the code in this release.
+
+### Llmcode v0.79.2
+
+- Added 'gemini' alias for gemini-2.5-pro model.
+- Updated Gemini 2.5 Pro max output tokens to 64k.
+- Added support for Lisp-style semicolon comments in file watcher, by Matteo Landi.
+- Added OpenRouter API error detection and retries.
+- Added openrouter/deepseek-chat-v3-0324 model.
+- Llmcode wrote 93% of the code in this release.
+
+### Llmcode v0.79.1
+
+- Improved model listing to include all models in fuzzy matching, including those provided by llmcode (not litellm).
+
+### Llmcode v0.79.0
+
+- Added support for Gemini 2.5 Pro models.
+- Added support for DeepSeek V3 0324 model.
+- Added a new `/context` command that automatically identifies which files need to be edited for a given request.
+- Added `/edit` as an alias for the `/editor` command.
+- Added "overeager" mode for Claude 3.7 Sonnet models to try and keep it working within the requested scope.
+- Llmcode wrote 65% of the code in this release.
+
+### Llmcode v0.78.0
+
+- Added support for thinking tokens for OpenRouter Sonnet 3.7.
+- Added commands to switch between model types: `/editor-model` for Editor Model, and `/weak-model` for Weak Model, by csala.
+- Added model setting validation to ignore `--reasoning-effort` and `--thinking-tokens` if the model doesn't support them.
+- Added `--check-model-accepts-settings` flag (default: true) to force unsupported model settings.
+- Annotated which models support reasoning_effort and thinking_tokens settings in the model settings data.
+- Improved code block rendering in markdown output with better padding using NoInsetMarkdown.
+- Added `--git-commit-verify` flag (default: False) to control whether git commit hooks are bypassed.
+- Fixed autocompletion for `/ask`, `/code`, and `/architect` commands, by shladnik.
+- Added vi-like behavior when pressing enter in multiline-mode while in vi normal/navigation-mode, by Marco Mayer.
+- Added AWS_PROFILE support for Bedrock models, allowing use of AWS profiles instead of explicit credentials, by lentil32.
+- Enhanced `--llmcodeignore` argument to resolve both absolute and relative paths, by mopemope.
+- Improved platform information handling to gracefully handle retrieval errors.
+- Llmcode wrote 92% of the code in this release.
+
+### Llmcode v0.77.1
+
+- Bumped dependencies to pickup litellm fix for Ollama.
+- Added support for `openrouter/google/gemma-3-27b-it` model.
+- Updated exclude patterns for help documentation.
+
+### Llmcode v0.77.0
+
+- Big upgrade in [programming languages supported](https://llm.khulnasoft.com/docs/languages.html) by adopting [tree-sitter-language-pack](https://github.com/Goldziher/tree-sitter-language-pack/).
+  - 130 new languages with linter support.
+  - 20 new languages with repo-map support.
+- Added `/think-tokens` command to set thinking token budget with support for human-readable formats (8k, 10.5k, 0.5M).
+- Added `/reasoning-effort` command to control model reasoning level.
+- The `/think-tokens` and `/reasoning-effort` commands display current settings when called without arguments.
+- Display of thinking token budget and reasoning effort in model information.
+- Changed `--thinking-tokens` argument to accept string values with human-readable formats.
+- Added `--auto-accept-architect` flag (default: true) to automatically accept changes from architect coder format without confirmation.
+- Added support for `cohere_chat/command-a-03-2025` and `gemini/gemma-3-27b-it`
+- The bare `/drop` command now preserves original read-only files provided via args.read.
+- Fixed a bug where default model would be set by deprecated `--shortcut` switches even when already specified in the command line.
+- Improved AutoCompleter to require 3 characters for autocompletion to reduce noise.
+- Llmcode wrote 72% of the code in this release.
+
+### Llmcode v0.76.2
+
+- Fixed handling of JSONDecodeError when loading model cache file.
+- Fixed handling of GitCommandError when retrieving git user configuration.
+- Llmcode wrote 75% of the code in this release.
+
+### Llmcode v0.76.1
+
+- Added ignore_permission_denied option to file watcher to prevent errors when accessing restricted files, by Yutaka Matsubara.
+- Llmcode wrote 0% of the code in this release.
+
+### Llmcode v0.76.0
+
+- Improved support for thinking/reasoningmodels:
+  - Added `--thinking-tokens` CLI option to control token budget for models that support thinking.
+  - Display thinking/reasoning content from LLMs which return it.
+  - Enhanced handling of reasoning tags to better clean up model responses.
+  - Added deprecation warning for `remove_reasoning` setting, now replaced by `reasoning_tag`.
+- Llmcode will notify you when it's completed the last request and needs your input:
+  - Added [notifications when LLM responses are ready](https://llm.khulnasoft.com/docs/usage/notifications.html) with `--notifications` flag.
+  - Specify desktop notification command with `--notifications-command`.
+- Added support for QWQ 32B.
+- Switch to `tree-sitter-language-pack` for tree sitter support.
+- Improved error handling for EOF (Ctrl+D) in user input prompts.
+- Added helper function to ensure hex color values have a # prefix.
+- Fixed handling of Git errors when reading staged files.
+- Improved SSL verification control for model information requests.
+- Improved empty LLM response handling with clearer warning messages.
+- Fixed Git identity retrieval to respect global configuration, by Akira Komamura.
+- Offer to install dependencies for Bedrock and Vertex AI models.
+- Deprecated model shortcut args (like --4o, --opus) in favor of the --model flag.
+- Llmcode wrote 85% of the code in this release.
+
+### Llmcode v0.75.3
+
+- Support for V3 free on OpenRouter: `--model openrouter/deepseek/deepseek-chat:free`.
+
+### Llmcode v0.75.2
 
 - Added support for Claude 3.7 Sonnet models on OpenRouter, Bedrock and Vertex AI.
-- Llmcode wrote 47% of the code in this release.
+- Updated default model to Claude 3.7 Sonnet on OpenRouter.
+- Added support for GPT-4.5-preview model.
+- Added support for Claude 3.7 Sonnet:beta on OpenRouter.
+- Fixed weak_model_name patterns to match main model name patterns for some models.
 
 ### Llmcode v0.75.1
 
@@ -139,14 +475,14 @@
 
 ### Llmcode v0.69.0
 
-- [Watch files](https://llmcode.khulnasoft.com/docs/usage/watch.html) improvements:
+- [Watch files](https://llm.khulnasoft.com/docs/usage/watch.html) improvements:
   - Use `# ... AI?` comments to trigger llmcode and ask questions about your code.
   - Now watches *all* files, not just certain source files.
   - Use `# AI comments`, `// AI comments`, or `-- AI comments` to give llmcode instructions in any text file.
 - Full support for Gemini Flash 2.0 Exp:
   - `llmcode --model flash` or `llmcode --model gemini/gemini-2.0-flash-exp`
-- [New `--multiline` flag and `/multiline-mode` command](https://llmcode.khulnasoft.com/docs/usage/commands.html#entering-multi-line-chat-messages) makes ENTER a soft newline and META-ENTER send the message, by @miradnanali.
-- `/copy-context <instructions>` now takes optional "instructions" when [copying code context to the clipboard](https://llmcode.khulnasoft.com/docs/usage/copypaste.html#copy-llmcodes-code-context-to-your-clipboard-paste-into-the-web-ui).
+- [New `--multiline` flag and `/multiline-mode` command](https://llm.khulnasoft.com/docs/usage/commands.html#entering-multi-line-chat-messages) makes ENTER a soft newline and META-ENTER send the message, by @miradnanali.
+- `/copy-context <instructions>` now takes optional "instructions" when [copying code context to the clipboard](https://llm.khulnasoft.com/docs/usage/copypaste.html#copy-llmcodes-code-context-to-your-clipboard-paste-into-the-web-ui).
 - Improved clipboard error handling with helpful requirements install info.
 - Ask 5% of users if they want to opt-in to analytics.
 - `/voice` now lets you edit the transcribed text before sending.
@@ -155,10 +491,10 @@
 
 ### Llmcode v0.68.0
 
-- [Llmcode works with LLM web chat UIs](https://llmcode.khulnasoft.com/docs/usage/copypaste.html).
+- [Llmcode works with LLM web chat UIs](https://llm.khulnasoft.com/docs/usage/copypaste.html).
   - New `--copy-paste` mode.
   - New `/copy-context` command.
-- [Set API keys and other environment variables for all providers from command line or yaml conf file](https://llmcode.khulnasoft.com/docs/config/llmcode_conf.html#storing-llm-keys).
+- [Set API keys and other environment variables for all providers from command line or YAML conf file](https://llm.khulnasoft.com/docs/config/llmcode_conf.html#storing-llm-keys).
   - New `--api-key provider=key` setting.
   - New `--set-env VAR=value` setting.
 - Added bash and zsh support to `--watch-files`.
@@ -176,7 +512,7 @@
 
 ### Llmcode v0.67.0
 
-- [Use llmcode in your IDE or editor](https://llmcode.khulnasoft.com/docs/usage/watch.html).
+- [Use llmcode in your IDE or editor](https://llm.khulnasoft.com/docs/usage/watch.html).
   - Run `llmcode --watch-files` and it will watch for instructions you add to your source files.
   - One-liner `# ...` or `// ...` comments that start or end with "AI" are instructions to llmcode.
   - When llmcode sees "AI!" it reads and follows all the instructions in AI comments.
@@ -187,7 +523,7 @@
 - Spinner now falls back to ASCII art if fancy symbols throw unicode errors.
 - `--read` now expands `~` home dirs.
 - Enabled exception capture in analytics.
-- [Llmcode wrote 61% of the code in this release.](https://llmcode.khulnasoft.com/HISTORY.html)
+- [Llmcode wrote 61% of the code in this release.](https://llm.khulnasoft.com/HISTORY.html)
 
 ### Llmcode v0.66.0
 
@@ -212,11 +548,11 @@
 
 ### Llmcode v0.65.0
 
-- Added `--alias` config to define [custom model aliases](https://llmcode.khulnasoft.com/docs/config/model-aliases.html).
+- Added `--alias` config to define [custom model aliases](https://llm.khulnasoft.com/docs/config/model-aliases.html).
 - Added `--[no-]detect-urls` flag to disable detecting and offering to scrape URLs found in the chat.
 - Ollama models now default to an 8k context window.
-- Added [RepoMap support for Dart language](https://llmcode.khulnasoft.com/docs/languages.html) by @malkoG.
-- Ask 2.5% of users if they want to opt-in to [analytics](https://llmcode.khulnasoft.com/docs/more/analytics.html).
+- Added [RepoMap support for Dart language](https://llm.khulnasoft.com/docs/languages.html) by @malkoG.
+- Ask 2.5% of users if they want to opt-in to [analytics](https://llm.khulnasoft.com/docs/more/analytics.html).
 - Skip suggesting files that share names with files already in chat.
 - `/editor` returns and prefill the file content into the prompt, so you can use `/editor` to compose messages that start with `/commands`, etc.
 - Enhanced error handling for analytics.
@@ -230,13 +566,13 @@
 
 ### Llmcode v0.64.0
 
-- Added [`/editor` command](https://llmcode.khulnasoft.com/docs/usage/commands.html) to open system editor for writing prompts, by @thehunmonkgroup.
+- Added [`/editor` command](https://llm.khulnasoft.com/docs/usage/commands.html) to open system editor for writing prompts, by @thehunmonkgroup.
 - Full support for `gpt-4o-2024-11-20`.
 - Stream o1 models by default.
 - `/run` and suggested shell commands are less mysterious and now confirm that they "Added XX lines of output to the chat."
-- Ask 1% of users if they want to opt-in to [analytics](https://llmcode.khulnasoft.com/docs/more/analytics.html).
-- Added support for [optional multiline input tags](https://llmcode.khulnasoft.com/docs/usage/commands.html#entering-multi-line-chat-messages) with matching closing tags.
-- Improved [model settings configuration](https://llmcode.khulnasoft.com/docs/config/adv-model-settings.html#global-extra-params) with support for global `extra_params` for `litellm.completion()`.
+- Ask 1% of users if they want to opt-in to [analytics](https://llm.khulnasoft.com/docs/more/analytics.html).
+- Added support for [optional multiline input tags](https://llm.khulnasoft.com/docs/usage/commands.html#entering-multi-line-chat-messages) with matching closing tags.
+- Improved [model settings configuration](https://llm.khulnasoft.com/docs/config/adv-model-settings.html#global-extra-params) with support for global `extra_params` for `litellm.completion()`.
 - Architect mode now asks to add files suggested by the LLM.
 - Fixed bug in fuzzy model name matching.
 - Added Timeout exception to handle API provider timeouts.
@@ -273,7 +609,7 @@
 ### Llmcode v0.62.0
 
 - Full support for Claude 3.5 Haiku
-  - Scored 75% on [llmcode's code editing leaderboard](https://llmcode.khulnasoft.com/docs/leaderboards/).
+  - Scored 75% on [llmcode's code editing leaderboard](https://llm.khulnasoft.com/docs/leaderboards/).
   - Almost as good as Sonnet at much lower cost.
   - Launch with `--haiku` to use it.
 - Easily apply file edits from ChatGPT, Claude or other web apps
@@ -292,7 +628,7 @@
   - `/load <fname>` will replay the commands in the file.
   - You can use `/load` to run any arbitrary set of slash-commands, not just `/add` and `/read-only`.
   - Use `--load <fname>` to run a list of commands on launch, before the interactive chat begins.
-- Anonymous, opt-in [analytics](https://llmcode.khulnasoft.com/docs/more/analytics.html) with no personal data sharing.
+- Anonymous, opt-in [analytics](https://llm.khulnasoft.com/docs/more/analytics.html) with no personal data sharing.
 - Llmcode follows litellm's `supports_vision` attribute to enable image support for models.
 - Bugfix for when diff mode flexibly handles the model using the wrong filename.
 - Displays filenames in sorted order for `/add` and `/read-only`.
@@ -326,7 +662,7 @@
 
 ### Llmcode v0.59.1
 
-- Check for obsolete `yes: true` in yaml config, show helpful error.
+- Check for obsolete `yes: true` in YAML config, show helpful error.
 - Model settings for openrouter/anthropic/claude-3.5-sonnet:beta
 
 ### Llmcode v0.59.0
@@ -336,7 +672,7 @@
   - Still auto-completes the full paths of the repo files like `/add`.
   - Now supports globs like `src/**/*.py`
 - Renamed `--yes` to `--yes-always`.
-  - Now uses `LLMCODE_YES_ALWAYS` env var and `yes-always:` yaml key.
+  - Now uses `LLMCODE_YES_ALWAYS` env var and `yes-always:` YAML key.
   - Existing YAML and .env files will need to be updated.
   - Can still abbreviate to `--yes` on the command line.
 - Config file now uses standard YAML list syntax with `  - list entries`, one per line.  
@@ -354,7 +690,7 @@
 
 ### Llmcode v0.58.0
 
-- [Use a pair of Architect/Editor models for improved coding](https://llmcode.khulnasoft.com/2024/09/26/architect.html)
+- [Use a pair of Architect/Editor models for improved coding](https://llm.khulnasoft.com/2024/09/26/architect.html)
   - Use a strong reasoning model like o1-preview as your Architect.
   - Use a cheaper, faster model like gpt-4o as your Editor.
 - New `--o1-preview` and `--o1-mini` shortcuts.
@@ -497,7 +833,7 @@
 
 ### Llmcode v0.53.0
 
-- [Keep your prompt cache from expiring](https://llmcode.khulnasoft.com/docs/usage/caching.html#preventing-cache-expiration) with `--cache-keepalive-pings`.
+- [Keep your prompt cache from expiring](https://llm.khulnasoft.com/docs/usage/caching.html#preventing-cache-expiration) with `--cache-keepalive-pings`.
   - Pings the API every 5min to keep the cache warm.
 - You can now bulk accept/reject a series of add url and run shell confirmations.
 - Improved matching of filenames from S/R blocks with files in chat.
@@ -543,7 +879,7 @@
   - Use `--map-refresh <always|files|manual|auto>` to configure.
 - Improved cost estimate logic for caching.
 - Improved editing performance on Jupyter Notebook `.ipynb` files.
-- Show which config yaml file is loaded with `--verbose`.
+- Show which config YAML file is loaded with `--verbose`.
 - Bumped dependency versions.
 - Bugfix: properly load `.llmcode.models.metadata.json` data.
 - Bugfix: Using `--msg /ask ...` caused an exception.
@@ -579,7 +915,7 @@
 - `/diff` now shows diffs of all changes resulting from your request, including lint and test fixes.
 - New `/clipboard` command to paste images or text from the clipboard, replaces `/add-clipboard-image`.
 - Now shows the markdown scraped when you add a url with `/web`.
-- When [scripting llmcode](https://llmcode.khulnasoft.com/docs/scripting.html) messages can now contain in-chat `/` commands.
+- When [scripting llmcode](https://llm.khulnasoft.com/docs/scripting.html) messages can now contain in-chat `/` commands.
 - Llmcode in docker image now suggests the correct command to update to latest version.
 - Improved retries on API errors (was easy to test during Sonnet outage).
 - Added `--mini` for `gpt-4o-mini`.
@@ -607,7 +943,7 @@
 - New `/add-clipboard-image` to add images to the chat from your clipboard.
 - Use `--map-tokens 1024` to use repo map with any model.
 - Support for Sonnet's 8k output window.
-  - [Llmcode already supported infinite output from Sonnet.](https://llmcode.khulnasoft.com/2024/07/01/sonnet-not-lazy.html)
+  - [Llmcode already supported infinite output from Sonnet.](https://llm.khulnasoft.com/2024/07/01/sonnet-not-lazy.html)
 - Workaround litellm bug for retrying API server errors.
 - Upgraded dependencies, to pick up litellm bug fixes.
 - Llmcode wrote 44% of the code in this release.
@@ -618,18 +954,18 @@
 
 ### Llmcode v0.47.0
 
-- [Commit message](https://llmcode.khulnasoft.com/docs/git.html#commit-messages) improvements:
+- [Commit message](https://llm.khulnasoft.com/docs/git.html#commit-messages) improvements:
   - Added Conventional Commits guidelines to commit message prompt.
   - Added `--commit-prompt` to customize the commit message prompt.
   - Added strong model as a fallback for commit messages (and chat summaries).
-- [Linting](https://llmcode.khulnasoft.com/docs/usage/lint-test.html) improvements:
+- [Linting](https://llm.khulnasoft.com/docs/usage/lint-test.html) improvements:
   - Ask before fixing lint errors.
   - Improved performance of `--lint` on all dirty files in repo.
   - Improved lint flow, now doing code edit auto-commit before linting.
   - Bugfix to properly handle subprocess encodings (also for `/run`).
-- Improved [docker support](https://llmcode.khulnasoft.com/docs/install/docker.html):
+- Improved [docker support](https://llm.khulnasoft.com/docs/install/docker.html):
   - Resolved permission issues when using `docker run --user xxx`.
-  - New `khulnasoft/llmcode-full` docker image, which includes all extras.
+  - New `paulgauthier/llmcode-full` docker image, which includes all extras.
 - Switching to code and ask mode no longer summarizes the chat history.
 - Added graph of llmcode's contribution to each release.
 - Generic auto-completions are provided for `/commands` without a completion override.
@@ -712,7 +1048,7 @@
 
 ### Llmcode v0.43.0
 
-- Use `/help <question>` to [ask for help about using llmcode](https://llmcode.khulnasoft.com/docs/troubleshooting/support.html), customizing settings, troubleshooting, using LLMs, etc.
+- Use `/help <question>` to [ask for help about using llmcode](https://llm.khulnasoft.com/docs/troubleshooting/support.html), customizing settings, troubleshooting, using LLMs, etc.
 - Allow multiple use of `/undo`.
 - All config/env/yml/json files now load from home, git root, cwd and named command line switch.
 - New `$HOME/.llmcode/caches` dir for app-wide expendable caches.
@@ -729,11 +1065,11 @@
 
 ### Llmcode v0.41.0
 
-- [Allow Claude 3.5 Sonnet to stream back >4k tokens!](https://llmcode.khulnasoft.com/2024/07/01/sonnet-not-lazy.html)
+- [Allow Claude 3.5 Sonnet to stream back >4k tokens!](https://llm.khulnasoft.com/2024/07/01/sonnet-not-lazy.html)
   - It is the first model capable of writing such large coherent, useful code edits.
   - Do large refactors or generate multiple files of new code in one go.
 - Llmcode now uses `claude-3-5-sonnet-20240620` by default if `ANTHROPIC_API_KEY` is set in the environment.
-- [Enabled image support](https://llmcode.khulnasoft.com/docs/usage/images-urls.html) for 3.5 Sonnet and for GPT-4o & 3.5 Sonnet via OpenRouter (by @yamitzky).
+- [Enabled image support](https://llm.khulnasoft.com/docs/usage/images-urls.html) for 3.5 Sonnet and for GPT-4o & 3.5 Sonnet via OpenRouter (by @yamitzky).
 - Added `--attribute-commit-message` to prefix llmcode's commit messages with "llmcode:".
 - Fixed regression in quality of one-line commit messages.
 - Automatically retry on Anthropic `overloaded_error`.
@@ -757,23 +1093,23 @@
 
 - Improved prompting to discourage Sonnet from wasting tokens emitting unchanging code (#705).
 - Improved error info for token limit errors.
-- Options to suppress adding "(llmcode)" to the [git author and committer names](https://llmcode.khulnasoft.com/docs/git.html#commit-attribution).
+- Options to suppress adding "(llmcode)" to the [git author and committer names](https://llm.khulnasoft.com/docs/git.html#commit-attribution).
 - Use `--model-settings-file` to customize per-model settings, like use of repo-map (by @caseymcc).
 - Improved invocation of flake8 linter for python code.
 
 
 ### Llmcode v0.39.0
 
-- Use `--sonnet` for Claude 3.5 Sonnet, which is the top model on [llmcode's LLM code editing leaderboard](https://llmcode.khulnasoft.com/docs/leaderboards/#claude-35-sonnet-takes-the-top-spot).
+- Use `--sonnet` for Claude 3.5 Sonnet, which is the top model on [llmcode's LLM code editing leaderboard](https://llm.khulnasoft.com/docs/leaderboards/#claude-35-sonnet-takes-the-top-spot).
 - All `LLMCODE_xxx` environment variables can now be set in `.env` (by @jpshack-at-palomar).
 - Use `--llm-history-file` to log raw messages sent to the LLM (by @daniel-vainsencher).
 - Commit messages are no longer prefixed with "llmcode:". Instead the git author and committer names have "(llmcode)" added.
 
 ### Llmcode v0.38.0
 
-- Use `--vim` for [vim keybindings](https://llmcode.khulnasoft.com/docs/usage/commands.html#vi) in the chat.
-- [Add LLM metadata](https://llmcode.khulnasoft.com/docs/llms/warnings.html#specifying-context-window-size-and-token-costs) via `.llmcode.models.json` file (by @caseymcc).
-- More detailed [error messages on token limit errors](https://llmcode.khulnasoft.com/docs/troubleshooting/token-limits.html).
+- Use `--vim` for [vim keybindings](https://llm.khulnasoft.com/docs/usage/commands.html#vi) in the chat.
+- [Add LLM metadata](https://llm.khulnasoft.com/docs/llms/warnings.html#specifying-context-window-size-and-token-costs) via `.llmcode.models.json` file (by @caseymcc).
+- More detailed [error messages on token limit errors](https://llm.khulnasoft.com/docs/troubleshooting/token-limits.html).
 - Single line commit messages, without the recent chat messages.
 - Ensure `--commit --dry-run` does nothing.
 - Have playwright wait for idle network to better scrape js sites.
@@ -793,7 +1129,7 @@
 
 ### Llmcode v0.36.0
 
-- [Llmcode can now lint your code and fix any errors](https://llmcode.khulnasoft.com/2024/05/22/linting.html).
+- [Llmcode can now lint your code and fix any errors](https://llm.khulnasoft.com/2024/05/22/linting.html).
   - Llmcode automatically lints and fixes after every LLM edit.
   - You can manually lint-and-fix files with `/lint` in the chat or `--lint` on the command line.
   - Llmcode includes built in basic linters for all supported tree-sitter languages.
@@ -807,8 +1143,8 @@
 ### Llmcode v0.35.0
 
 - Llmcode now uses GPT-4o by default.
-  - GPT-4o tops the [llmcode LLM code editing leaderboard](https://llmcode.khulnasoft.com/docs/leaderboards/) at 72.9%, versus 68.4% for Opus.
-  - GPT-4o takes second on [llmcode's refactoring leaderboard](https://llmcode.khulnasoft.com/docs/leaderboards/#code-refactoring-leaderboard) with 62.9%, versus Opus at 72.3%.
+  - GPT-4o tops the [llmcode LLM code editing leaderboard](https://llm.khulnasoft.com/docs/leaderboards/) at 72.9%, versus 68.4% for Opus.
+  - GPT-4o takes second on [llmcode's refactoring leaderboard](https://llm.khulnasoft.com/docs/leaderboards/#code-refactoring-leaderboard) with 62.9%, versus Opus at 72.3%.
 - Added `--restore-chat-history` to restore prior chat history on launch, so you can continue the last conversation.
 - Improved reflection feedback to LLMs using the diff edit format.
 - Improved retries on `httpx` errors.
@@ -825,11 +1161,11 @@
 
 ### Llmcode v0.33.0
 
-- Added native support for [Deepseek models](https://llmcode.khulnasoft.com/docs/llms.html#deepseek) using `DEEPSEEK_API_KEY` and `deepseek/deepseek-chat`, etc rather than as a generic OpenAI compatible API.
+- Added native support for [Deepseek models](https://llm.khulnasoft.com/docs/llms.html#deepseek) using `DEEPSEEK_API_KEY` and `deepseek/deepseek-chat`, etc rather than as a generic OpenAI compatible API.
 
 ### Llmcode v0.32.0
 
-- [Llmcode LLM code editing leaderboards](https://llmcode.khulnasoft.com/docs/leaderboards/) that rank popular models according to their ability to edit code.
+- [Llmcode LLM code editing leaderboards](https://llm.khulnasoft.com/docs/leaderboards/) that rank popular models according to their ability to edit code.
   - Leaderboards include GPT-3.5/4 Turbo, Opus, Sonnet, Gemini 1.5 Pro, Llama 3, Deepseek Coder & Command-R+.
 - Gemini 1.5 Pro now defaults to a new diff-style edit format (diff-fenced), enabling it to work better with larger code bases.
 - Support for Deepseek-V2, via more a flexible config of system messages in the diff edit format.
@@ -838,7 +1174,7 @@
 
 ### Llmcode v0.31.0
 
-- [Llmcode is now also AI pair programming in your browser!](https://llmcode.khulnasoft.com/2024/05/02/browser.html) Use the `--browser` switch to launch an experimental browser based version of llmcode.
+- [Llmcode is now also AI pair programming in your browser!](https://llm.khulnasoft.com/2024/05/02/browser.html) Use the `--browser` switch to launch an experimental browser based version of llmcode.
 - Switch models during the chat with `/model <name>` and search the list of available models with `/models <query>`.
 
 ### Llmcode v0.30.1
@@ -847,14 +1183,14 @@
 
 ### Llmcode v0.30.0
 
-- Added [Gemini 1.5 Pro](https://llmcode.khulnasoft.com/docs/llms.html#free-models) as a recommended free model.
+- Added [Gemini 1.5 Pro](https://llm.khulnasoft.com/docs/llms.html#free-models) as a recommended free model.
 - Allow repo map for "whole" edit format.
 - Added `--models <MODEL-NAME>` to search the available models.
 - Added `--no-show-model-warnings` to silence model warnings.
 
 ### Llmcode v0.29.2
 
-- Improved [model warnings](https://llmcode.khulnasoft.com/docs/llms.html#model-warnings) for unknown or unfamiliar models
+- Improved [model warnings](https://llm.khulnasoft.com/docs/llms.html#model-warnings) for unknown or unfamiliar models
 
 ### Llmcode v0.29.1
 
@@ -862,14 +1198,14 @@
 
 ### Llmcode v0.29.0
 
-- Added support for [directly connecting to Anthropic, Cohere, Gemini and many other LLM providers](https://llmcode.khulnasoft.com/docs/llms.html).
+- Added support for [directly connecting to Anthropic, Cohere, Gemini and many other LLM providers](https://llm.khulnasoft.com/docs/llms.html).
 - Added `--weak-model <model-name>` which allows you to specify which model to use for commit messages and chat history summarization.
 - New command line switches for working with popular models:
   - `--4-turbo-vision`
   - `--opus`
   - `--sonnet`
   - `--anthropic-api-key`
-- Improved "whole" and "diff" backends to better support [Cohere's free to use Command-R+ model](https://llmcode.khulnasoft.com/docs/llms.html#cohere).
+- Improved "whole" and "diff" backends to better support [Cohere's free to use Command-R+ model](https://llm.khulnasoft.com/docs/llms.html#cohere).
 - Allow `/add` of images from anywhere in the filesystem.
 - Fixed crash when operating in a repo in a detached HEAD state.
 - Fix: Use the same default model in CLI and python scripting.
@@ -877,8 +1213,8 @@
 ### Llmcode v0.28.0
 
 - Added support for new `gpt-4-turbo-2024-04-09` and `gpt-4-turbo` models.
-  - Benchmarked at 61.7% on Exercism benchmark, comparable to `gpt-4-0613` and worse than the `gpt-4-preview-XXXX` models. See [recent Exercism benchmark results](https://llmcode.khulnasoft.com/2024/03/08/claude-3.html).
-  - Benchmarked at 34.1% on the refactoring/laziness benchmark, significantly worse than the `gpt-4-preview-XXXX` models. See [recent refactor bencmark results](https://llmcode.khulnasoft.com/2024/01/25/benchmarks-0125.html).
+  - Benchmarked at 61.7% on Exercism benchmark, comparable to `gpt-4-0613` and worse than the `gpt-4-preview-XXXX` models. See [recent Exercism benchmark results](https://llm.khulnasoft.com/2024/03/08/claude-3.html).
+  - Benchmarked at 34.1% on the refactoring/laziness benchmark, significantly worse than the `gpt-4-preview-XXXX` models. See [recent refactor bencmark results](https://llm.khulnasoft.com/2024/01/25/benchmarks-0125.html).
   - Llmcode continues to default to `gpt-4-1106-preview` as it performs best on both benchmarks, and significantly better on the refactoring/laziness benchmark.
 
 ### Llmcode v0.27.0
@@ -902,12 +1238,12 @@
 ### Llmcode v0.25.0
 
 - Issue a warning if user adds too much code to the chat.
-  - https://llmcode.khulnasoft.com/docs/faq.html#how-can-i-add-all-the-files-to-the-chat
+  - https://llm.khulnasoft.com/docs/faq.html#how-can-i-add-all-the-files-to-the-chat
 - Vocally refuse to add files to the chat that match `.llmcodeignore`
   - Prevents bug where subsequent git commit of those files will fail.
 - Added `--openai-organization-id` argument.
 - Show the user a FAQ link if edits fail to apply.
-- Made past articles part of https://llmcode.khulnasoft.com/blog/
+- Made past articles part of https://llm.khulnasoft.com/blog/
 
 ### Llmcode v0.24.1
 
@@ -962,7 +1298,7 @@
 
 ### Llmcode v0.19.0
 
-- [Significantly reduced "lazy" coding from GPT-4 Turbo due to new unified diff edit format](https://llmcode.khulnasoft.com/docs/unified-diffs.html)
+- [Significantly reduced "lazy" coding from GPT-4 Turbo due to new unified diff edit format](https://llm.khulnasoft.com/docs/unified-diffs.html)
   - Score improves from 20% to 61% on new "laziness benchmark".
   - Llmcode now uses unified diffs by default for `gpt-4-1106-preview`.
 - New `--4-turbo` command line switch as a shortcut for `--model gpt-4-1106-preview`.
@@ -984,9 +1320,9 @@
 - Support for OpenAI's new 11/06 models:
   - gpt-4-1106-preview with 128k context window
   - gpt-3.5-turbo-1106 with 16k context window
-- [Benchmarks for OpenAI's new 11/06 models](https://llmcode.khulnasoft.com/docs/benchmarks-1106.html)
-- Streamlined [API for scripting llmcode, added docs](https://llmcode.khulnasoft.com/docs/faq.html#can-i-script-llmcode)
-- Ask for more concise SEARCH/REPLACE blocks. [Benchmarked](https://llmcode.khulnasoft.com/docs/benchmarks.html) at 63.9%, no regression.
+- [Benchmarks for OpenAI's new 11/06 models](https://llm.khulnasoft.com/docs/benchmarks-1106.html)
+- Streamlined [API for scripting llmcode, added docs](https://llm.khulnasoft.com/docs/faq.html#can-i-script-llmcode)
+- Ask for more concise SEARCH/REPLACE blocks. [Benchmarked](https://llm.khulnasoft.com/docs/benchmarks.html) at 63.9%, no regression.
 - Improved repo-map support for elisp.
 - Fixed crash bug when `/add` used on file matching `.gitignore`
 - Fixed misc bugs to catch and handle unicode decoding errors.
@@ -1005,9 +1341,9 @@
 
 ### Llmcode v0.16.0
 
-- [Improved repository map using tree-sitter](https://llmcode.khulnasoft.com/docs/repomap.html)
-- Switched from "edit block" to "search/replace block", which reduced malformed edit blocks. [Benchmarked](https://llmcode.khulnasoft.com/docs/benchmarks.html) at 66.2%, no regression.
-- Improved handling of malformed edit blocks targeting multiple edits to the same file. [Benchmarked](https://llmcode.khulnasoft.com/docs/benchmarks.html) at 65.4%, no regression.
+- [Improved repository map using tree-sitter](https://llm.khulnasoft.com/docs/repomap.html)
+- Switched from "edit block" to "search/replace block", which reduced malformed edit blocks. [Benchmarked](https://llm.khulnasoft.com/docs/benchmarks.html) at 66.2%, no regression.
+- Improved handling of malformed edit blocks targeting multiple edits to the same file. [Benchmarked](https://llm.khulnasoft.com/docs/benchmarks.html) at 65.4%, no regression.
 - Bugfix to properly handle malformed `/add` wildcards.
 
 
@@ -1015,13 +1351,13 @@
 
 - Added support for `.llmcodeignore` file, which instructs llmcode to ignore parts of the git repo.
 - New `--commit` cmd line arg, which just commits all pending changes with a sensible commit message generated by gpt-3.5.
-- Added universal ctags and multiple architectures to the [llmcode docker image](https://llmcode.khulnasoft.com/docs/install/docker.html)
+- Added universal ctags and multiple architectures to the [llmcode docker image](https://llm.khulnasoft.com/docs/install/docker.html)
 - `/run` and `/git` now accept full shell commands, like: `/run (cd subdir; ls)`
 - Restored missing `--encoding` cmd line switch.
 
 ### Llmcode v0.14.2
 
-- Easily [run llmcode from a docker image](https://llmcode.khulnasoft.com/docs/install/docker.html)
+- Easily [run llmcode from a docker image](https://llm.khulnasoft.com/docs/install/docker.html)
 - Fixed bug with chat history summarization.
 - Fixed bug if `soundfile` package not available.
 
@@ -1035,14 +1371,14 @@
 
 ### Llmcode v0.14.0
 
-- [Support for Claude2 and other LLMs via OpenRouter](https://llmcode.khulnasoft.com/docs/faq.html#accessing-other-llms-with-openrouter) by @joshuavial
-- Documentation for [running the llmcode benchmarking suite](https://github.com/KhulnaSoft/llmcode/tree/main/benchmark)
+- [Support for Claude2 and other LLMs via OpenRouter](https://llm.khulnasoft.com/docs/faq.html#accessing-other-llms-with-openrouter) by @joshuavial
+- Documentation for [running the llmcode benchmarking suite](https://github.com/khulnasoft-lab/llmcode/tree/main/benchmark)
 - Llmcode now requires Python >= 3.9
 
 
 ### Llmcode v0.13.0
 
-- [Only git commit dirty files that GPT tries to edit](https://llmcode.khulnasoft.com/docs/faq.html#how-did-v0130-change-git-usage)
+- [Only git commit dirty files that GPT tries to edit](https://llm.khulnasoft.com/docs/faq.html#how-did-v0130-change-git-usage)
 - Send chat history as prompt/context for Whisper voice transcription
 - Added `--voice-language` switch to constrain `/voice` to transcribe to a specific language
 - Late-bind importing `sounddevice`, as it was slowing down llmcode startup
@@ -1050,10 +1386,10 @@
 
 ### Llmcode v0.12.0
 
-- [Voice-to-code](https://llmcode.khulnasoft.com/docs/usage/voice.html) support, which allows you to code with your voice.
+- [Voice-to-code](https://llm.khulnasoft.com/docs/usage/voice.html) support, which allows you to code with your voice.
 - Fixed bug where /diff was causing crash.
 - Improved prompting for gpt-4, refactor of editblock coder.
-- [Benchmarked](https://llmcode.khulnasoft.com/docs/benchmarks.html) at 63.2% for gpt-4/diff, no regression.
+- [Benchmarked](https://llm.khulnasoft.com/docs/benchmarks.html) at 63.2% for gpt-4/diff, no regression.
 
 ### Llmcode v0.11.1
 
@@ -1062,13 +1398,13 @@
 - Fixed corner case of pending chat history summarization when dirty committing.
 - Fixed corner case of undefined `text` when using `--no-pretty`.
 - Fixed /commit bug from repo refactor, added test coverage.
-- [Benchmarked](https://llmcode.khulnasoft.com/docs/benchmarks.html) at 53.4% for gpt-3.5/whole (no regression).
+- [Benchmarked](https://llm.khulnasoft.com/docs/benchmarks.html) at 53.4% for gpt-3.5/whole (no regression).
 
 ### Llmcode v0.11.0
 
 - Automatically summarize chat history to avoid exhausting context window.
 - More detail on dollar costs when running with `--no-stream`
-- Stronger GPT-3.5 prompt against skipping/eliding code in replies (51.9% [benchmark](https://llmcode.khulnasoft.com/docs/benchmarks.html), no regression)
+- Stronger GPT-3.5 prompt against skipping/eliding code in replies (51.9% [benchmark](https://llm.khulnasoft.com/docs/benchmarks.html), no regression)
 - Defend against GPT-3.5 or non-OpenAI models suggesting filenames surrounded by asterisks.
 - Refactored GitRepo code out of the Coder class.
 
@@ -1086,17 +1422,17 @@
 - Updated keyboard interrupt logic so that 2 ^C in 2 seconds always forces llmcode to exit.
 - Provide GPT with detailed error if it makes a bad edit block, ask for a retry.
 - Force `--no-pretty` if llmcode detects it is running inside a VSCode terminal.
-- [Benchmarked](https://llmcode.khulnasoft.com/docs/benchmarks.html) at 64.7% for gpt-4/diff (no regression)
+- [Benchmarked](https://llm.khulnasoft.com/docs/benchmarks.html) at 64.7% for gpt-4/diff (no regression)
 
 
 ### Llmcode v0.9.0
 
-- Support for the OpenAI models in [Azure](https://llmcode.khulnasoft.com/docs/faq.html#azure)
+- Support for the OpenAI models in [Azure](https://llm.khulnasoft.com/docs/faq.html#azure)
 - Added `--show-repo-map`
 - Improved output when retrying connections to the OpenAI API
 - Redacted api key from `--verbose` output
 - Bugfix: recognize and add files in subdirectories mentioned by user or GPT
-- [Benchmarked](https://llmcode.khulnasoft.com/docs/benchmarks.html) at 53.8% for gpt-3.5-turbo/whole (no regression)
+- [Benchmarked](https://llm.khulnasoft.com/docs/benchmarks.html) at 53.8% for gpt-3.5-turbo/whole (no regression)
 
 ### Llmcode v0.8.3
 
@@ -1119,7 +1455,7 @@
 - Glob wildcards are now supported in `/add` and `/drop` commands
 - Pass `--encoding` into ctags, require it to return `utf-8`
 - More robust handling of filepaths, to avoid 8.3 windows filenames
-- Added [FAQ](https://llmcode.khulnasoft.com/docs/faq.html)
+- Added [FAQ](https://llm.khulnasoft.com/docs/faq.html)
 - Marked GPT-4 as generally available
 - Bugfix for live diffs of whole coder with missing filenames
 - Bugfix for chats with multiple files
@@ -1127,7 +1463,7 @@
 
 ### Llmcode v0.8.0
 
-- [Benchmark comparing code editing in GPT-3.5 and GPT-4](https://llmcode.khulnasoft.com/docs/benchmarks.html)
+- [Benchmark comparing code editing in GPT-3.5 and GPT-4](https://llm.khulnasoft.com/docs/benchmarks.html)
 - Improved Windows support:
   - Fixed bugs related to path separators in Windows
   - Added a CI step to run all tests on Windows

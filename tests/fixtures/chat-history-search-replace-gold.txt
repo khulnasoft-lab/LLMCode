@@ -1,7 +1,7 @@
 
 
 @@@ #### Use the Spinner instead of the inlined custom spinner @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/utils.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/utils.py @@@@@@@@@@@@@@@@@@@@
 def run_install(cmd):
     print()
     print("Installing: ", " ".join(cmd))
@@ -769,7 +769,7 @@ Both tests now use `gpt-4o` as the model and mock the `RepoMap` class to ensure 
 
 > Tokens: 26,200 sent, 680 received. Cost: $0.09 request, $0.12 session.  
 > The LLM did not conform to the edit format.  
-> https://llmcode.khulnasoft.com/docs/troubleshooting/edit-errors.html  
+> https://llm.khulnasoft.com/docs/troubleshooting/edit-errors.html  
 > # 1 SEARCH/REPLACE block failed to match!  
 >   
 > ## SearchReplaceNoExactMatch: This SEARCH block failed to exactly match lines in tests/basic/test_main.py  
@@ -875,7 +875,7 @@ These changes will implement the tests for the `--map-tokens` option as requeste
 
 > Tokens: 27,543 sent, 632 received. Cost: $0.09 request, $0.21 session.  
 > The LLM did not conform to the edit format.  
-> https://llmcode.khulnasoft.com/docs/troubleshooting/edit-errors.html  
+> https://llm.khulnasoft.com/docs/troubleshooting/edit-errors.html  
 > # 1 SEARCH/REPLACE block failed to match!  
 >   
 > ## SearchReplaceNoExactMatch: This SEARCH block failed to exactly match lines in tests/basic/test_main.py  
@@ -1922,7 +1922,7 @@ def get_counts_for_file(start_tag, end_tag, authors, fname):
 
 
 @@@ #### handle Keys.BracketedPaste and print a when it happens @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.lexers import PygmentsLexer
 from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt
@@ -1934,7 +1934,7 @@ from prompt_toolkit.lexers import PygmentsLexer
 from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt
 from prompt_toolkit.styles import Style
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
             @kb.add("escape", "c-m", eager=True)
             def _(event):
                 event.current_buffer.insert_text("\n")
@@ -1955,7 +1955,7 @@ from prompt_toolkit.styles import Style
 
 
 @@@ #### handle command-v and print @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
             @kb.add(Keys.BracketedPaste)
             def _(event):
                 print("Bracketed paste detected!")
@@ -1978,7 +1978,7 @@ from prompt_toolkit.styles import Style
 
 
 @@@ #### handle alt-v too @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
             @kb.add("c-v")
             def _(event):
                 print("Command-V (Ctrl+V) detected!")
@@ -1996,7 +1996,7 @@ from prompt_toolkit.styles import Style
 
 
 @@@ #### can i make it so each image will have LLMCODE_DOCKER_IMAGE=true set? @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docker/app.Dockerfile @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docker/Dockerfile @@@@@@@@@@@@@@@@@@@@
 FROM base AS llmcode-full
 
 COPY . /tmp/llmcode
@@ -2025,7 +2025,7 @@ RUN playwright install --with-deps chromium
 
 ENTRYPOINT ["/venv/bin/llmcode"]
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docker/app.Dockerfile @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docker/Dockerfile @@@@@@@@@@@@@@@@@@@@
 FROM base AS llmcode
 
 COPY . /tmp/llmcode
@@ -2055,7 +2055,7 @@ ENTRYPOINT ["/venv/bin/llmcode"]
 
 
 @@@ #### no, i mean for processing that run inside the image @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docker/app.Dockerfile @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docker/Dockerfile @@@@@@@@@@@@@@@@@@@@
 FROM python:3.10-slim AS base
 
 RUN apt-get update && \
@@ -2079,7 +2079,7 @@ RUN python -m venv /venv
 ENV PATH="/venv/bin:$PATH"
 ENV LLMCODE_DOCKER_IMAGE=true
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docker/app.Dockerfile @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docker/Dockerfile @@@@@@@@@@@@@@@@@@@@
 FROM base AS llmcode-full
 
 ENV LLMCODE_DOCKER_IMAGE=true
@@ -2090,7 +2090,7 @@ FROM base AS llmcode-full
 
 COPY . /tmp/llmcode
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docker/app.Dockerfile @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: docker/Dockerfile @@@@@@@@@@@@@@@@@@@@
 FROM base AS llmcode
 
 ENV LLMCODE_DOCKER_IMAGE=true
@@ -2716,7 +2716,7 @@ def simple_send_with_retries(model_name, messages):
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
 
 
-@@@ #### refactor "https://llmcode.khulnasoft.com" and "Llmcode" into constants in llm.py @@@@@@@@@@@@@@@@@@@@
+@@@ #### refactor "https://llm.khulnasoft.com" and "Llmcode" into constants in llm.py @@@@@@@@@@@@@@@@@@@@
 @@@ SEARCH: llmcode/llm.py @@@@@@@@@@@@@@@@@@@@
 import importlib
 import os
@@ -2724,7 +2724,7 @@ import warnings
 
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
 
-os.environ["OR_SITE_URL"] = "http://llmcode.khulnasoft.com"
+os.environ["OR_SITE_URL"] = "http://llm.khulnasoft.com"
 os.environ["OR_APP_NAME"] = "Llmcode"
 
 # `import litellm` takes 1.5 seconds, defer it!
@@ -2735,7 +2735,7 @@ import warnings
 
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
 
-LLMCODE_SITE_URL = "https://llmcode.khulnasoft.com"
+LLMCODE_SITE_URL = "https://llm.khulnasoft.com"
 LLMCODE_APP_NAME = "Llmcode"
 
 os.environ["OR_SITE_URL"] = LLMCODE_SITE_URL
@@ -2791,7 +2791,7 @@ from llmcode.llm import litellm, LLMCODE_SITE_URL, LLMCODE_APP_NAME
         max_tokens=8192,
         extra_headers={
             "anthropic-beta": "max-tokens-3-5-sonnet-2024-07-15",
-            "HTTP-Referer": "https://llmcode.khulnasoft.com",
+            "HTTP-Referer": "https://llm.khulnasoft.com",
             "X-Title": "Llmcode",
         },
 @@@@@@@@@@@@@@@@@@@@
@@ -2941,12 +2941,12 @@ def guessed_wrong_repo(io, git_root, fnames, git_dname):
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
 
 
-@@@ #### cache the `TreeContext` for each filename, and reuse it. @@@@@@@@@@@@@@@@@@@@
+@@@ #### cache the `TreeContext` for each filename, and re-use it. @@@@@@@@@@@@@@@@@@@@
 >  
 >  
 > ^C again to exit  
 
-To implement caching for `TreeContext` for each filename and reuse it, we need to modify the `RepoMap` class in `llmcode/repomap.py`. Specifically, we need to:
+To implement caching for `TreeContext` for each filename and re-use it, we need to modify the `RepoMap` class in `llmcode/repomap.py`. Specifically, we need to:
 
 1. Add a cache dictionary to store `TreeContext` instances.
 2. Modify the `render_tree` method to check the cache before creating a new `TreeContext` instance.
@@ -3024,7 +3024,7 @@ llmcode/repomap.py
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
 
 
-@@@ #### cache the `TreeContext` for each filename, and reuse it. @@@@@@@@@@@@@@@@@@@@
+@@@ #### cache the `TreeContext` for each filename, and re-use it. @@@@@@@@@@@@@@@@@@@@
 @@@ SEARCH: llmcode/repomap.py @@@@@@@@@@@@@@@@@@@@
 class RepoMap:
     CACHE_VERSION = 3
@@ -3298,12 +3298,12 @@ pip install flask-socketio
 
 
 @@@ #### make that change @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
 from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt
 @@@@@@@@@@@@@@@@@@@@
 from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confirm
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def confirm_ask(self, question, default="y"):
         self.num_user_asks += 1
 
@@ -3346,7 +3346,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confi
 
         return res
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def tool_output(self, *messages, log_only=False):
         if messages:
             hist = " ".join(messages)
@@ -3384,7 +3384,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confi
 
 
 @@@ #### TypeError: confirm() got an unexpected keyword argument 'default' @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def confirm_ask(self, question, default="y"):
         self.num_user_asks += 1
 
@@ -3438,7 +3438,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confi
 
         return res
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def confirm_ask(self, question, default="y"):
         self.num_user_asks += 1
 
@@ -3495,7 +3495,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confi
 
 
 @@@ #### make tool_output into an sync method like you describe. but it will append the output to a list self.pending_output. the client will poll to collect output periodically. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def tool_output(self, *messages, log_only=False):
         if messages:
             hist = " ".join(messages)
@@ -3521,7 +3521,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confi
         # Append messages to pending_output
         self.pending_output.append(" ".join(str(msg) for msg in messages))
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def __init__(
         self,
         pretty=True,
@@ -3628,7 +3628,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confi
 
         self.pending_output = []
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def append_chat_history(self, text, linebreak=False, blockquote=False, strip=True):
         if blockquote:
             if strip:
@@ -3667,13 +3667,13 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt, confi
 
 
 @@@ #### make an InputOutputPolling subclass of InputOutput. it should override tool_output, tool_error as async methods. make those methods in io also async. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
 import asyncio
 @@@@@@@@@@@@@@@@@@@@
 import asyncio
 from typing import List
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def tool_error(self, message="", strip=True):
         self.num_error_outputs += 1
 
@@ -3778,7 +3778,7 @@ class InputOutputPolling(InputOutput):
         self.pending_errors.clear()
         return errors
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
 import base64
 import os
 from collections import defaultdict
@@ -4156,7 +4156,7 @@ from llmcode import models, prompts, voice
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
 
 
-@@@ #### /run scripts/dev/generate_requirements.sh --upgrade @@@@@@@@@@@@@@@@@@@@
+@@@ #### /run scripts/pip-compile.sh --upgrade @@@@@@@@@@@@@@@@@@@@
 @@@ SEARCH: requirements/requirements-help.in @@@@@@@@@@@@@@@@@@@@
 -c ../requirements.txt
 #
@@ -4179,15 +4179,15 @@ tokenizers<0.14,>=0.11.1
 
 
 @@@ #### can we get the last modified date from git instead @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <!--[[[cog
 import os
 import datetime
 
 files = [
-    'docs/site/docs/leaderboards/index.md',
-    'docs/site/_data/edit_leaderboard.yml',
-    'docs/site/_data/refactor_leaderboard.yml'
+    'llmcode/website/docs/leaderboards/index.md',
+    'llmcode/website/_data/edit_leaderboard.yml',
+    'llmcode/website/_data/refactor_leaderboard.yml'
 ]
 
 mod_times = [os.path.getmtime(file) for file in files]
@@ -4201,9 +4201,9 @@ import subprocess
 import datetime
 
 files = [
-    'docs/site/docs/leaderboards/index.md',
-    'docs/site/_data/edit_leaderboard.yml',
-    'docs/site/_data/refactor_leaderboard.yml'
+    'llmcode/website/docs/leaderboards/index.md',
+    'llmcode/website/_data/edit_leaderboard.yml',
+    'llmcode/website/_data/refactor_leaderboard.yml'
 ]
 
 def get_last_modified_date(file):
@@ -4323,7 +4323,7 @@ cog.out(f"{latest_mod_date.strftime('%B %d, %Y.')}")
 
 
 @@@ #### update `format_messages` to show all the entries when content is an array @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/utils.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/utils.py @@@@@@@@@@@@@@@@@@@@
     for msg in messages:
         output.append("")
         role = msg["role"].upper()
@@ -5340,7 +5340,7 @@ llmcode/coders/base_coder.py
 
 
 @@@ #### add a --read param like --file, except will pass in `read_only_fnames` @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--file",
         action="append",
@@ -6976,7 +6976,7 @@ class Commands:
 
 
 @@@ #### don't use confirm(), just prompt() with default=y @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def confirm_ask(self, question, default="y"):
         self.num_user_asks += 1
 
@@ -7014,7 +7014,7 @@ class Commands:
 
         return is_yes
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
 from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, confirm, prompt
 @@@@@@@@@@@@@@@@@@@@
 from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt
@@ -7166,7 +7166,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt
 
 
 @@@ #### add --mini to set model to gpt-4o-mini @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     gpt_4o_model = "gpt-4o"
     group.add_argument(
         "--4o",
@@ -7212,7 +7212,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt
 
 
 @@@ #### add --mini to set model to gpt-4o-mini @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     gpt_4o_mini_model = "gpt-4o-mini"
     group.add_argument(
         "--mini",
@@ -7527,7 +7527,7 @@ from llmcode import models, prompts, voice
             self.abs_read_only_fnames,
         )
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def __init__(self, root, rel_fnames, addable_rel_fnames, commands, encoding):
         self.addable_rel_fnames = addable_rel_fnames
         self.rel_fnames = rel_fnames
@@ -7539,7 +7539,7 @@ from llmcode import models, prompts, voice
         self.encoding = encoding
         self.abs_read_only_fnames = abs_read_only_fnames
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def get_input(self, root, rel_fnames, addable_rel_fnames, commands):
         if self.pretty:
             style = dict(style=self.user_input_color) if self.user_input_color else dict()
@@ -7600,7 +7600,7 @@ from llmcode import models, prompts, voice
             root, rel_fnames, addable_rel_fnames, commands, self.encoding, abs_read_only_fnames
         )
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
 class AutoCompleter(Completer):
     def __init__(self, root, rel_fnames, addable_rel_fnames, commands, encoding):
         self.addable_rel_fnames = addable_rel_fnames
@@ -7682,7 +7682,7 @@ class AutoCompleter(Completer):
             tokens = list(lexer.get_tokens(content))
             self.words.update(token[1] for token in tokens if token[0] in Token.Name)
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
 class AutoCompleter(Completer):
     def __init__(self, root, rel_fnames, addable_rel_fnames, commands, encoding, abs_read_only_fnames):
         self.addable_rel_fnames = addable_rel_fnames
@@ -7768,7 +7768,7 @@ class AutoCompleter(Completer):
 
 
 @@@ #### /ex @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def __init__(
         self, root, rel_fnames, addable_rel_fnames, commands, encoding, abs_read_only_fnames
     ):
@@ -7788,12 +7788,12 @@ class AutoCompleter(Completer):
 
 
 @@@ #### to `get_input` too @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def get_input(self, root, rel_fnames, addable_rel_fnames, commands, abs_read_only_fnames):
 @@@@@@@@@@@@@@@@@@@@
     def get_input(self, root, rel_fnames, addable_rel_fnames, commands, abs_read_only_fnames=None):
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
         completer_instance = AutoCompleter(
             root, rel_fnames, addable_rel_fnames, commands, self.encoding, abs_read_only_fnames
         )
@@ -7805,7 +7805,7 @@ class AutoCompleter(Completer):
 
 
 @@@ #### /test pytest tests/basic/test_io.py @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
         all_fnames = [Path(root) / rel_fname for rel_fname in rel_fnames] + list(
             abs_read_only_fnames
         )
@@ -8011,7 +8011,7 @@ llmcode/coders/base_coder.py
 
 
 @@@ #### add bold=false param to `tool_output` @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def tool_output(self, *messages, log_only=False):
         if messages:
             hist = " ".join(messages)
@@ -9539,25 +9539,25 @@ class Coder:
 
 
 @@@ #### the edit leaderboard is wider than the width allocated, so users need to scroll left/right to see it all @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
 @@@@@@@@@@@@@@@@@@@@
 <div style="overflow-x: auto;">
 <table style="width: 100%; min-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 </table>
 @@@@@@@@@@@@@@@@@@@@
 </table>
 </div>
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
 @@@@@@@@@@@@@@@@@@@@
 <div style="overflow-x: auto;">
 <table style="width: 100%; min-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 </table>
 @@@@@@@@@@@@@@@@@@@@
 </table>
@@ -9566,31 +9566,31 @@ class Coder:
 
 
 @@@ #### no, this happens even on wide desktop browsers. it's not just a small screen issue @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <div style="overflow-x: auto;">
 <table style="width: 100%; min-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
 @@@@@@@@@@@@@@@@@@@@
 <table style="width: 100%; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 </table>
 </div>
 @@@@@@@@@@@@@@@@@@@@
 </table>
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <div style="overflow-x: auto;">
 <table style="width: 100%; min-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
 @@@@@@@@@@@@@@@@@@@@
 <table style="width: 100%; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 </table>
 </div>
 @@@@@@@@@@@@@@@@@@@@
 </table>
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <style>
   tr.selected {
     color: #0056b3;
@@ -9613,7 +9613,7 @@ class Coder:
   }
 </style>
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <style>
   tr.selected {
     color: #0056b3;
@@ -9639,7 +9639,7 @@ class Coder:
 
 
 @@@ #### the edit leaderboard is wider than the width allocated, so users need to scroll left/right to see it all. even on desktop browsers that are very wide @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
   <thead style="background-color: #f2f2f2;">
     <tr>
@@ -9690,7 +9690,7 @@ class Coder:
   </table>
 </div>
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
   <thead style="background-color: #f2f2f2;">
     <tr>
@@ -9750,7 +9750,7 @@ class Coder:
 
 To address the issue of the edit leaderboard being wider than the allocated width, we can modify the table styling to make it more responsive and easier to view on various screen sizes. Here's how we can update the code:
 
-docs/site/docs/leaderboards/index.md
+llmcode/website/docs/leaderboards/index.md
 ```html
 <<<<<<< SEARCH
 <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
@@ -9799,7 +9799,7 @@ docs/site/docs/leaderboards/index.md
 
 
 @@@ #### the edit leaderboard is wider than the width allocated, so users need to scroll left/right to see it all. even on desktop browsers that are very wide @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/docs/leaderboards/index.md @@@@@@@@@@@@@@@@@@@@
 <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 14px;">
   <thead style="background-color: #f2f2f2;">
     <tr>
@@ -9971,7 +9971,7 @@ docs/site/docs/leaderboards/index.md
 
 
 @@@ #### Add --attribute-commit-message-committer and pass to Repo @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--attribute-commit-message",
         action=argparse.BooleanOptionalAction,
@@ -10023,7 +10023,7 @@ docs/site/docs/leaderboards/index.md
 
 
 @@@ #### update the docs @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/docs/git.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/docs/git.md @@@@@@@@@@@@@@@@@@@@
 ## Commit attribution
 
 Llmcode marks commits that it either authored or committed.
@@ -10065,7 +10065,7 @@ Both of these options are disabled by default, but can be useful for easily iden
 - `/diff` now shows diffs of all changes resulting from your request, including lint and test fixes.
 - New `/clipboard` command to paste images or text from the clipboard, replaces `/add-clipboard-image`.
 - Now shows the markdown scraped when you add a url with `/web`.
-- When [scripting llmcode](https://llmcode.khulnasoft.com/docs/scripting.html) messages can now contain in-chat `/` commands.
+- When [scripting llmcode](https://llm.khulnasoft.com/docs/scripting.html) messages can now contain in-chat `/` commands.
 - Llmcode in docker image now suggests the correct command to update to latest version.
 - Improved retries on API errors (was easy to test during Sonnet outage).
 - Added `--mini` for `gpt-4o-mini`.
@@ -10080,7 +10080,7 @@ Both of these options are disabled by default, but can be useful for easily iden
 - `/diff` now shows diffs of all changes resulting from your request, including lint and test fixes.
 - New `/clipboard` command to paste images or text from the clipboard, replaces `/add-clipboard-image`.
 - Now shows the markdown scraped when you add a url with `/web`.
-- When [scripting llmcode](https://llmcode.khulnasoft.com/docs/scripting.html) messages can now contain in-chat `/` commands.
+- When [scripting llmcode](https://llm.khulnasoft.com/docs/scripting.html) messages can now contain in-chat `/` commands.
 - Llmcode in docker image now suggests the correct command to update to latest version.
 - Improved retries on API errors (was easy to test during Sonnet outage).
 - Added `--mini` for `gpt-4o-mini`.
@@ -10531,7 +10531,7 @@ from llmcode import models, prompts, voice
 
 
 @@@ #### add --chat-mode as an alias for --edit-format @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--edit-format",
         metavar="EDIT_FORMAT",
@@ -10618,7 +10618,7 @@ from llmcode import models, prompts, voice
 
 Certainly! I'll update the documentation to include a small example of the `/code` command. Here's the change:
 
-docs/site/docs/usage/modes.md
+llmcode/website/docs/usage/modes.md
 <source>markdown
 <<<<<<< SEARCH
 - `code` - Llmcode will make changes to your code to satisfy your requests.
@@ -10637,7 +10637,7 @@ send messages in other modes using `/code`, `/ask`, and `/help` commands:
 >>>>>>> REPLACE
 </source>
 
-docs/site/docs/usage/modes.md
+llmcode/website/docs/usage/modes.md
 <source>markdown
 <<<<<<< SEARCH
 
@@ -11584,7 +11584,7 @@ from llmcode.llm import litellm
 
 
 @@@ #### add --deepseek for model deepseek/deepseek-coder @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     gpt_3_model_name = "gpt-3.5-turbo"
     group.add_argument(
         "--35turbo",
@@ -11619,8 +11619,8 @@ from llmcode.llm import litellm
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
 
 
-@@@ #### add a --deepseek-beta bool arg. describe as uses deepseek coder via the beta api endpoint @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ #### add a --deepseek-beta bool arg. descibe as uses deepseek coder via the beta api endpoint @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     deepseek_model = "deepseek/deepseek-coder"
     group.add_argument(
         "--deepseek",
@@ -11657,8 +11657,8 @@ from llmcode.llm import litellm
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
 
 
-@@@ #### add a --deepseek-beta bool arg. describe as uses deepseek coder via the beta api endpoint. in main set the model name and DEEPSEEK_API_BASE=https://api.deepseek.com/beta @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ #### add a --deepseek-beta bool arg. descibe as uses deepseek coder via the beta api endpoint. in main set the model name and DEEPSEEK_API_BASE=https://api.deepseek.com/beta @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--deepseek",
         action="store_const",
@@ -11739,11 +11739,11 @@ Llmcode lets you pair program with LLMs,
 to edit code in your local git repository.
 Start a new project or work with an existing git repo.
 Llmcode works best with GPT-4o & Claude 3.5 Sonnet and can 
-[connect to almost any LLM](https://llmcode.khulnasoft.com/docs/llms.html).
+[connect to almost any LLM](https://llm.khulnasoft.com/docs/llms.html).
 
 <p align="center">
   <img
-    src="https://llmcode.khulnasoft.com/assets/screencast.svg"
+    src="https://llm.khulnasoft.com/assets/screencast.svg"
     alt="llmcode screencast"
   >
 </p>
@@ -11752,7 +11752,7 @@ Llmcode works best with GPT-4o & Claude 3.5 Sonnet and can
   <a href="https://discord.gg/Tv2uQnR88V">
     <img src="https://img.shields.io/badge/Join-Discord-blue.svg"/>
   </a>
-  <a href="https://llmcode.khulnasoft.com/docs/install.html">
+  <a href="https://llm.khulnasoft.com/docs/install.html">
     <img src="https://img.shields.io/badge/Read-Docs-green.svg"/>
   </a>
 </p>
@@ -11765,13 +11765,13 @@ Llmcode works best with GPT-4o & Claude 3.5 Sonnet and can
 
 Llmcode vous permet de programmer en binôme avec des LLMs,
 pour éditer du code dans votre dépôt git local.
-Commencez un nouveau project ou travaillez avec un dépôt git existent.
+Commencez un nouveau projet ou travaillez avec un dépôt git existant.
 Llmcode fonctionne mieux avec GPT-4o & Claude 3.5 Sonnet et peut
-[se connecter à presque tous les LLMs](https://llmcode.khulnasoft.com/docs/llms.html).
+[se connecter à presque tous les LLMs](https://llm.khulnasoft.com/docs/llms.html).
 
 <p align="center">
   <img
-    src="https://llmcode.khulnasoft.com/assets/screencast.svg"
+    src="https://llm.khulnasoft.com/assets/screencast.svg"
     alt="screencast llmcode"
   >
 </p>
@@ -11780,7 +11780,7 @@ Llmcode fonctionne mieux avec GPT-4o & Claude 3.5 Sonnet et peut
   <a href="https://discord.gg/Tv2uQnR88V">
     <img src="https://img.shields.io/badge/Rejoindre-Discord-blue.svg"/>
   </a>
-  <a href="https://llmcode.khulnasoft.com/docs/install.html">
+  <a href="https://llm.khulnasoft.com/docs/install.html">
     <img src="https://img.shields.io/badge/Lire-Docs-green.svg"/>
   </a>
 </p>
@@ -11832,9 +11832,9 @@ README.md
 <source>
 <<<<<<< SEARCH
 See the
-[installation instructions](https://llmcode.khulnasoft.com/docs/install.html)
+[installation instructions](https://llm.khulnasoft.com/docs/install.html)
 and other
-[documentation](https://llmcode.khulnasoft.com/docs/usage.html)
+[documentation](https://llm.khulnasoft.com/docs/usage.html)
 for more details.
 
 ## Features
@@ -11847,22 +11847,22 @@ for more details.
   - Refactor code.
   - Update docs.
 - Llmcode will edit your files to complete your request.
-- Llmcode [automatically git commits](https://llmcode.khulnasoft.com/docs/git.html) changes with a sensible commit message.
-- Llmcode works with [most popular languages](https://llmcode.khulnasoft.com/docs/languages.html): python, javascript, typescript, php, html, css, and more...
-- Llmcode works best with GPT-4o & Claude 3.5 Sonnet and can [connect to almost any LLM](https://llmcode.khulnasoft.com/docs/llms.html).
+- Llmcode [automatically git commits](https://llm.khulnasoft.com/docs/git.html) changes with a sensible commit message.
+- Llmcode works with [most popular languages](https://llm.khulnasoft.com/docs/languages.html): python, javascript, typescript, php, html, css, and more...
+- Llmcode works best with GPT-4o & Claude 3.5 Sonnet and can [connect to almost any LLM](https://llm.khulnasoft.com/docs/llms.html).
 - Llmcode can edit multiple files at once for complex requests.
-- Llmcode uses a [map of your entire git repo](https://llmcode.khulnasoft.com/docs/repomap.html), which helps it work well in larger codebases.
+- Llmcode uses a [map of your entire git repo](https://llm.khulnasoft.com/docs/repomap.html), which helps it work well in larger codebases.
 - Edit files in your editor while chatting with llmcode,
 and it will always use the latest version.
 Pair program with AI.
-- [Add images to the chat](https://llmcode.khulnasoft.com/docs/usage/images-urls.html) (GPT-4o, Claude 3.5 Sonnet, etc).
-- [Add URLs to the chat](https://llmcode.khulnasoft.com/docs/usage/images-urls.html) and llmcode will read their content.
-- [Code with your voice](https://llmcode.khulnasoft.com/docs/usage/voice.html).
+- [Add images to the chat](https://llm.khulnasoft.com/docs/usage/images-urls.html) (GPT-4o, Claude 3.5 Sonnet, etc).
+- [Add URLs to the chat](https://llm.khulnasoft.com/docs/usage/images-urls.html) and llmcode will read their content.
+- [Code with your voice](https://llm.khulnasoft.com/docs/usage/voice.html).
 
 
 ## Top tier performance
 
-[Llmcode has one of the top scores on SWE Bench](https://llmcode.khulnasoft.com/2024
+[Llmcode has one of the top scores on SWE Bench](https://llm.khulnasoft.com/2024
 
 >  
 >  
@@ -11904,7 +11904,7 @@ HISTORY.md
 - `/diff` now shows diffs of all changes resulting from your request, including lint and test fixes.
 - New `/clipboard` command to paste images or text from the clipboard, replaces `/add-clipboard-image`.
 - Now shows the markdown scraped when you add a url with `/web`.
-- When [scripting llmcode](https://llmcode.khulnasoft.com/docs/scripting.html) messages can now contain in-chat `/` commands.
+- When [scripting llmcode](https://llm.khulnasoft.com/docs/scripting.html) messages can now contain in-chat `/` commands.
 - Llmcode in docker image now suggests the correct command to update to latest version.
 - Improved retries on API errors (was easy to test during Sonnet outage).
 - Added `--mini` for `gpt-4o-mini`.
@@ -11932,7 +11932,7 @@ HISTORY.md
 - New `/add-clipboard-image` to add images to the chat from your clipboard.
 - Use `--map-tokens 1024` to use repo map with any model.
 - Support for Sonnet's 8k output window.
-  - [Llmcode already supported infinite output from Sonnet.](https://llmcode.khulnasoft.com/2024/07/01/sonnet-not-lazy.html)
+  - [Llmcode already supported infinite output from Sonnet.](https://llm.khulnasoft.com/2024/07/01/sonnet-not-lazy.html)
 - Workaround litellm bug for retrying API server errors.
 - Upgraded dependencies, to pick up litellm bug fixes.
 - Llmcode wrote 44% of the code in this release.
@@ -11943,18 +11943,18 @@ HISTORY.md
 
 ### Llmcode v0.47.0
 
-- [Commit message](https://llmcode.khulnasoft.com/docs/git.html#commit-messages) improvements:
+- [Commit message](https://llm.khulnasoft.com/docs/git.html#commit-messages) improvements:
   - Added Conventional Commits guidelines to commit message prompt.
   - Added `--commit-prompt` to customize the commit message prompt.
   - Added strong model as a fallback for commit messages (and chat summaries).
-- [Linting](https://llmcode.khulnasoft.com/docs/usage/lint-test.html) improvements:
+- [Linting](https://llm.khulnasoft.com/docs/usage/lint-test.html) improvements:
   - Ask before fixing lint errors.
   - Improved performance of `--lint` on all dirty files in repo.
   - Improved lint flow, now doing code edit auto-commit before linting.
   - Bugfix to properly handle subprocess encodings (also for `/run`).
-- Improved [docker support](https://llmcode.khulnasoft.com/docs/install/docker.html):
+- Improved [docker support](https://llm.khulnasoft.com/docs/install/docker.html):
   - Resolved permission issues when using `docker run --user xxx`.
-  - New `khulnasoft/llmcode-full` docker image, which includes all extras.
+  - New `paulgauthier/llmcode-full` docker image, which includes all extras.
 - Switching to code and ask mode no longer summarizes the chat history.
 - Added graph of llmcode's contribution to each release.
 - Generic auto-completions are provided for `/commands` without a completion override.
@@ -12037,7 +12037,7 @@ HISTORY.md
 
 ### Llmcode v0.43.0
 
-- Use `/help <question>` to [ask for help about using llmcode](https://llmcode.khulnasoft.com/docs/troubleshooting/support.html), customizing settings, troubleshooting, using LLMs, etc.
+- Use `/help <question>` to [ask for help about using llmcode](https://llm.khulnasoft.com/docs/troubleshooting/support.html), customizing settings, troubleshooting, using LLMs, etc.
 - Allow multiple use of `/undo`.
 - All config/env/yml/json files now load from home, git root, cwd and named command line switch.
 - New `$HOME/.llmcode/caches` dir for app-wide expendable caches.
@@ -12054,11 +12054,11 @@ HISTORY.md
 
 ### Llmcode v0.41.0
 
-- [Allow Claude 3.5 Sonnet to stream back >4k tokens!](https://llmcode.khulnasoft.com/2024/07/01/sonnet-not-lazy.html)
+- [Allow Claude 3.5 Sonnet to stream back >4k tokens!](https://llm.khulnasoft.com/2024/07/01/sonnet-not-lazy.html)
   - It is the first model capable of writing such large coherent, useful code edits.
   - Do large refactors or generate multiple files of new code in one go.
 - Llmcode now uses `claude-3-5-sonnet-20240620` by default if `ANTHROPIC_API_KEY` is set in the environment.
-- [Enabled image support](https://llmcode.khulnasoft.com/docs/usage/images-urls.html) for 3.5 Sonnet and for GPT-4o & 3.5 Sonnet via OpenRouter (by @yamitzky).
+- [Enabled image support](https://llm.khulnasoft.com/docs/usage/images-urls.html) for 3.5 Sonnet and for GPT-4o & 3.5 Sonnet via OpenRouter (by @yamitzky).
 - Added `--attribute-commit-message` to prefix llmcode's commit messages with "llmcode:".
 - Fixed regression in quality of one-line commit messages.
 - Automatically retry on Anthropic `overloaded_error`.
@@ -12082,23 +12082,23 @@ HISTORY.md
 
 - Improved prompting to discourage Sonnet from wasting tokens emitting unchanging code (#705).
 - Improved error info for token limit errors.
-- Options to suppress adding "(llmcode)" to the [git author and committer names](https://llmcode.khulnasoft.com/docs/git.html#commit-attribution).
+- Options to suppress adding "(llmcode)" to the [git author and committer names](https://llm.khulnasoft.com/docs/git.html#commit-attribution).
 - Use `--model-settings-file` to customize per-model settings, like use of repo-map (by @caseymcc).
 - Improved invocation of flake8 linter for python code.
 
 
 ### Llmcode v0.39.0
 
-- Use `--sonnet` for Claude 3.5 Sonnet, which is the top model on [llmcode's LLM code editing leaderboard](https://llmcode.khulnasoft.com/docs/leaderboards/#claude-35-sonnet-takes-the-top-spot).
+- Use `--sonnet` for Claude 3.5 Sonnet, which is the top model on [llmcode's LLM code editing leaderboard](https://llm.khulnasoft.com/docs/leaderboards/#claude-35-sonnet-takes-the-top-spot).
 - All `LLMCODE_xxx` environment variables can now be set in `.env` (by @jpshack-at-palomar).
 - Use `--llm-history-file` to log raw messages sent to the LLM (by @daniel-vainsencher).
 - Commit messages are no longer prefixed with "llmcode:". Instead the git author and committer names have "(llmcode)" added.
 
 ### Llmcode v0.38.0
 
-- Use `--vim` for [vim keybindings](https://llmcode.khulnasoft.com/docs/usage/commands.html#vi) in the chat.
-- [Add LLM metadata](https://llmcode.khulnasoft.com/docs/llms/warnings.html#specifying-context-window-size-and-token-costs) via `.llmcode.models.json` file (by @caseymcc).
-- More detailed [error messages on token limit errors](https://llmcode.khulnasoft.com/docs/troubleshooting/token-limits.html).
+- Use `--vim` for [vim keybindings](https://llm.khulnasoft.com/docs/usage/commands.html#vi) in the chat.
+- [Add LLM metadata](https://llm.khulnasoft.com/docs/llms/warnings.html#specifying-context-window-size-and-token-costs) via `.llmcode.models.json` file (by @caseymcc).
+- More detailed [error messages on token limit errors](https://llm.khulnasoft.com/docs/troubleshooting/token-limits.html).
 - Single line commit messages, without the recent chat messages.
 - Ensure `--commit --dry-run` does nothing.
 - Have playwright wait for idle network to better scrape js sites.
@@ -12118,7 +12118,7 @@ HISTORY.md
 
 ### Llmcode v0.36.0
 
-- [Llmcode can now lint your code and fix any errors](https://llmcode.khulnasoft.com/2024/05/22/linting.html).
+- [Llmcode can now lint your code and fix any errors](https://llm.khulnasoft.com/2024/05/22/linting.html).
   - Llmcode automatically lints and fixes after every LLM edit.
   - You can manually lint-and-fix files with `/lint` in the chat or `--lint` on the command line.
   - Llmcode includes built in basic linters for all supported tree-sitter languages.
@@ -12132,8 +12132,8 @@ HISTORY.md
 ### Llmcode v0.35.0
 
 - Llmcode now uses GPT-4o by default.
-  - GPT-4o tops the [llmcode LLM code editing leaderboard](https://llmcode.khulnasoft.com/docs/leaderboards/) at 72.9%, versus 68.4% for Opus.
-  - GPT-4o takes second on [llmcode's refactoring leaderboard](https://llmcode.khulnasoft.com/docs/leaderboards/#code-refactoring-leaderboard) with 62.9%, versus Opus at 72.3%.
+  - GPT-4o tops the [llmcode LLM code editing leaderboard](https://llm.khulnasoft.com/docs/leaderboards/) at 72.9%, versus 68.4% for Opus.
+  - GPT-4o takes second on [llmcode's refactoring leaderboard](https://llm.khulnasoft.com/docs/leaderboards/#code-refactoring-leaderboard) with 62.9%, versus Opus at 72.3%.
 - Added `--restore-chat-history` to restore prior chat history on launch, so you can continue the last conversation.
 - Improved reflection feedback to LLMs using the diff edit format.
 - Improved retries on `httpx` errors.
@@ -12150,11 +12150,11 @@ HISTORY.md
 
 ### Llmcode v0.33.0
 
-- Added native support for [Deepseek models](https://llmcode.khulnasoft.com/docs/llms.html#deepseek) using `DEEPSEEK_API_KEY` and `deepseek/deepseek-chat`, etc rather than as a generic OpenAI compatible API.
+- Added native support for [Deepseek models](https://llm.khulnasoft.com/docs/llms.html#deepseek) using `DEEPSEEK_API_KEY` and `deepseek/deepseek-chat`, etc rather than as a generic OpenAI compatible API.
 
 ### Llmcode v0.32.0
 
-- [Llmcode LLM code editing leaderboards](https://llmcode.khulnasoft.com/docs/leaderboards/) that rank popular models according to their ability to edit code.
+- [Llmcode LLM code editing leaderboards](https://llm.khulnasoft.com/docs/leaderboards/) that rank popular models according to their ability to edit code.
   - Leaderboards include GPT-3.5/4 Turbo, Opus, Sonnet, Gemini 1.5 Pro, Llama 3, Deepseek Coder & Command-R+.
 - Gemini 1.5 Pro now defaults to a new diff-style edit format (diff-fenced), enabling it to work better with larger code bases.
 - Support for Deepseek-V2, via more a flexible config of system messages in the diff edit format.
@@ -12163,7 +12163,7 @@ HISTORY.md
 
 ### Llmcode v0.31.0
 
-- [Llmcode is now also AI pair programming in your browser!](https://llmcode.khulnasoft.com/2024/05/02/browser.html) Use the `--browser` switch to launch an experimental browser based version of llmcode.
+- [Llmcode is now also AI pair programming in your browser!](https://llm.khulnasoft.com/2024/05/02/browser.html) Use the `--browser` switch to launch an experimental browser based version of llmcode.
 - Switch models during the chat with `/model <name>` and search the list of available models with `/models <query>`.
 
 ### Llmcode v0.30.1
@@ -12172,14 +12172,14 @@ HISTORY.md
 
 ### Llmcode v0.30.0
 
-- Added [Gemini 1.5 Pro](https://llmcode.khulnasoft.com/docs/llms.html#free-models) as a recommended free model.
+- Added [Gemini 1.5 Pro](https://llm.khulnasoft.com/docs/llms.html#free-models) as a recommended free model.
 - Allow repo map for "whole" edit format.
 - Added `--models <MODEL-NAME>` to search the available models.
 - Added `--no-show-model-warnings` to silence model warnings.
 
 ### Llmcode v0.29.2
 
-- Improved [model warnings](https://llmcode.khulnasoft.com/docs/llms.html#model-warnings) for unknown or unfamiliar models
+- Improved [model warnings](https://llm.khulnasoft.com/docs/llms.html#model-warnings) for unknown or unfamiliar models
 
 ### Llmcode v0.29.1
 
@@ -12187,14 +12187,14 @@ HISTORY.md
 
 ### Llmcode v0.29.0
 
-- Added support for [directly connecting to Anthropic, Cohere, Gemini and many other LLM providers](https://llmcode.khulnasoft.com/docs/llms.html).
+- Added support for [directly connecting to Anthropic, Cohere, Gemini and many other LLM providers](https://llm.khulnasoft.com/docs/llms.html).
 - Added `--weak-model <model-name>` which allows you to specify which model to use for commit messages and chat history summarization.
 - New command line switches for working with popular models:
   - `--4-turbo-vision`
   - `--opus`
   - `--sonnet`
   - `--anthropic-api-key`
-- Improved "whole" and "diff" backends to better support [Cohere's free to use Command-R+ model](https://llmcode.khulnasoft.com/docs/llms.html#cohere).
+- Improved "whole" and "diff" backends to better support [Cohere's free to use Command-R+ model](https://llm.khulnasoft.com/docs/llms.html#cohere).
 - Allow `/add` of images from anywhere in the filesystem.
 - Fixed crash when operating in a repo in a detached HEAD state.
 - Fix: Use the same default model in CLI and python scripting.
@@ -12202,8 +12202,8 @@ HISTORY.md
 ### Llmcode v0.28.0
 
 - Added support for new `gpt-4-turbo-2024-04-09` and `gpt-4-turbo` models.
-  - Benchmarked at 61.7% on Exercism benchmark, comparable to `gpt-4-0613` and worse than the `gpt-4-preview-XXXX` models. See [recent Exercism benchmark results](https://llmcode.khulnasoft.com/2024/03/08/claude-3.html).
-  - Benchmarked at 34.1% on the refactoring/laziness benchmark, significantly worse than the `gpt-4-preview-XXXX` models. See [recent refactor bencmark results](https://llmcode.khulnasoft.com/2024/01/25/benchmarks-0125.html).
+  - Benchmarked at 61.7% on Exercism benchmark, comparable to `gpt-4-0613` and worse than the `gpt-4-preview-XXXX` models. See [recent Exercism benchmark results](https://llm.khulnasoft.com/2024/03/08/claude-3.html).
+  - Benchmarked at 34.1% on the refactoring/laziness benchmark, significantly worse than the `gpt-4-preview-XXXX` models. See [recent refactor bencmark results](https://llm.khulnasoft.com/2024/01/25/benchmarks-0125.html).
   - Llmcode continues to default to `gpt-4-1106-preview` as it performs best on both benchmarks, and significantly better on the refactoring/laziness benchmark.
 
 ### Llmcode v0.27.0
@@ -12227,12 +12227,12 @@ HISTORY.md
 ### Llmcode v0.25.0
 
 - Issue a warning if user adds too much code to the chat.
-  - https://llmcode.khulnasoft.com/docs/faq.html#how-can-i-add-all-the-files-to-the-chat
+  - https://llm.khulnasoft.com/docs/faq.html#how-can-i-add-all-the-files-to-the-chat
 - Vocally refuse to add files to the chat that match `.llmcodeignore`
   - Prevents bug where subsequent git commit of those files will fail.
 - Added `--openai-organization-id` argument.
 - Show the user a FAQ link if edits fail to apply.
-- Made past articles part of https://llmcode.khulnasoft.com/blog/
+- Made past articles part of https://llm.khulnasoft.com/blog/
 
 ### Llmcode v0.24.1
 
@@ -12287,7 +12287,7 @@ HISTORY.md
 
 ### Llmcode v0.19.0
 
-- [Significantly reduced "lazy" coding from GPT-4 Turbo due to new unified diff edit format](https://llmcode.khulnasoft.com/docs/unified-diffs.html)
+- [Significantly reduced "lazy" coding from GPT-4 Turbo due to new unified diff edit format](https://llm.khulnasoft.com/docs/unified-diffs.html)
   - Score improves from 20% to 61% on new "laziness benchmark".
   - Llmcode now uses unified diffs by default for `gpt-4-1106-preview`.
 - New `--4-turbo` command line switch as a shortcut for `--model gpt-4-1106-preview`.
@@ -12558,7 +12558,7 @@ This implementation allows you to easily add analytics tracking throughout your 
 > Committing llmcode/analytics.py before applying edits.  
 > Commit b49ee06 feat: Add analytics.py module  
 > The LLM did not conform to the edit format.  
-> https://llmcode.khulnasoft.com/docs/troubleshooting/edit-errors.html  
+> https://llm.khulnasoft.com/docs/troubleshooting/edit-errors.html  
 > # 3 SEARCH/REPLACE blocks failed to match!  
 >   
 > ## SearchReplaceNoExactMatch: This SEARCH block failed to exactly match lines in llmcode/main.py  
@@ -12628,7 +12628,7 @@ class Analytics:
 
 
 @@@ #### add --analytics which controls whether we track or not. create `Analytics` in main and pass to Coder @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--gui",
         "--browser",
@@ -13351,7 +13351,7 @@ from mixpanel import Mixpanel
 
 
 @@@ #### add a --analytics-log <fname> and pass it to `Analytics` @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--analytics",
         action=argparse.BooleanOptionalAction,
@@ -13379,7 +13379,7 @@ from mixpanel import Mixpanel
 
 
 @@@ #### add --analytics-disable, pass to `Analytics`. If present, add disabled:true to mixpanel.json. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--analytics-log",
         metavar="ANALYTICS_LOG_FILE",
@@ -13762,7 +13762,7 @@ HISTORY.md
 - `/diff` now shows diffs of all changes resulting from your request, including lint and test fixes.
 - New `/clipboard` command to paste images or text from the clipboard, replaces `/add-clipboard-image`.
 - Now shows the markdown scraped when you add a url with `/web`.
-- When [scripting llmcode](https://llmcode.khulnasoft.com/docs/scripting.html) messages can now contain in-chat `/` commands.
+- When [scripting llmcode](https://llm.khulnasoft.com/docs/scripting.html) messages can now contain in-chat `/` commands.
 - Llmcode in docker image now suggests the correct command to update to latest version.
 - Improved retries on API errors (was easy to test during Sonnet outage).
 - Added `--mini` for `gpt-4o-mini`.
@@ -15052,7 +15052,7 @@ llmcode/coders/base_coder.py
 ^^^ Expected `>>>>>>> REPLACE` or `=======`
 
 
-@@@ #### self.calculate_and_show_tokens_and_cost isn't being called when send() raises `FinishReasonLength`. this might result in the request stopping or retrying with prefill. either way, we want to print costs and update the `total_cost` @@@@@@@@@@@@@@@@@@@@
+@@@ #### self.calculate_and_show_tokens_and_cost isn't being called when send() raises `FinishReasonLength`. this might result inthe request stopping or retrying with prefill. either way, we want to print costs and update the `total_cost` @@@@@@@@@@@@@@@@@@@@
 >  
 >  
 > ^C again to exit  
@@ -15101,7 +15101,7 @@ llmcode/coders/base_coder.py
 ^^^ Expected `=======`
 
 
-@@@ #### self.calculate_and_show_tokens_and_cost isn't being called when send() raises `FinishReasonLength`. this might result in the request stopping or retrying with prefill. either way, we want to print costs and update the `total_cost` @@@@@@@@@@@@@@@@@@@@
+@@@ #### self.calculate_and_show_tokens_and_cost isn't being called when send() raises `FinishReasonLength`. this might result inthe request stopping or retrying with prefill. either way, we want to print costs and update the `total_cost` @@@@@@@@@@@@@@@@@@@@
 @@@ SEARCH: llmcode/coders/base_coder.py @@@@@@@@@@@@@@@@@@@@
     def send(self, messages, model=None, functions=None):
         if not model:
@@ -15624,7 +15624,7 @@ class Coder:
 
 
 @@@ #### move the analytics args to their own section, above Other Settings @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--analytics",
         action=argparse.BooleanOptionalAction,
@@ -15645,7 +15645,7 @@ class Coder:
 
 @@@@@@@@@@@@@@@@@@@@
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group = parser.add_argument_group("Other Settings")
 @@@@@@@@@@@@@@@@@@@@
     group = parser.add_argument_group("Analytics Settings")
@@ -15736,7 +15736,7 @@ class Coder:
 
 
 @@@ #### move the analytics args to their own section, above Other Settings @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--analytics",
         action=argparse.BooleanOptionalAction,
@@ -15757,7 +15757,7 @@ class Coder:
 
 @@@@@@@@@@@@@@@@@@@@
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group = parser.add_argument_group("Other Settings")
 @@@@@@@@@@@@@@@@@@@@
     group = parser.add_argument_group("Analytics Settings")
@@ -15781,7 +15781,7 @@ class Coder:
 
     group = parser.add_argument_group("Other Settings")
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--analytics",
         action=argparse.BooleanOptionalAction,
@@ -15802,7 +15802,7 @@ class Coder:
 
 @@@@@@@@@@@@@@@@@@@@
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group = parser.add_argument_group("Other Settings")
 @@@@@@@@@@@@@@@@@@@@
     group = parser.add_argument_group("Analytics Settings")
@@ -15947,7 +15947,7 @@ from llmcode.analytics import Analytics
 
 
 @@@ #### change --analytics-disable to --disable-analytics @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--analytics-disable",
         action="store_true",
@@ -15973,7 +15973,7 @@ from llmcode.analytics import Analytics
         print("Analytics have been permanently disabled.")
         return
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/docs/more/analytics.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/docs/more/analytics.md @@@@@@@@@@@@@@@@@@@@
 llmcode --analytics-disable
 @@@@@@@@@@@@@@@@@@@@
 llmcode --disable-analytics
@@ -16749,7 +16749,7 @@ class Analytics:
 
 
 @@@ #### do a bar graph with the % code on the y-axis @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
 <canvas id="blameChart" width="800" height="450" style="margin-top: 20px"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment"></script>
@@ -16922,7 +16922,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### SyntaxError: Unexpected number '182'. Expected a parameter pattern or a ')' in parameter list. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                     callbacks: {
                         label: function(context) {
                             var index = context.dataIndex;
@@ -16946,7 +16946,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### switch to a bar graph with the % code on the y-axis @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
 <canvas id="blameChart" width="800" height="450" style="margin-top: 20px"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment"></script>
@@ -17113,7 +17113,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### make the x-axis be the version number @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
     var blameData = {
         datasets: [{
             label: 'Llmcode\'s Contribution to Each Release',
@@ -17191,7 +17191,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### can we label every version on the x-axis? @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                 x: {
                     type: 'category',
                     title: {
@@ -17220,7 +17220,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### The hover is showing "undefined: NaN% (undefined lines)" @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                 tooltip: {
                     callbacks: {
                         label: function(context) {
@@ -17243,7 +17243,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### The tooltip is showing "undefined: NaN% (undefined lines)". You previous fix resulting in no tooltip @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
             plugins: {
                 tooltip: {
                     callbacks: {
@@ -17269,7 +17269,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### ok, try that @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                 tooltip: {
                     callbacks: {
                         label: function(context) {
@@ -17292,7 +17292,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### do that @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                 tooltip: {
                     callbacks: {
                         label: function(context) {
@@ -17318,7 +17318,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### it still shows 0 lines for all tooltips @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                 tooltip: {
                     callbacks: {
                         label: function(context) {
@@ -17345,7 +17345,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### all the tooltips show 0 lines @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                         label: function(context) {
                             var label = context.dataset.label || '';
                             var value = context.parsed.y || 0;
@@ -17365,7 +17365,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### do that @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                 tooltip: {
                     callbacks: {
                         label: function(context) {
@@ -17392,12 +17392,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### lines is just the percent? i want the number of lines from `llmcode_total` in the dataset @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
             data: [{% for row in site.data.blame %}{{ row.llmcode_percentage }},{% endfor %}],
 @@@@@@@@@@@@@@@@@@@@
             data: [{% for row in site.data.blame %}{{ row.llmcode_total }},{% endfor %}],
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                             var value = context.parsed.y || 0;
                             var lines = context.raw || 0;
                             return `${label}: ${Math.round(value)}% (${lines} lines)`;
@@ -17406,17 +17406,17 @@ document.addEventListener('DOMContentLoaded', function () {
                             var percentage = context.raw.llmcode_percentage || 0;
                             return `${label}: ${lines} lines (${percentage.toFixed(2)}%)`;
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                     text: 'Llmcode\'s Contribution to Each Release',
 @@@@@@@@@@@@@@@@@@@@
                     text: 'Llmcode\'s Contribution (Lines of Code) to Each Release',
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                         text: 'Llmcode Contribution (% of code)'
 @@@@@@@@@@@@@@@@@@@@
                         text: 'Llmcode Contribution (Lines of Code)'
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                                 text: 'Y-axis is percent of code, bubble size is lines of code',
 @@@@@@@@@@@@@@@@@@@@
                                 text: 'Y-axis is lines of code, tooltip shows percentage',
@@ -17424,7 +17424,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### the "lines" in the tooltop is just the percent? i want the number of lines from `llmcode_total` in the dataset @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                         label: function(context) {
                             var label = context.dataset.label || '';
                             var value = context.parsed.y || 0;
@@ -17442,7 +17442,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### SyntaxError: Unexpected token '||' @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                         label: function(context) {
                             var label = context.dataset.label || '';
                             var value = context.parsed.y || 0;
@@ -17461,7 +17461,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### can we pass the llmcode_total lines into the context, so we can use it in the tooltip? @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
         datasets: [{
             label: 'Llmcode\'s Contribution to Each Release',
             data: [{% for row in site.data.blame %}{{ row.llmcode_percentage }},{% endfor %}],
@@ -17478,7 +17478,7 @@ document.addEventListener('DOMContentLoaded', function () {
             borderWidth: 1
         }]
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
                         label: function(context) {
                             console.log(context);
                             var label = context.dataset.label || '';
@@ -17497,7 +17497,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### add another bar chart which plots the llmcode_total number of lines by release @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
 <canvas id="blameChart" width="800" height="450" style="margin-top: 20px"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment"></script>
@@ -17742,7 +17742,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### can we hide the legends? @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
         options: {
             scales: {
                 x: {
@@ -17792,7 +17792,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     display: false
                 },
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
         options: {
             scales: {
                 x: {
@@ -17845,7 +17845,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### make the charts 20% less tall @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/blame.md @@@@@@@@@@@@@@@@@@@@
 <canvas id="blameChart" width="800" height="450" style="margin-top: 20px"></canvas>
 <canvas id="linesChart" width="800" height="450" style="margin-top: 20px"></canvas>
 @@@@@@@@@@@@@@@@@@@@
@@ -19592,7 +19592,7 @@ from .dump import dump  # noqa: F401
 
 
 @@@ #### add a bar graph at the top which plots `pass_rate_1` for each model and edit_format combo. group all the edit_formats for each model together. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
 ---
 title: LLMs are bad at returning code in json
 excerpt: LLMs write worse code if you ask them to return the code wrapped in json via a tool/function call.
@@ -19649,7 +19649,7 @@ graph TD
 
 
 @@@ #### add a bar graph at the top which plots `pass_rate_1` for each model and edit_format combo. group all the edit_formats for each model together. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
 ---
 title: LLMs are bad at returning code in json
 excerpt: LLMs write worse code if you ask them to return the code wrapped in json via a tool/function call.
@@ -19747,7 +19747,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### great, but have it pull the data from the yml file @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     var ctx = document.getElementById('passRateChart').getContext('2d');
@@ -19887,7 +19887,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 Certainly! I'll reorder the edit formats as requested: Markdown, Tool call, Tool call (strict). Here's the *SEARCH/REPLACE block* to make this change:
 
-docs/site/_data/code-in-json.yml
+llmcode/website/_data/code-in-json.yml
 <source>
 <<<<<<< SEARCH
 - dirname: 2024-08-14-18-38-25--json-gpt-4o-2024-08-06-non-strict-func
@@ -19919,9 +19919,9 @@ docs/site/_data/code-in-json.yml
 >  
 > ^C again to exit  
 
-To order the edit formats as requested (markdown, tool call, tool call strict), we need to modify the YAML data in the `docs/site/_data/code-in-json.yml` file. Here's how we can do that:
+To order the edit formats as requested (markdown, tool call, tool call strict), we need to modify the YAML data in the `llmcode/website/_data/code-in-json.yml` file. Here's how we can do that:
 
-docs/site/_data/code-in-json.yml
+llmcode/website/_data/code-in-json.yml
 <source>yaml
 <<<<<<< SEARCH
 - dirname: 2024-08-14-18-38-25--json-gpt-4o-2024-08-06-non-strict-func
@@ -19947,12 +19947,12 @@ docs/site/_data/code-in-json.yml
 
 # llmcode chat started at 2024-08-14 20:04:37
 
-> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode docs/site/_posts/2024-08-14-code-in-json.md --read docs/site/_data/code-in-json.yml  
+> /Users/gauthier/Projects/llmcode/.venv/bin/llmcode llmcode/website/_posts/2024-08-14-code-in-json.md --read llmcode/website/_data/code-in-json.yml  
 > Llmcode v0.50.2-dev  
 > Models: claude-3-5-sonnet-20240620 with ♾️ diff edit format, weak model claude-3-haiku-20240307  
 > Git repo: .git with 305 files  
 > Repo-map: using 1024 tokens  
-> Added docs/site/_posts/2024-08-14-code-in-json.md to the chat.  
+> Added llmcode/website/_posts/2024-08-14-code-in-json.md to the chat.  
 > Use /help <question> for help, run "llmcode --help" to see cmd line args  
 
 
@@ -19960,7 +19960,7 @@ docs/site/_data/code-in-json.yml
 
 
 @@@ #### make the tool+split color the same as tool, but stripe it @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
         backgroundColor: format === 'Markdown' ? 'rgba(54, 162, 235, 0.8)' :
                          format === 'Tool call' ? 'rgba(255, 99, 132, 0.8)' :
                          'rgba(75, 192, 192, 0.8)',
@@ -19975,7 +19975,7 @@ docs/site/_data/code-in-json.yml
 
 
 @@@ #### can we actually put a dot or stripe pattern across it. i don't want to mess with its border. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
         backgroundColor: format === 'Markdown' ? 'rgba(54, 162, 235, 0.8)' :
                          format.startsWith('Tool call') ? 'rgba(255, 99, 132, 0.8)' :
                          'rgba(75, 192, 192, 0.8)',
@@ -19996,7 +19996,7 @@ docs/site/_data/code-in-json.yml
             }
         },
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
     new Chart(ctx, config);
 @@@@@@@@@@@@@@@@@@@@
     function createStripedCanvas(isStrict) {
@@ -20023,7 +20023,7 @@ docs/site/_data/code-in-json.yml
 
     new Chart(ctx, config);
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
         backgroundColor: format === 'Markdown' ? 'rgba(54, 162, 235, 0.8)' :
                          format.startsWith('Tool call') ? 'rgba(255, 99, 132, 0.8)' :
                          'rgba(75, 192, 192, 0.8)',
@@ -20062,7 +20062,7 @@ MODELS="
 
 
 @@@ #### the yml contains multiple datapoints for each model/edit_format. average them for display on the graph. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
     var yamlData = {{ site.data.code-in-json | jsonify }};
     
     var models = [...new Set(yamlData.map(item => item.model))];
@@ -20092,7 +20092,7 @@ MODELS="
 
 
 @@@ #### sort the x-axis by model name @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
     var models = [...new Set(yamlData.map(item => item.model))];
 @@@@@@@@@@@@@@@@@@@@
     var models = [...new Set(yamlData.map(item => item.model))].sort();
@@ -20137,7 +20137,7 @@ def plot_over_time(yaml_file):
 
 
 @@@ #### on narrow screen like phone, the graph looks bad because there's not enough vertical room for the title, legend, x-axis. can we make the graph responsive, so that if its on a very narrow screen the aspect ratio changes to more of a square? @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
     var config = {
         type: 'bar',
         data: data,
@@ -20230,7 +20230,7 @@ def plot_over_time(yaml_file):
         }
     };
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
 <canvas id="passRateChart" width="800" height="400" style="margin-bottom: 20px"></canvas>
 @@@@@@@@@@@@@@@@@@@@
 <div style="position: relative; height: 0; padding-bottom: 50%; margin-bottom: 20px;">
@@ -20240,14 +20240,14 @@ def plot_over_time(yaml_file):
 
 
 @@@ #### no. i just want to increase the height if we are on a small screen. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
 <canvas id="passRateChart" width="800" height="400" style="margin-bottom: 20px"></canvas>
 @@@@@@@@@@@@@@@@@@@@
 <div id="chartContainer" style="position: relative; height: 0; padding-bottom: 50%; margin-bottom: 20px;">
     <canvas id="passRateChart" style="position: absolute; width: 100%; height: 100%;"></canvas>
 </div>
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
     var config = {
         type: 'bar',
         data: data,
@@ -20338,7 +20338,7 @@ def plot_over_time(yaml_file):
 
 
 @@@ #### add a bar graph in the Syntax errors section. for each model/edit_format, plot the total number of syntax_errors+indentation_errors across all runs of that model/edit_format @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
 ## Syntax errors
 
 @@@@@@@@@@@@@@@@@@@@
@@ -20442,7 +20442,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### ReferenceError: Can't find variable: createStripedCanvas @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
     new Chart(ctx, config);
 });
 </script>
@@ -20476,7 +20476,7 @@ function createStripedCanvas(isStrict) {
 
 
 @@@ #### add the number to the top of each bar in both graphs @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
             plugins: {
                 title: {
                     display: true,
@@ -20527,7 +20527,7 @@ function createStripedCanvas(isStrict) {
                 }
             }
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
             plugins: {
                 title: {
                     display: true,
@@ -20581,7 +20581,7 @@ function createStripedCanvas(isStrict) {
 
 
 @@@ #### move the js for figure 1 into the js file @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_posts/2024-08-14-code-in-json.md @@@@@@@@@@@@@@@@@@@@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     var ctx = document.getElementById('passRateChart').getContext('2d');
@@ -20719,7 +20719,7 @@ function createStripedCanvas(isStrict) {
 @@@@@@@@@@@@@@@@@@@@
 <script src="/assets/code-in-json-benchmark.js"></script>
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@@
 document.addEventListener('DOMContentLoaded', function () {
     var ctx = document.getElementById('passRateChart').getContext('2d');
@@ -20835,7 +20835,7 @@ function createStripedCanvas(isStrict) {
 
 
 @@@ #### show the value of each bar at the top of each bar @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
     var config = {
         type: 'bar',
         data: data,
@@ -20941,7 +20941,7 @@ function createStripedCanvas(isStrict) {
         }]
     };
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/code-in-json-syntax.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/code-in-json-syntax.js @@@@@@@@@@@@@@@@@@@@
     var config = {
         type: 'bar',
         data: data,
@@ -21048,7 +21048,7 @@ function createStripedCanvas(isStrict) {
 
 
 @@@ #### do that @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
 <canvas id="passRateChart" width="800" height="400" style="margin-bottom: 20px"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -21368,7 +21368,7 @@ function createStripedCanvas(isStrict) {
 
 
 @@@ #### make the same change to the syntax chart @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/code-in-json-syntax.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/code-in-json-syntax.js @@@@@@@@@@@@@@@@@@@@
 <canvas id="syntaxErrorsChart" width="800" height="400" style="margin-bottom: 20px"></canvas>
   
 <script>
@@ -21394,7 +21394,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var ctx = document.getElementById('syntaxErrorsChart').getContext('2d');
     var chartContainer = document.querySelector('.chart-container');
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/code-in-json-syntax.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/code-in-json-syntax.js @@@@@@@@@@@@@@@@@@@@
     var config = {
         type: 'bar',
         data: data,
@@ -21417,7 +21417,7 @@ document.addEventListener('DOMContentLoaded', function () {
             aspectRatio: getAspectRatio(),
             scales: {
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/code-in-json-syntax.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/code-in-json-syntax.js @@@@@@@@@@@@@@@@@@@@
     new Chart(ctx, config);
 });
 </script>
@@ -21439,7 +21439,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 @@@ #### on the top of the bars, show the percentage numbers with no decimals @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
                         if (data !== null) {
                             ctx.fillStyle = '#000000';
                             ctx.textAlign = 'center';
@@ -21541,7 +21541,7 @@ from pathlib import Path
 
 
 @@@ #### for the number atop the bars, show 1 decimal point if we are on a wide screen (not a phone) @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
         afterDraw: function(chart) {
             var ctx = chart.ctx;
             chart.data.datasets.forEach(function(dataset, i) {
@@ -21579,7 +21579,7 @@ from pathlib import Path
 
 
 @@@ #### just omit the numbers if the screen isn't wide @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: docs/site/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/website/_includes/code-in-json-benchmark.js @@@@@@@@@@@@@@@@@@@@
         afterDraw: function(chart) {
             var ctx = chart.ctx;
             var isWideScreen = window.innerWidth > 768; // Assuming 768px as the breakpoint for wide screens
@@ -22893,7 +22893,7 @@ from pathlib import Path
 
 
 @@@ #### add a --map-refresh switch, pass into `RepoMap`.refresh @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--map-tokens",
         type=int,
@@ -23157,7 +23157,7 @@ llmcode/repomap.py
 
 
 @@@ #### add a --cache-prompts bool, default false. if true, force map_refresh="files". pass cache_prompts into Coder.cache_prompts @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--map-refresh",
         choices=["auto", "always", "files", "manual"],
@@ -23912,7 +23912,7 @@ HISTORY.md
 <<<<<<< SEARCH
 ### main branch
 =======
-### Branch principale
+### Branche principale
 >>>>>>> REPLACE
 ```
 
@@ -24024,9 +24024,9 @@ llmcode/main.py
 >  
 > ^C again to exit  
 
-To enhance the `show_messages` function to handle the case where content is a list of dicts, we need to modify the `format_messages` function in the `llmcode/core/utils.py` file. Here's the proposed change:
+To enhance the `show_messages` function to handle the case where content is a list of dicts, we need to modify the `format_messages` function in the `llmcode/utils.py` file. Here's the proposed change:
 
-llmcode/core/utils.py
+llmcode/utils.py
 ```python
 <<<<<<< SEARCH
 def format_messages(messages, title=None):
@@ -24066,7 +24066,7 @@ Defaults:
   --map-refresh:     auto
   --env-file:        /Users/gauthier/Projects/llmcode/.env
   --input-history-file:/Users/gauthier/Projects/llmcode/.llmcode.input.history
-  --chat-history-file:/Users/gauthier/Projects/llmcode/.llmcode.khulnasoft.com.history.md
+  --chat-history-file:/Users/gauthier/Projects/llmcode/.llm.khulnasoft.com.history.md
   --user-input-color:#00cc00
   --tool-error-color:#FF2222
   --assistant-output-color:#0088ff
@@ -24089,7 +24089,7 @@ Option settings:
   - auto_lint: True
   - auto_test: False
   - cache_prompts: True
-  - chat_history_file: /Users/gauthier/Projects/llmcode/.llmcode.khulnasoft.com.history.md
+  - chat_history_file: /Users/gauthier/Projects/llmcode/.llm.khulnasoft.com.history.md
   - check_update: True
   - code_theme: default
   - commit: False
@@ -25236,7 +25236,7 @@ pip install pandas
 
 
 @@@ #### in cleanup, ignore recursion errors too @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/utils.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/utils.py @@@@@@@@@@@@@@@@@@@@
     def cleanup(self):
         try:
             self.temp_dir.cleanup()
@@ -25252,7 +25252,7 @@ pip install pandas
 
 
 @@@ #### only call `TemporaryDirectory` with `ignore_cleanup_errors` if python version >= 3.10 @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/utils.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/utils.py @@@@@@@@@@@@@@@@@@@@
 import itertools
 import os
 import subprocess
@@ -25539,7 +25539,7 @@ pytest tests/basic/test_main.py::TestMain::test_return_coder
 
 
 @@@ #### add a --map-multiplier-no-files switch that defaults to 2 @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/args.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/args.py @@@@@@@@@@@@@@@@@@@@
     group.add_argument(
         "--cache-prompts",
         action=argparse.BooleanOptionalAction,
@@ -25912,7 +25912,7 @@ class Coder:
 
 
 @@@ #### add a `subject` param to prompt_ask. print it with tool_output bold=true before printing the question @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def prompt_ask(self, question, default=None):
         self.num_user_asks += 1
 
@@ -25943,7 +25943,7 @@ class Coder:
 
 
 @@@ #### add subject to `confirm_ask` too @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def confirm_ask(self, question, default="y"):
         self.num_user_asks += 1
 
@@ -25993,7 +25993,7 @@ class Coder:
 
 
 @@@ #### move the `prompt_toolkit` imports to the top @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
 import base64
 import os
 from collections import defaultdict
@@ -26024,7 +26024,7 @@ from prompt_toolkit.shortcuts import CompleteStyle, PromptSession
 from prompt_toolkit.styles import Style
 from prompt_toolkit.validation import Validator
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
         from prompt_toolkit.completion import WordCompleter
 
         completer = WordCompleter(["yes", "no"])
@@ -26041,7 +26041,7 @@ from prompt_toolkit.validation import Validator
 
 
 @@@ #### prompt_ask should set the style like `confirm_ask` @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def prompt_ask(self, question, default=None, subject=None):
         self.num_user_asks += 1
 
@@ -26177,7 +26177,7 @@ from prompt_toolkit.validation import Validator
 
 
 @@@ #### when autocompleting filenames, don't wrap them in backticks ` @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
         candidates = [(word, f"`{word}`") for word in candidates]
 
         last_word = words[-1]
@@ -26213,7 +26213,7 @@ from prompt_toolkit.validation import Validator
 
 
 @@@ #### when autocompleting filenames, don't wrap them in backticks `. keep the backticks for other autocompletes, just not filenames @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
                 if rel_fnames:
                     for rel_fname in rel_fnames:
                         yield Completion(
@@ -26235,7 +26235,7 @@ from prompt_toolkit.validation import Validator
                         style='class:completion.filename' if word in self.addable_rel_fnames else 'class:completion.other'
                     )
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
         if self.user_input_color:
             style = Style.from_dict(
                 {
@@ -26266,7 +26266,7 @@ from prompt_toolkit.validation import Validator
 
 
 @@@ #### when autocompleting filenames, don't wrap them in backticks `. keep the backticks for other autocompletes, just not filenames @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
         candidates = [(word, f"`{word}`") for word in candidates]
 
         last_word = words[-1]
@@ -26302,7 +26302,7 @@ from prompt_toolkit.validation import Validator
 
 
 @@@ #### in `confirm_ask`, if the subject is multiline pad all the lines to the length of the longest line. with spaces on the end. @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def confirm_ask(self, question, default="y", subject=None):
         self.num_user_asks += 1
 
@@ -26477,7 +26477,7 @@ python -m unittest tests/basic/test_main.py
 
 
 @@@ #### the main prompt sometimes shows 1 file right before the >, and shows multiple files on the line before. always show on line before, even 1 file @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
         rel_fnames = list(rel_fnames)
         show = " ".join(rel_fnames)
         if len(show) > 10:
@@ -26491,7 +26491,7 @@ python -m unittest tests/basic/test_main.py
 
 
 @@@ #### show the coder.edit_format right before the > @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def get_input(self, root, rel_fnames, addable_rel_fnames, commands, abs_read_only_fnames=None):
         if self.pretty:
             style = dict(style=self.user_input_color) if self.user_input_color else dict()
@@ -26704,7 +26704,7 @@ python -m unittest discover tests
 
 
 @@@ #### confirm_ask should take a explicit_yes_required param, default False. if True, then self.yes==True means the answer is no @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def confirm_ask(self, question, default="y", subject=None):
         self.num_user_asks += 1
 
@@ -27102,7 +27102,7 @@ python -m unittest -v tests.basic.test_main.TestMain.test_apply_shell_commands
 
 
 @@@ #### do that @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
 class AutoCompleter(Completer):
     def __init__(
         self, root, rel_fnames, addable_rel_fnames, commands, encoding, abs_read_only_fnames=None
@@ -27118,7 +27118,7 @@ class AutoCompleter(Completer):
         self.addable_rel_fnames = addable_rel_fnames
         self.rel_fnames = rel_fnames
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
                     yield Completion(
                         rel_fname, start_position=-len(last_word), display=rel_fname
                     )
@@ -27137,7 +27137,7 @@ class AutoCompleter(Completer):
                         style=self.style
                     )
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
         if self.user_input_color:
             style = Style.from_dict(
                 {
@@ -27179,7 +27179,7 @@ class AutoCompleter(Completer):
             style=style
         )
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
                     yield Completion(
                         rel_fname, start_position=-len(last_word), display=rel_fname
                     )
@@ -27198,7 +27198,7 @@ class AutoCompleter(Completer):
                         style=self.style
                     )
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
     def get_completions(self, document, complete_event):
         text = document.text_before_cursor
         words = text.split()
@@ -27272,7 +27272,7 @@ class AutoCompleter(Completer):
 
 
 @@@ #### Exception can only concatenate str (not "Style") to str @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
 class AutoCompleter(Completer):
     def __init__(
         self,
@@ -27299,7 +27299,7 @@ class AutoCompleter(Completer):
     ):
         self.style = style if isinstance(style, str) else None
 @@@ REPLACE @@@@@@@@@@@@@@@@@@@@
-@@@ SEARCH: llmcode/core/io.py @@@@@@@@@@@@@@@@@@@@
+@@@ SEARCH: llmcode/io.py @@@@@@@@@@@@@@@@@@@@
                         yield Completion(
                             rel_fname,
                             start_position=-len(last_word),

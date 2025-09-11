@@ -1,0 +1,760 @@
+name: load_testing_python
+description: Load testing template for Python services using Locust
+category: load
+language: python
+framework: pytest
+template_content: |
+  import pytest
+  import time
+  import statistics
+  import json
+  from locust import HttpUser, task, between
+from locust.env import Environment
+from locust.stats import stats_printer, stats_history
+from locust.log import setup_logging
+from {{ module_name }} import {{ service_class_or_function }}
+  
+  
+  class {{ service_user_class }}(HttpUser):
+      """Locust user for load testing {{ service_name }}"""
+      
+      wait_time = between({{ min_wait }}, {{ max_wait }})
+      
+      def on_start(self):
+          """Called when a user starts"""
+          self.headers = {{ default_headers }}
+          self.auth_token = None
+          
+          {% if requires_auth %}
+          # Perform authentication
+          self._authenticate()
+          {% endif %}
+      
+      {% if requires_auth %}
+      def _authenticate(self):
+          """Authenticate user and get token"""
+          response = self.client.post(
+              '{{ auth_endpoint }}',
+              json={{ auth_payload }},
+              headers={{ auth_headers }}
+          )
+          
+          if response.status_code == 200:
+              self.auth_token = response.json().get('{{ token_field }}')
+              self.headers['Authorization'] = f'Bearer {self.auth_token}'
+          else:
+              pytest.fail(f"Authentication failed: {response.text}")
+      {% endif %}
+      
+      {% for task in load_tasks %}
+      @task({{ task.weight }})
+      def {{ task.name }}(self):
+          """{{ task.description }}"""
+          {% if task.requires_auth %}
+          if not self.auth_token:
+              self._authenticate()
+          {% endif %}
+          
+          start_time = time.time()
+          
+          try:
+              {% if task.method == 'GET' %}
+              response = self.client.get(
+                  '{{ task.endpoint }}',
+                  headers=self.headers,
+                  params={{ task.params }}
+              )
+              {% elif task.method == 'POST' %}
+              response = self.client.post(
+                  '{{ task.endpoint }}',
+                  json={{ task.payload }},
+                  headers=self.headers
+              )
+              {% elif task.method == 'PUT' %}
+              response = self.client.put(
+                  '{{ task.endpoint }}',
+                  json={{ task.payload }},
+                  headers=self.headers
+              )
+              {% elif task.method == 'DELETE' %}
+              response = self.client.delete(
+                  '{{ task.endpoint }}',
+                  headers=self.headers
+              )
+              {% endif %}
+              
+              # Validate response
+              {{ task.validation }}
+              
+              # Record custom metrics
+              self._record_metrics('{{ task.name }}', start_time, response)
+              
+          except Exception as e:
+              # Handle exceptions and record failures
+              self._record_failure('{{ task.name }}', str(e))
+              raise
+      {% endfor %}
+      
+      def _record_metrics(self, task_name: str, start_time: float, response):
+          """Record custom metrics for the task"""
+          response_time = (time.time() - start_time) * 1000  # Convert to milliseconds
+          
+          # Record response time
+          self.environment.events.request.fire(
+              request_type="Custom",
+              name=f"{task_name}_response_time",
+              response_time=response_time,
+              response_length=len(response.content),
+              context=None,
+              exception=None
+          )
+          
+          # Record success rate
+          if response.status_code == 200:
+              self.environment.events.request.fire(
+                  request_type="Custom",
+                  name=f"{task_name}_success",
+                  response_time=0,
+                  response_length=0,
+                  context=None,
+                  exception=None
+              )
+          else:
+              self.environment.events.request.fire(
+                  request_type="Custom",
+                  name=f"{task_name}_failure",
+                  response_time=0,
+                  response_length=0,
+                  context=None,
+                  exception=Exception(f"HTTP {response.status_code}")
+              )
+      
+      def _record_failure(self, task_name: str, error_message: str):
+          """Record failure metrics"""
+          self.environment.events.request.fire(
+              request_type="Custom",
+              name=f"{task_name}_error",
+              response_time=0,
+              response_length=0,
+              context=None,
+              exception=Exception(error_message)
+          )
+  
+  
+  class TestLoadTesting:
+      """Load testing suite for {{ service_name }}"""
+      
+      @pytest.fixture
+      def load_test_config(self):
+          """Load testing configuration"""
+          return {
+              'host': '{{ service_host }}',
+              'users': {{ num_users }},
+              'spawn_rate': {{ spawn_rate }},
+              'run_time': {{ run_time }},
+              'expected_rps': {{ expected_rps }},
+              'max_response_time': {{ max_response_time }},
+              'min_success_rate': {{ min_success_rate }},
+              'max_error_rate': {{ max_error_rate }},
+              'percentile_95_threshold': {{ percentile_95_threshold }}
+          }
+      
+      @pytest.fixture
+      def locust_environment(self, load_test_config):
+          """Create Locust environment for testing"""
+          env = Environment(user_classes=[{{ service_user_class }}])
+          env.host = load_test_config['host']
+          return env
+      
+      def test_load_testing_basic(self, locust_environment, load_test_config):
+          """Run basic load testing"""
+          # Create runner
+          from locust.util.gevent_utils import gevent_spawn
+          from locust.runners import LocalRunner
+          
+          runner = LocalRunner(locust_environment)
+          
+          # Start load test
+          runner.start(user_count=load_test_config['users'], 
+                      spawn_rate=load_test_config['spawn_rate'])
+          
+          # Run for specified time
+          start_time = time.time()
+          while time.time() - start_time < load_test_config['run_time']:
+              time.sleep(1)
+          
+          # Stop runner
+          runner.quit()
+          
+          # Get statistics
+          stats = runner.stats.total
+          
+          # Validate results
+          self._validate_load_test_results(stats, load_test_config)
+      
+      def test_load_testing_ramp_up(self, locust_environment, load_test_config):
+          """Test load testing with ramp-up"""
+          from locust.runners import LocalRunner
+          
+          runner = LocalRunner(locust_environment)
+          
+          # Ramp up users gradually
+          ramp_up_steps = {{ ramp_up_steps }}
+          users_per_step = load_test_config['users'] // ramp_up_steps
+          step_duration = load_test_config['run_time'] // ramp_up_steps
+          
+          for step in range(ramp_up_steps):
+              target_users = (step + 1) * users_per_step
+              runner.start(user_count=target_users, spawn_rate=users_per_step)
+              
+              time.sleep(step_duration)
+              
+              # Check intermediate stats
+              stats = runner.stats.total
+              self._validate_intermediate_stats(stats, load_test_config, step + 1)
+          
+          runner.quit()
+      
+      def test_load_testing_spike(self, locust_environment, load_test_config):
+          """Test load testing with spike pattern"""
+          from locust.runners import LocalRunner
+          
+          runner = LocalRunner(locust_environment)
+          
+          # Normal load
+          normal_users = load_test_config['users'] // 2
+          runner.start(user_count=normal_users, spawn_rate=normal_users)
+          time.sleep(load_test_config['run_time'] // 3)
+          
+          # Spike load
+          spike_users = load_test_config['users']
+          runner.start(user_count=spike_users, spawn_rate=spike_users)
+          time.sleep(load_test_config['run_time'] // 3)
+          
+          # Return to normal
+          runner.start(user_count=normal_users, spawn_rate=normal_users)
+          time.sleep(load_test_config['run_time'] // 3)
+          
+          runner.quit()
+          
+          # Validate spike handling
+          stats = runner.stats.total
+          self._validate_spike_results(stats, load_test_config)
+      
+      def test_load_testing_endurance(self, locust_environment, load_test_config):
+          """Test load testing endurance over extended period"""
+          from locust.runners import LocalRunner
+          
+          runner = LocalRunner(locust_environment)
+          
+          # Extended load test
+          extended_time = load_test_config['run_time'] * {{ endurance_multiplier }}
+          runner.start(user_count=load_test_config['users'], 
+                      spawn_rate=load_test_config['spawn_rate'])
+          
+          start_time = time.time()
+          while time.time() - start_time < extended_time:
+              time.sleep(60)  # Check every minute
+              
+              # Monitor for degradation
+              stats = runner.stats.total
+              self._check_for_degradation(stats, load_test_config)
+          
+          runner.quit()
+          
+          # Validate endurance results
+          stats = runner.stats.total
+          self._validate_endurance_results(stats, load_test_config, extended_time)
+      
+      def test_load_testing_distributed(self, load_test_config):
+          """Test distributed load testing"""
+          # This would typically require multiple machines
+          # For now, we'll simulate distributed testing
+          pytest.skip("Distributed load testing requires multiple worker nodes")
+          
+          # Implementation would involve:
+          # 1. Setting up master node
+          # 2. Setting up worker nodes
+          # 3. Coordinating test execution
+          # 4. Aggregating results
+      
+      def test_load_testing_custom_metrics(self, locust_environment, load_test_config):
+          """Test custom metrics collection"""
+          from locust.runners import LocalRunner
+          
+          runner = LocalRunner(locust_environment)
+          runner.start(user_count=load_test_config['users'], 
+                      spawn_rate=load_test_config['spawn_rate'])
+          
+          # Collect custom metrics
+          custom_metrics = {
+              'response_times': [],
+              'success_rates': [],
+              'error_rates': [],
+              'throughput': []
+          }
+          
+          start_time = time.time()
+          while time.time() - start_time < load_test_config['run_time']:
+              time.sleep(5)
+              
+              # Collect metrics
+              stats = runner.stats.total
+              custom_metrics['response_times'].append(stats.avg_response_time)
+              custom_metrics['success_rates'].append(stats.success_rate)
+              custom_metrics['error_rates'].append(stats.fail_ratio)
+              custom_metrics['throughput'].append(stats.total_rps)
+          
+          runner.quit()
+          
+          # Validate custom metrics
+          self._validate_custom_metrics(custom_metrics, load_test_config)
+      
+      def test_load_testing_resource_monitoring(self, locust_environment, load_test_config):
+          """Test resource monitoring during load testing"""
+          import psutil
+          import threading
+          
+          from locust.runners import LocalRunner
+          
+          runner = LocalRunner(locust_environment)
+          
+          # Resource monitoring data
+          resource_data = {
+              'cpu_usage': [],
+              'memory_usage': [],
+              'disk_io': [],
+              'network_io': []
+          }
+          
+          def monitor_resources():
+              """Monitor system resources"""
+              while monitoring_active:
+                  resource_data['cpu_usage'].append(psutil.cpu_percent())
+                  resource_data['memory_usage'].append(psutil.virtual_memory().percent)
+                  resource_data['disk_io'].append(psutil.disk_io_counters())
+                  resource_data['network_io'].append(psutil.net_io_counters())
+                  time.sleep(1)
+          
+          # Start monitoring
+          monitoring_active = True
+          monitor_thread = threading.Thread(target=monitor_resources)
+          monitor_thread.start()
+          
+          # Run load test
+          runner.start(user_count=load_test_config['users'], 
+                      spawn_rate=load_test_config['spawn_rate'])
+          time.sleep(load_test_config['run_time'])
+          runner.quit()
+          
+          # Stop monitoring
+          monitoring_active = False
+          monitor_thread.join()
+          
+          # Validate resource usage
+          self._validate_resource_usage(resource_data, load_test_config)
+      
+      def test_load_testing_report_generation(self, locust_environment, load_test_config):
+          """Test load testing report generation"""
+          from locust.runners import LocalRunner
+          
+          runner = LocalRunner(locust_environment)
+          runner.start(user_count=load_test_config['users'], 
+                      spawn_rate=load_test_config['spawn_rate'])
+          time.sleep(load_test_config['run_time'])
+          runner.quit()
+          
+          # Generate reports
+          self._generate_html_report(runner.stats, load_test_config)
+          self._generate_json_report(runner.stats, load_test_config)
+          self._generate_csv_report(runner.stats, load_test_config)
+          
+          # Validate report files
+          assert self._report_file_exists('load_test_report.html')
+          assert self._report_file_exists('load_test_report.json')
+          assert self._report_file_exists('load_test_report.csv')
+      
+      def _validate_load_test_results(self, stats, config):
+          """Validate load test results"""
+          # Check response time
+          assert stats.avg_response_time <= config['max_response_time'], \
+              f"Average response time {stats.avg_response_time}ms exceeds threshold {config['max_response_time']}ms"
+          
+          # Check success rate
+          success_rate = (stats.num_requests - stats.num_failures) / stats.num_requests * 100
+          assert success_rate >= config['min_success_rate'], \
+              f"Success rate {success_rate}% is below threshold {config['min_success_rate']}%"
+          
+          # Check error rate
+          error_rate = stats.fail_ratio * 100
+          assert error_rate <= config['max_error_rate'], \
+              f"Error rate {error_rate}% exceeds threshold {config['max_error_rate']}%"
+          
+          # Check throughput
+          assert stats.total_rps >= config['expected_rps'], \
+              f"Throughput {stats.total_rps} RPS is below expected {config['expected_rps']} RPS"
+          
+          # Check percentile
+          percentile_95 = stats.get_response_time_percentile(0.95)
+          assert percentile_95 <= config['percentile_95_threshold'], \
+              f"95th percentile {percentile_95}ms exceeds threshold {config['percentile_95_threshold']}ms"
+      
+      def _validate_intermediate_stats(self, stats, config, step):
+          """Validate intermediate statistics during ramp-up"""
+          # Less strict validation for intermediate steps
+          max_response_time = config['max_response_time'] * (1 + (step * 0.1))  # Allow 10% increase per step
+          min_success_rate = config['min_success_rate'] * 0.9  # Allow 10% decrease
+          
+          assert stats.avg_response_time <= max_response_time, \
+              f"Step {step}: Response time too high"
+          
+          success_rate = (stats.num_requests - stats.num_failures) / stats.num_requests * 100
+          assert success_rate >= min_success_rate, \
+              f"Step {step}: Success rate too low"
+      
+      def _validate_spike_results(self, stats, config):
+          """Validate spike test results"""
+          # Spike tests should handle increased load gracefully
+          # Allow slightly higher response times but maintain success rate
+          spike_max_response_time = config['max_response_time'] * 1.5
+          spike_min_success_rate = config['min_success_rate'] * 0.95
+          
+          assert stats.avg_response_time <= spike_max_response_time, \
+              f"Spike test response time too high"
+          
+          success_rate = (stats.num_requests - stats.num_failures) / stats.num_requests * 100
+          assert success_rate >= spike_min_success_rate, \
+              f"Spike test success rate too low"
+      
+      def _validate_endurance_results(self, stats, config, duration):
+          """Validate endurance test results"""
+          # Endurance tests should maintain performance over time
+          # Check for performance degradation
+          endurance_max_response_time = config['max_response_time'] * 1.2
+          endurance_min_success_rate = config['min_success_rate'] * 0.98
+          
+          assert stats.avg_response_time <= endurance_max_response_time, \
+              f"Endurance test response time degraded"
+          
+          success_rate = (stats.num_requests - stats.num_failures) / stats.num_requests * 100
+          assert success_rate >= endurance_min_success_rate, \
+              f"Endurance test success rate degraded"
+          
+          # Check throughput consistency
+          expected_total_requests = config['expected_rps'] * duration
+          actual_requests = stats.num_requests
+          throughput_efficiency = actual_requests / expected_total_requests
+          
+          assert throughput_efficiency >= 0.9, \
+              f"Endurance test throughput efficiency too low: {throughput_efficiency}"
+      
+      def _validate_custom_metrics(self, metrics, config):
+          """Validate custom metrics"""
+          # Check response time consistency
+          avg_response_time = statistics.mean(metrics['response_times'])
+          assert avg_response_time <= config['max_response_time'], \
+              f"Custom metrics response time too high"
+          
+          # Check success rate consistency
+          avg_success_rate = statistics.mean(metrics['success_rates'])
+          assert avg_success_rate >= config['min_success_rate'], \
+              f"Custom metrics success rate too low"
+          
+          # Check error rate consistency
+          avg_error_rate = statistics.mean(metrics['error_rates'])
+          assert avg_error_rate <= config['max_error_rate'], \
+              f"Custom metrics error rate too high"
+          
+          # Check throughput consistency
+          avg_throughput = statistics.mean(metrics['throughput'])
+          assert avg_throughput >= config['expected_rps'] * 0.9, \
+              f"Custom metrics throughput too low"
+      
+      def _validate_resource_usage(self, resource_data, config):
+          """Validate resource usage during load testing"""
+          # Check CPU usage
+          avg_cpu = statistics.mean(resource_data['cpu_usage'])
+          assert avg_cpu <= {{ max_cpu_usage }}, \
+              f"Average CPU usage {avg_cpu}% exceeds threshold"
+          
+          # Check memory usage
+          avg_memory = statistics.mean(resource_data['memory_usage'])
+          assert avg_memory <= {{ max_memory_usage }}, \
+              f"Average memory usage {avg_memory}% exceeds threshold"
+          
+          # Check for resource leaks (memory should not grow continuously)
+          memory_trend = resource_data['memory_usage'][-10:]  # Last 10 measurements
+          memory_growth_rate = (memory_trend[-1] - memory_trend[0]) / len(memory_trend)
+          assert memory_growth_rate <= {{ max_memory_growth_rate }}, \
+              f"Memory growth rate {memory_growth_rate}% per measurement too high"
+      
+      def _check_for_degradation(self, stats, config):
+          """Check for performance degradation"""
+          # This would typically compare current stats with baseline
+          # For now, just check basic thresholds
+          if stats.avg_response_time > config['max_response_time'] * 1.5:
+              pytest.fail(f"Severe performance degradation detected: response time {stats.avg_response_time}ms")
+          
+          success_rate = (stats.num_requests - stats.num_failures) / stats.num_requests * 100
+          if success_rate < config['min_success_rate'] * 0.8:
+              pytest.fail(f"Severe success rate degradation detected: {success_rate}%")
+      
+      def _generate_html_report(self, stats, config):
+          """Generate HTML load test report"""
+          report_data = {
+              'test_name': '{{ service_name }} Load Test',
+              'timestamp': time.strftime('%Y-%m-%d %H:%M:%S'),
+              'config': config,
+              'results': {
+                  'total_requests': stats.num_requests,
+                  'total_failures': stats.num_failures,
+                  'avg_response_time': stats.avg_response_time,
+                  'min_response_time': stats.min_response_time,
+                  'max_response_time': stats.max_response_time,
+                  'success_rate': (stats.num_requests - stats.num_failures) / stats.num_requests * 100,
+                  'total_rps': stats.total_rps,
+                  'percentile_95': stats.get_response_time_percentile(0.95)
+              }
+          }
+          
+          html_content = f"""
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>{report_data['test_name']}</title>
+              <style>
+                  body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                  .header {{ background-color: #f0f0f0; padding: 20px; border-radius: 5px; }}
+                  .metric {{ margin: 10px 0; }}
+                  .success {{ color: green; }}
+                  .failure {{ color: red; }}
+              </style>
+          </head>
+          <body>
+              <div class="header">
+                  <h1>{report_data['test_name']}</h1>
+                  <p>Generated: {report_data['timestamp']}</p>
+              </div>
+              
+              <h2>Configuration</h2>
+              <div class="metric">Users: {config['users']}</div>
+              <div class="metric">Spawn Rate: {config['spawn_rate']}</div>
+              <div class="metric">Run Time: {config['run_time']}s</div>
+              
+              <h2>Results</h2>
+              <div class="metric">Total Requests: {report_data['results']['total_requests']}</div>
+              <div class="metric">Total Failures: {report_data['results']['total_failures']}</div>
+              <div class="metric">Average Response Time: {report_data['results']['avg_response_time']:.2f}ms</div>
+              <div class="metric">Success Rate: {report_data['results']['success_rate']:.2f}%</div>
+              <div class="metric">Throughput: {report_data['results']['total_rps']:.2f} RPS</div>
+              <div class="metric">95th Percentile: {report_data['results']['percentile_95']:.2f}ms</div>
+          </body>
+          </html>
+          """
+          
+          with open('load_test_report.html', 'w') as f:
+              f.write(html_content)
+      
+      def _generate_json_report(self, stats, config):
+          """Generate JSON load test report"""
+          report_data = {
+              'test_name': '{{ service_name }} Load Test',
+              'timestamp': time.strftime('%Y-%m-%d %H:%M:%S'),
+              'config': config,
+              'results': {
+                  'total_requests': stats.num_requests,
+                  'total_failures': stats.num_failures,
+                  'avg_response_time': stats.avg_response_time,
+                  'min_response_time': stats.min_response_time,
+                  'max_response_time': stats.max_response_time,
+                  'success_rate': (stats.num_requests - stats.num_failures) / stats.num_requests * 100,
+                  'total_rps': stats.total_rps,
+                  'percentile_95': stats.get_response_time_percentile(0.95)
+              }
+          }
+          
+          with open('load_test_report.json', 'w') as f:
+              json.dump(report_data, f, indent=2)
+      
+      def _generate_csv_report(self, stats, config):
+          """Generate CSV load test report"""
+          import csv
+          
+          with open('load_test_report.csv', 'w', newline='') as f:
+              writer = csv.writer(f)
+              writer.writerow(['Metric', 'Value'])
+              writer.writerow(['Test Name', '{{ service_name }} Load Test'])
+              writer.writerow(['Timestamp', time.strftime('%Y-%m-%d %H:%M:%S')])
+              writer.writerow(['Users', config['users']])
+              writer.writerow(['Spawn Rate', config['spawn_rate']])
+              writer.writerow(['Run Time', config['run_time']])
+              writer.writerow(['Total Requests', stats.num_requests])
+              writer.writerow(['Total Failures', stats.num_failures])
+              writer.writerow(['Average Response Time', f"{stats.avg_response_time:.2f}ms"])
+              writer.writerow(['Success Rate', f"{(stats.num_requests - stats.num_failures) / stats.num_requests * 100:.2f}%"])
+              writer.writerow(['Throughput', f"{stats.total_rps:.2f} RPS"])
+              writer.writerow(['95th Percentile', f"{stats.get_response_time_percentile(0.95):.2f}ms"])
+      
+      def _report_file_exists(self, filename):
+          """Check if report file exists"""
+          import os
+          return os.path.exists(filename)
+variables:
+  - name: module_name
+    type: string
+    description: Module containing the service to test
+    default_value: my_service
+  - name: service_class_or_function
+    type: string
+    description: Name of the service class or function
+    default_value: MyService
+  - name: service_name
+    type: string
+    description: Name of the service being tested
+    default_value: My API Service
+  - name: service_user_class
+    type: string
+    description: Name of the Locust user class
+    default_value: MyServiceUser
+  - name: service_host
+    type: string
+    description: Host URL for the service
+    default_value: http://localhost:8000
+  - name: min_wait
+    type: integer
+    description: Minimum wait time between requests (milliseconds)
+    default_value: 1000
+  - name: max_wait
+    type: integer
+    description: Maximum wait time between requests (milliseconds)
+    default_value: 3000
+  - name: default_headers
+    type: dict
+    description: Default headers for requests
+    default_value:
+      Content-Type: application/json
+      User-Agent: LoadTestClient/1.0
+  - name: requires_auth
+    type: boolean
+    description: Whether the service requires authentication
+    default_value: true
+  - name: auth_endpoint
+    type: string
+    description: Authentication endpoint
+    default_value: /api/auth/login
+  - name: auth_payload
+    type: dict
+    description: Authentication payload
+    default_value:
+      username: testuser
+      password: testpass
+  - name: auth_headers
+    type: dict
+    description: Headers for authentication request
+    default_value:
+      Content-Type: application/json
+  - name: token_field
+    type: string
+    description: Field name for authentication token
+    default_value: access_token
+  - name: load_tasks
+    type: list
+    description: List of load testing tasks
+    default_value:
+      - name: get_users
+        description: Get list of users
+        method: GET
+        endpoint: /api/users
+        weight: 3
+        params:
+          limit: 10
+        requires_auth: true
+        validation: |
+          assert response.status_code == 200
+          data = response.json()
+          assert isinstance(data, list)
+      - name: create_user
+        description: Create a new user
+        method: POST
+        endpoint: /api/users
+        weight: 1
+        payload:
+          username: testuser_{random_int}
+          email: test_{random_int}@example.com
+          password: testpass123
+        requires_auth: true
+        validation: |
+          assert response.status_code == 201
+          data = response.json()
+          assert 'id' in data
+          assert data['username'] == payload['username']
+  - name: num_users
+    type: integer
+    description: Number of concurrent users
+    default_value: 10
+  - name: spawn_rate
+    type: integer
+    description: Rate at which users are spawned
+    default_value: 2
+  - name: run_time
+    type: integer
+    description: Duration of the load test in seconds
+    default_value: 60
+  - name: expected_rps
+    type: float
+    description: Expected requests per second
+    default_value: 5.0
+  - name: max_response_time
+    type: integer
+    description: Maximum acceptable response time in milliseconds
+    default_value: 1000
+  - name: min_success_rate
+    type: float
+    description: Minimum acceptable success rate percentage
+    default_value: 95.0
+  - name: max_error_rate
+    type: float
+    description: Maximum acceptable error rate percentage
+    default_value: 5.0
+  - name: percentile_95_threshold
+    type: integer
+    description: Maximum acceptable 95th percentile response time
+    default_value: 1500
+  - name: ramp_up_steps
+    type: integer
+    description: Number of steps for ramp-up testing
+    default_value: 5
+  - name: endurance_multiplier
+    type: integer
+    description: Multiplier for endurance test duration
+    default_value: 5
+  - name: max_cpu_usage
+    type: float
+    description: Maximum acceptable CPU usage percentage
+    default_value: 80.0
+  - name: max_memory_usage
+    type: float
+    description: Maximum acceptable memory usage percentage
+    default_value: 80.0
+  - name: max_memory_growth_rate
+    type: float
+    description: Maximum acceptable memory growth rate per measurement
+    default_value: 1.0
+tags:
+  - load-testing
+  - locust
+  - python
+  - pytest
+  - performance
+  - stress-testing
+dependencies:
+  - pytest
+  - locust
+  - psutil
+  - requests
+complexity: high
+estimated_time: 35m
+author: Llmcode Test Generator
+version: 1.0.0
+created_at: 2024-01-01T00:00:00
+updated_at: 2024-01-01T00:00:00

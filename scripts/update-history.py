@@ -29,7 +29,7 @@ def run_git_log():
         f"v{latest_ver}..HEAD",
         "--",
         "llmcode/",
-        ":!docs/site/",
+        ":!llmcode/website/",
         ":!scripts/",
         ":!HISTORY.md",
     ]
@@ -113,7 +113,7 @@ def main():
     cmd = [
         "llmcode",
         "--model",
-        "sonnet",
+        "gpt-5",
         hist_path,
         "--read",
         log_path,

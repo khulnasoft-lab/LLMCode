@@ -39,52 +39,61 @@ class EditBlockCoder(Coder):
         return self.apply_edits(edits, dry_run=True)
 
     def apply_edits(self, edits, dry_run=False):
+        if dry_run:
+            return self.apply_edits_dry_run(edits)
+
+        if not edits:
+            return
+
+        diffs = []
+        new_contents = {}
         failed = []
         passed = []
-        updated_edits = []
 
-        for edit in edits:
-            path, original, updated = edit
+        for path, original, updated in edits:
             full_path = self.abs_root_path(path)
-            new_content = None
+            content = self.io.read_text(full_path)
+            if content is None:
+                failed.append((path, original, updated))
+                continue
 
-            if Path(full_path).exists():
-                content = self.io.read_text(full_path)
-                new_content = do_replace(full_path, content, original, updated, self.fence)
-
-            # If the edit failed, and
-            # this is not a "create a new file" with an empty original...
-            # https://github.com/KhulnaSoft/llmcode/issues/2258
-            if not new_content and original.strip():
-                # try patching any of the other files in the chat
-                for full_path in self.abs_fnames:
-                    content = self.io.read_text(full_path)
-                    new_content = do_replace(full_path, content, original, updated, self.fence)
-                    if new_content:
-                        path = self.get_rel_fname(full_path)
-                        break
-
-            updated_edits.append((path, original, updated))
+            new_content = do_replace(full_path, content, original, updated, self.fence)
 
             if new_content:
-                if not dry_run:
-                    self.io.write_text(full_path, new_content)
-                passed.append(edit)
+                diff = difflib.unified_diff(
+                    content.splitlines(keepends=True),
+                    new_content.splitlines(keepends=True),
+                    fromfile=path,
+                    tofile=path,
+                )
+                diffs.append("".join(diff))
+                new_contents[full_path] = new_content
+                passed.append((path, original, updated))
             else:
-                failed.append(edit)
+                failed.append((path, original, updated))
 
-        if dry_run:
-            return updated_edits
+        if not diffs:
+            self.handle_failed_edits(failed)
+            return
 
+        self.io.tool_output("Proposed changes:")
+        for diff in diffs:
+            self.io.show_diff(diff)
+
+        if self.io.confirm_ask("Apply all changes?"):
+            for full_path, new_content in new_contents.items():
+                self.io.write_text(full_path, new_content)
+            self.handle_failed_edits(failed)
+        else:
+            self.io.tool_output("Changes not applied.")
+
+    def handle_failed_edits(self, failed):
         if not failed:
             return
 
         blocks = "block" if len(failed) == 1 else "blocks"
-
         res = f"# {len(failed)} SEARCH/REPLACE {blocks} failed to match!\n"
-        for edit in failed:
-            path, original, updated = edit
-
+        for path, original, updated in failed:
             full_path = self.abs_root_path(path)
             content = self.io.read_text(full_path)
 
@@ -104,23 +113,14 @@ class EditBlockCoder(Coder):
 {self.fence[1]}
 
 """
-
             if updated in content and updated:
                 res += f"""Are you sure you need this SEARCH/REPLACE block?
 The REPLACE lines are already in {path}!
 
 """
         res += (
-            "The SEARCH section must exactly match an existing block of lines including all white"
-            " space, comments, indentation, docstrings, etc\n"
+            "The SEARCH section must exactly match an existing block of lines including all white" " space, comments, indentation, docstrings, etc\n"
         )
-        if passed:
-            pblocks = "block" if len(passed) == 1 else "blocks"
-            res += f"""
-# The other {len(passed)} SEARCH/REPLACE {pblocks} were applied successfully.
-Don't re-send them.
-Just reply with fixed versions of the {blocks} above that failed to match.
-"""
         raise ValueError(res)
 
 
@@ -138,7 +138,9 @@ def perfect_or_whitespace(whole_lines, part_lines, replace_lines):
         return res
 
     # Try being flexible about leading whitespace
-    res = replace_part_with_missing_leading_whitespace(whole_lines, part_lines, replace_lines)
+    res = replace_part_with_missing_leading_whitespace(
+        whole_lines, part_lines, replace_lines
+    )
     if res:
         return res
 
@@ -168,7 +170,9 @@ def replace_most_similar_chunk(whole, part, replace):
     # drop leading empty line, GPT sometimes adds them spuriously (issue #25)
     if len(part_lines) > 2 and not part_lines[0].strip():
         skip_blank_line_part_lines = part_lines[1:]
-        res = perfect_or_whitespace(whole_lines, skip_blank_line_part_lines, replace_lines)
+        res = perfect_or_whitespace(
+            whole_lines, skip_blank_line_part_lines, replace_lines
+        )
         if res:
             return res
 
@@ -211,7 +215,9 @@ def try_dotdotdots(whole, part, replace):
         return
 
     # Compare odd strings in part_pieces and replace_pieces
-    all_dots_match = all(part_pieces[i] == replace_pieces[i] for i in range(1, len(part_pieces), 2))
+    all_dots_match = all(
+        part_pieces[i] == replace_pieces[i] for i in range(1, len(part_pieces), 2)
+    )
 
     if not all_dots_match:
         raise ValueError("Unmatched ... in SEARCH/REPLACE block")
@@ -240,7 +246,9 @@ def try_dotdotdots(whole, part, replace):
     return whole
 
 
-def replace_part_with_missing_leading_whitespace(whole_lines, part_lines, replace_lines):
+def replace_part_with_missing_leading_whitespace(
+    whole_lines, part_lines, replace_lines
+):
     # GPT often messes up leading whitespace.
     # It usually does it uniformly across the ORIG and UPD blocks.
     # Either omitting all leading whitespace, or including only some of it.
@@ -266,8 +274,12 @@ def replace_part_with_missing_leading_whitespace(whole_lines, part_lines, replac
         if add_leading is None:
             continue
 
-        replace_lines = [add_leading + rline if rline.strip() else rline for rline in replace_lines]
-        whole_lines = whole_lines[:i] + replace_lines + whole_lines[i + num_part_lines :]
+        replace_lines = [
+            add_leading + rline if rline.strip() else rline for rline in replace_lines
+        ]
+        whole_lines = (
+            whole_lines[:i] + replace_lines + whole_lines[i + num_part_lines :]
+        )
         return "".join(whole_lines)
 
     return None
@@ -383,7 +395,7 @@ def do_replace(fname, content, before_text, after_text, fence=None):
     return new_content
 
 
-HEAD = r"^<{5,9} SEARCH\s*$"
+HEAD = r"^<{5,9} SEARCH>?\s*$"
 DIVIDER = r"^={5,9}\s*$"
 UPDATED = r"^>{5,9} REPLACE\s*$"
 
@@ -412,7 +424,16 @@ def strip_filename(filename, fence):
         return
 
     start_fence = fence[0]
-    if filename.startswith(start_fence) or filename.startswith(triple_backticks):
+    if filename.startswith(start_fence):
+        candidate = filename[len(start_fence) :]
+        if candidate and ("." in candidate or "/" in candidate):
+            return candidate
+        return
+
+    if filename.startswith(triple_backticks):
+        candidate = filename[len(triple_backticks) :]
+        if candidate and ("." in candidate or "/" in candidate):
+            return candidate
         return
 
     filename = filename.rstrip(":")
@@ -421,7 +442,7 @@ def strip_filename(filename, fence):
     filename = filename.strip("`")
     filename = filename.strip("*")
 
-    # https://github.com/KhulnaSoft/llmcode/issues/1158
+    # https://github.com/khulnasoft-lab/llmcode/issues/1158
     # filename = filename.replace("\\_", "_")
 
     return filename
@@ -454,9 +475,19 @@ def find_original_update_blocks(content, fence=DEFAULT_FENCE, valid_fnames=None)
             "```csh",
             "```tcsh",
         ]
-        next_is_editblock = i + 1 < len(lines) and head_pattern.match(lines[i + 1].strip())
 
-        if any(line.strip().startswith(start) for start in shell_starts) and not next_is_editblock:
+        # Check if the next line or the one after that is an editblock
+        next_is_editblock = (
+            i + 1 < len(lines)
+            and head_pattern.match(lines[i + 1].strip())
+            or i + 2 < len(lines)
+            and head_pattern.match(lines[i + 2].strip())
+        )
+
+        if (
+            any(line.strip().startswith(start) for start in shell_starts)
+            and not next_is_editblock
+        ):
             shell_content = []
             i += 1
             while i < len(lines) and not lines[i].strip().startswith("```"):
@@ -475,7 +506,9 @@ def find_original_update_blocks(content, fence=DEFAULT_FENCE, valid_fnames=None)
                 if i + 1 < len(lines) and divider_pattern.match(lines[i + 1].strip()):
                     filename = find_filename(lines[max(0, i - 3) : i], fence, None)
                 else:
-                    filename = find_filename(lines[max(0, i - 3) : i], fence, valid_fnames)
+                    filename = find_filename(
+                        lines[max(0, i - 3) : i], fence, valid_fnames
+                    )
 
                 if not filename:
                     if current_filename:

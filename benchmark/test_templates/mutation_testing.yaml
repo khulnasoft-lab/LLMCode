@@ -1,0 +1,533 @@
+name: mutation_testing_python
+description: Mutation testing template for Python using mutmut
+category: mutation
+language: python
+framework: pytest
+template_content: |
+  import pytest
+  import subprocess
+  import sys
+  from pathlib import Path
+  from {{ module_name }} import {{ function_or_class_name }}
+  
+  
+  class TestMutationTesting:
+      """Mutation testing suite for {{ function_or_class_name }}"""
+      
+      @pytest.fixture
+      def mutation_config(self):
+          """Mutation testing configuration"""
+          return {
+              'paths_to_mutate': ['{{ module_path }}'],
+              'tests_dirs': ['{{ test_dir }}'],
+              'mutation_threshold': {{ mutation_threshold }},
+              'max_workers': {{ max_workers }},
+              'test_time_base': {{ test_time_base }},
+              'test_time_multiplier': {{ test_time_multiplier }},
+              'backup': {{ backup_enabled }},
+              'swallow_output': {{ swallow_output }},
+              'include_patterns': {{ include_patterns }},
+              'exclude_patterns': {{ exclude_patterns }}
+          }
+      
+      def test_mutation_testing_setup(self, mutation_config):
+          """Test that mutation testing can be set up correctly"""
+          # Check that mutmut is installed
+          try:
+              import mutmut
+              assert mutmut.__version__ >= "2.4.0"
+          except ImportError:
+              pytest.skip("mutmut not installed")
+          
+          # Check that source files exist
+          for path in mutation_config['paths_to_mutate']:
+              assert Path(path).exists(), f"Source path does not exist: {path}"
+          
+          # Check that test files exist
+          for test_dir in mutation_config['tests_dirs']:
+              assert Path(test_dir).exists(), f"Test directory does not exist: {test_dir}"
+      
+      def test_mutation_testing_execution(self, mutation_config):
+          """Execute mutation testing and analyze results"""
+          # Build mutmut command
+          cmd = [
+              'python', '-m', 'mutmut',
+              'run',
+              '--paths-to-mutate', ','.join(mutation_config['paths_to_mutate']),
+              '--test-time-base', str(mutation_config['test_time_base']),
+              '--test-time-multiplier', str(mutation_config['test_time_multiplier']),
+              '--max-workers', str(mutation_config['max_workers'])
+          ]
+          
+          if mutation_config['backup']:
+              cmd.append('--backup')
+          
+          if mutation_config['swallow_output']:
+              cmd.append('--swallow-output')
+          
+          # Add include patterns
+          if mutation_config['include_patterns']:
+              cmd.extend(['--include-patterns', ','.join(mutation_config['include_patterns'])])
+          
+          # Add exclude patterns
+          if mutation_config['exclude_patterns']:
+              cmd.extend(['--exclude-patterns', ','.join(mutation_config['exclude_patterns'])])
+          
+          # Run mutation testing
+          result = subprocess.run(cmd, capture_output=True, text=True)
+          
+          # Parse results
+          mutation_results = self._parse_mutation_results(result.stdout)
+          
+          # Assert mutation threshold is met
+          total_mutations = mutation_results['total']
+          killed_mutations = mutation_results['killed']
+          mutation_score = (killed_mutations / total_mutations * 100) if total_mutations > 0 else 0
+          
+          assert mutation_score >= mutation_config['mutation_threshold'], \
+              f"Mutation score {mutation_score:.2f}% is below threshold {mutation_config['mutation_threshold']}%"
+          
+          # Print detailed results
+          self._print_mutation_results(mutation_results)
+      
+      def test_mutation_testing_specific_functions(self, mutation_config):
+          """Test mutation testing for specific functions"""
+          # Focus on specific functions for detailed mutation testing
+          specific_functions = {{ specific_functions }}
+          
+          for func_name in specific_functions:
+              cmd = [
+                  'python', '-m', 'mutmut',
+                  'run',
+                  '--paths-to-mutate', f'{{ module_path }}::{func_name}',
+                  '--test-time-base', str(mutation_config['test_time_base']),
+                  '--max-workers', '1'  # Use single worker for focused testing
+              ]
+              
+              result = subprocess.run(cmd, capture_output=True, text=True)
+              
+              # Parse results for this function
+              func_results = self._parse_mutation_results(result.stdout)
+              
+              # Assert that function has adequate mutation coverage
+              if func_results['total'] > 0:
+                  func_score = (func_results['killed'] / func_results['total'] * 100)
+                  assert func_score >= {{ function_mutation_threshold }}, \
+                      f"Function {func_name} mutation score {func_score:.2f}% is too low"
+      
+      def test_mutation_testing_surviving_mutants(self, mutation_config):
+          """Analyze and report surviving mutants"""
+          # Get surviving mutants
+          cmd = [
+              'python', '-m', 'mutmut',
+              'results'
+          ]
+          
+          result = subprocess.run(cmd, capture_output=True, text=True)
+          
+          surviving_mutants = self._extract_surviving_mutants(result.stdout)
+          
+          # Assert that there are no critical surviving mutants
+          critical_mutants = [m for m in surviving_mutants if m['severity'] == 'critical']
+          
+          assert len(critical_mutants) == 0, \
+              f"Found {len(critical_mutants)} critical surviving mutants that must be addressed"
+          
+          # Print surviving mutants for review
+          if surviving_mutants:
+              print("\nSurviving Mutants (non-critical):")
+              for mutant in surviving_mutants:
+                  print(f"  - {mutant['location']}: {mutant['description']}")
+      
+      def test_mutation_testing_html_report(self, mutation_config):
+          """Generate and validate HTML mutation report"""
+          # Generate HTML report
+          cmd = [
+              'python', '-m', 'mutmut',
+              'html'
+          ]
+          
+          result = subprocess.run(cmd, capture_output=True, text=True)
+          
+          assert result.returncode == 0, "Failed to generate HTML report"
+          
+          # Check that HTML report was created
+          html_report_path = Path("htmlcov/index.html")
+          assert html_report_path.exists(), "HTML report not generated"
+          
+          # Validate HTML report content
+          with open(html_report_path, 'r') as f:
+              html_content = f.read()
+          
+          assert "Mutation testing report" in html_content, "HTML report missing expected content"
+          assert "{{ function_or_class_name }}" in html_content, "HTML report missing function/class name"
+      
+      def test_mutation_testing_baseline(self, mutation_config):
+          """Test that mutation testing meets baseline requirements"""
+          # Run baseline mutation testing
+          baseline_results = self._run_baseline_mutation_test(mutation_config)
+          
+          # Check baseline metrics
+          assert baseline_results['total_mutations'] >= {{ min_total_mutations }}, \
+              f"Insufficient total mutations: {baseline_results['total_mutations']}"
+          
+          assert baseline_results['mutation_score'] >= {{ baseline_mutation_score }}, \
+              f"Baseline mutation score too low: {baseline_results['mutation_score']}%"
+          
+          assert baseline_results['test_coverage'] >= {{ baseline_test_coverage }}, \
+              f"Baseline test coverage too low: {baseline_results['test_coverage']}%"
+      
+      def test_mutation_testing_performance(self, mutation_config):
+          """Test mutation testing performance"""
+          import time
+          
+          start_time = time.time()
+          
+          # Run mutation testing with performance monitoring
+          cmd = [
+              'python', '-m', 'mutmut',
+              'run',
+              '--paths-to-mutate', ','.join(mutation_config['paths_to_mutate']),
+              '--max-workers', str(mutation_config['max_workers']),
+              '--test-time-base', str(mutation_config['test_time_base'])
+          ]
+          
+          result = subprocess.run(cmd, capture_output=True, text=True)
+          end_time = time.time()
+          
+          execution_time = end_time - start_time
+          
+          # Assert performance requirements
+          assert execution_time <= {{ max_execution_time }}, \
+              f"Mutation testing took too long: {execution_time:.2f}s"
+          
+          # Parse results
+          mutation_results = self._parse_mutation_results(result.stdout)
+          
+          # Calculate mutations per second
+          mutations_per_second = mutation_results['total'] / execution_time if execution_time > 0 else 0
+          
+          assert mutations_per_second >= {{ min_mutations_per_second }}, \
+              f"Mutation testing too slow: {mutations_per_second:.2f} mutations/second"
+      
+      def test_mutation_testing_incremental(self, mutation_config):
+          """Test incremental mutation testing"""
+          # Run initial mutation testing
+          initial_results = self._run_mutation_test(mutation_config)
+          
+          # Make a small change to the code (simulate development)
+          self._simulate_code_change()
+          
+          # Run incremental mutation testing
+          incremental_results = self._run_mutation_test(mutation_config)
+          
+          # Assert that incremental testing is faster
+          assert incremental_results['execution_time'] < initial_results['execution_time'], \
+              "Incremental mutation testing should be faster than full testing"
+          
+          # Assert that results are consistent
+          assert abs(incremental_results['mutation_score'] - initial_results['mutation_score']) <= {{ incremental_score_delta }}, \
+              "Incremental results should be consistent with full results"
+      
+      def _parse_mutation_results(self, output: str) -> dict:
+          """Parse mutmut output and extract results"""
+          results = {
+              'total': 0,
+              'killed': 0,
+              'survived': 0,
+              'timeout': 0,
+              'suspicious': 0
+          }
+          
+          lines = output.split('\n')
+          for line in lines:
+              if 'total' in line.lower():
+                  # Extract total mutations
+                  import re
+                  total_match = re.search(r'total:\s*(\d+)', line, re.IGNORECASE)
+                  if total_match:
+                      results['total'] = int(total_match.group(1))
+              
+              elif 'killed' in line.lower():
+                  killed_match = re.search(r'killed:\s*(\d+)', line, re.IGNORECASE)
+                  if killed_match:
+                      results['killed'] = int(killed_match.group(1))
+              
+              elif 'survived' in line.lower():
+                  survived_match = re.search(r'survived:\s*(\d+)', line, re.IGNORECASE)
+                  if survived_match:
+                      results['survived'] = int(survived_match.group(1))
+              
+              elif 'timeout' in line.lower():
+                  timeout_match = re.search(r'timeout:\s*(\d+)', line, re.IGNORECASE)
+                  if timeout_match:
+                      results['timeout'] = int(timeout_match.group(1))
+              
+              elif 'suspicious' in line.lower():
+                  suspicious_match = re.search(r'suspicious:\s*(\d+)', line, re.IGNORECASE)
+                  if suspicious_match:
+                      results['suspicious'] = int(suspicious_match.group(1))
+          
+          return results
+      
+      def _extract_surviving_mutants(self, output: str) -> list:
+          """Extract surviving mutants from mutmut results"""
+          mutants = []
+          
+          lines = output.split('\n')
+          for line in lines:
+              if 'survived' in line.lower() and '::' in line:
+                  # Parse surviving mutant line
+                  parts = line.split('::')
+                  if len(parts) >= 2:
+                      location = parts[0].strip()
+                      description = parts[1].strip()
+                      
+                      # Determine severity based on description
+                      severity = 'low'
+                      if 'critical' in description.lower() or 'important' in description.lower():
+                          severity = 'critical'
+                      elif 'medium' in description.lower():
+                          severity = 'medium'
+                      
+                      mutants.append({
+                          'location': location,
+                          'description': description,
+                          'severity': severity
+                      })
+          
+          return mutants
+      
+      def _print_mutation_results(self, results: dict):
+          """Print formatted mutation results"""
+          print("\nMutation Testing Results:")
+          print(f"  Total mutations: {results['total']}")
+          print(f"  Killed: {results['killed']}")
+          print(f"  Survived: {results['survived']}")
+          print(f"  Timeout: {results['timeout']}")
+          print(f"  Suspicious: {results['suspicious']}")
+          
+          if results['total'] > 0:
+              mutation_score = (results['killed'] / results['total'] * 100)
+              print(f"  Mutation score: {mutation_score:.2f}%")
+      
+      def _run_baseline_mutation_test(self, config: dict) -> dict:
+          """Run baseline mutation testing"""
+          cmd = [
+              'python', '-m', 'mutmut',
+              'run',
+              '--paths-to-mutate', ','.join(config['paths_to_mutate']),
+              '--test-time-base', str(config['test_time_base']),
+              '--max-workers', str(config['max_workers'])
+          ]
+          
+          result = subprocess.run(cmd, capture_output=True, text=True)
+          mutation_results = self._parse_mutation_results(result.stdout)
+          
+          # Calculate test coverage (simplified)
+          test_coverage = (mutation_results['killed'] / mutation_results['total'] * 100) if mutation_results['total'] > 0 else 0
+          
+          return {
+              'total_mutations': mutation_results['total'],
+              'mutation_score': test_coverage,
+              'test_coverage': test_coverage,
+              'execution_time': 0  # Placeholder
+          }
+      
+      def _run_mutation_test(self, config: dict) -> dict:
+          """Run mutation testing and return results"""
+          import time
+          
+          start_time = time.time()
+          
+          cmd = [
+              'python', '-m', 'mutmut',
+              'run',
+              '--paths-to-mutate', ','.join(config['paths_to_mutate']),
+              '--test-time-base', str(config['test_time_base']),
+              '--max-workers', str(config['max_workers'])
+          ]
+          
+          result = subprocess.run(cmd, capture_output=True, text=True)
+          end_time = time.time()
+          
+          mutation_results = self._parse_mutation_results(result.stdout)
+          mutation_score = (mutation_results['killed'] / mutation_results['total'] * 100) if mutation_results['total'] > 0 else 0
+          
+          return {
+              'total': mutation_results['total'],
+              'killed': mutation_results['killed'],
+              'survived': mutation_results['survived'],
+              'timeout': mutation_results['timeout'],
+              'suspicious': mutation_results['suspicious'],
+              'mutation_score': mutation_score,
+              'execution_time': end_time - start_time
+          }
+      
+      def _simulate_code_change(self):
+          """Simulate a small code change for incremental testing"""
+          # This is a placeholder for actual code change simulation
+          # In a real scenario, this would modify the source code
+          pass
+  
+  
+  # Additional mutation testing utilities
+  class MutationTestingUtils:
+      """Utilities for mutation testing analysis"""
+      
+      @staticmethod
+      def analyze_mutation_patterns(results: dict) -> dict:
+          """Analyze patterns in mutation results"""
+          patterns = {
+              'high_risk_areas': [],
+              'frequent_mutation_types': [],
+              'test_gaps': []
+          }
+          
+          # Analyze results to identify patterns
+          if results['survived'] > results['killed']:
+              patterns['high_risk_areas'].append("Overall high survival rate indicates weak test coverage")
+          
+          if results['timeout'] > 0:
+              patterns['frequent_mutation_types'].append("Timeout mutations suggest performance issues")
+          
+          if results['suspicious'] > 0:
+              patterns['test_gaps'].append("Suspicious mutations indicate edge case gaps")
+          
+          return patterns
+      
+      @staticmethod
+      def generate_mutation_recommendations(results: dict) -> list:
+          """Generate recommendations based on mutation results"""
+          recommendations = []
+          
+          if results['survived'] > 0:
+              recommendations.append(f"Address {results['survived']} surviving mutants by adding targeted tests")
+          
+          if results['timeout'] > 0:
+              recommendations.append("Optimize test performance to reduce timeout mutations")
+          
+          if results['suspicious'] > 0:
+              recommendations.append("Review suspicious mutants for potential test improvements")
+          
+          mutation_score = (results['killed'] / results['total'] * 100) if results['total'] > 0 else 0
+          if mutation_score < 80:
+              recommendations.append("Improve overall test coverage to increase mutation score")
+          
+          return recommendations
+      
+      @staticmethod
+      def compare_mutation_results(baseline: dict, current: dict) -> dict:
+          """Compare mutation results between baseline and current"""
+          comparison = {
+              'score_change': current['mutation_score'] - baseline['mutation_score'],
+              'total_change': current['total'] - baseline['total'],
+              'survived_change': current['survived'] - baseline['survived'],
+              'regression_detected': False,
+              'improvement_detected': False
+          }
+          
+          if comparison['score_change'] < -5:
+              comparison['regression_detected'] = True
+          elif comparison['score_change'] > 5:
+              comparison['improvement_detected'] = True
+          
+          return comparison
+variables:
+  - name: module_name
+    type: string
+    description: Module containing the function or class to test
+    default_value: my_module
+  - name: function_or_class_name
+    type: string
+    description: Name of the function or class to test
+    default_value: my_function
+  - name: module_path
+    type: string
+    description: Path to the module file
+    default_value: my_module.py
+  - name: test_dir
+    type: string
+    description: Directory containing test files
+    default_value: tests
+  - name: mutation_threshold
+    type: float
+    description: Minimum mutation score threshold (percentage)
+    default_value: 80.0
+  - name: max_workers
+    type: integer
+    description: Maximum number of parallel workers
+    default_value: 4
+  - name: test_time_base
+    type: float
+    description: Base time multiplier for test execution
+    default_value: 1.0
+  - name: test_time_multiplier
+    type: float
+    description: Multiplier for test execution time
+    default_value: 1.5
+  - name: backup_enabled
+    type: boolean
+    description: Whether to enable backup during mutation testing
+    default_value: true
+  - name: swallow_output
+    type: boolean
+    description: Whether to swallow output during mutation testing
+    default_value: false
+  - name: include_patterns
+    type: list
+    description: Patterns to include in mutation testing
+    default_value: ["*.py"]
+  - name: exclude_patterns
+    type: list
+    description: Patterns to exclude from mutation testing
+    default_value: ["test_*.py", "*_test.py", "__pycache__"]
+  - name: specific_functions
+    type: list
+    description: List of specific functions to test
+    default_value: []
+  - name: function_mutation_threshold
+    type: float
+    description: Minimum mutation score threshold for individual functions
+    default_value: 70.0
+  - name: min_total_mutations
+    type: integer
+    description: Minimum number of total mutations expected
+    default_value: 10
+  - name: baseline_mutation_score
+    type: float
+    description: Minimum baseline mutation score
+    default_value: 75.0
+  - name: baseline_test_coverage
+    type: float
+    description: Minimum baseline test coverage
+    default_value: 70.0
+  - name: max_execution_time
+    type: float
+    description: Maximum allowed execution time in seconds
+    default_value: 300.0
+  - name: min_mutations_per_second
+    type: float
+    description: Minimum mutations per second performance requirement
+    default_value: 1.0
+  - name: incremental_score_delta
+    type: float
+    description: Maximum allowed score difference for incremental testing
+    default_value: 2.0
+tags:
+  - mutation-testing
+  - mutmut
+  - python
+  - pytest
+  - quality
+  - coverage
+dependencies:
+  - pytest
+  - mutmut
+  - coverage
+complexity: high
+estimated_time: 30m
+author: Llmcode Test Generator
+version: 1.0.0
+created_at: 2024-01-01T00:00:00
+updated_at: 2024-01-01T00:00:00

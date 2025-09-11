@@ -70,9 +70,17 @@ class Analytics:
     # ephemeral
     logfile = None
 
-    def __init__(self, logfile=None, permanently_disable=False):
+    def __init__(
+        self,
+        logfile=None,
+        permanently_disable=False,
+        posthog_host=None,
+        posthog_project_api_key=None,
+    ):
         self.logfile = logfile
         self.get_or_create_uuid()
+        self.custom_posthog_host = posthog_host
+        self.custom_posthog_project_api_key = posthog_project_api_key
 
         if self.permanently_disable or permanently_disable or not self.asked_opt_in:
             self.disable(permanently_disable)
@@ -92,8 +100,9 @@ class Analytics:
 
         # self.mp = Mixpanel(mixpanel_project_token)
         self.ph = Posthog(
-            project_api_key=posthog_project_api_key,
-            host=posthog_host,
+            project_api_key=self.custom_posthog_project_api_key
+            or posthog_project_api_key,
+            host=self.custom_posthog_host or posthog_host,
             on_error=self.posthog_error,
             enable_exception_autocapture=True,
             super_properties=self.get_system_info(),  # Add system info to all events
@@ -199,7 +208,7 @@ class Analytics:
         """disable posthog if we get an error"""
         print("X" * 100)
         # https://github.com/PostHog/posthog-python/blob/9e1bb8c58afaa229da24c4fb576c08bb88a75752/posthog/consumer.py#L86
-        # https://github.com/KhulnaSoft/llmcode/issues/2532
+        # https://github.com/khulnasoft-lab/llmcode/issues/2532
         self.ph = None
 
     def event(self, event_name, main_model=None, **kwargs):
@@ -211,7 +220,9 @@ class Analytics:
         if main_model:
             properties["main_model"] = self._redact_model_name(main_model)
             properties["weak_model"] = self._redact_model_name(main_model.weak_model)
-            properties["editor_model"] = self._redact_model_name(main_model.editor_model)
+            properties["editor_model"] = self._redact_model_name(
+                main_model.editor_model
+            )
 
         properties.update(kwargs)
 
@@ -229,7 +240,9 @@ class Analytics:
                 self.mp = None  # Disable mixpanel on connection errors
 
         if self.ph:
-            self.ph.capture(self.user_id, event_name, dict(properties))
+            self.ph.capture(
+                event_name, distinct_id=self.user_id, properties=dict(properties)
+            )
 
         if self.logfile:
             log_entry = {

@@ -24,7 +24,7 @@ load_dotenv()
 
 BOT_SUFFIX = """
 
-Note: [A bot script](https://github.com/KhulnaSoft/llmcode/blob/main/scripts/issues.py) made these updates to the issue.
+Note: [A bot script](https://github.com/khulnasoft-lab/llmcode/blob/main/scripts/issues.py) made these updates to the issue.
 """  # noqa
 
 DUPLICATE_COMMENT = (
@@ -62,14 +62,11 @@ CLOSE_FIXED_BUG_COMMENT = (
 
 # GitHub API configuration
 GITHUB_API_URL = "https://api.github.com"
-REPO_OWNER = "KhulnaSoft"
+REPO_OWNER = "khulnasoft-lab"
 REPO_NAME = "llmcode"
 TOKEN = os.getenv("GITHUB_TOKEN")
 
-headers = {
-    "Authorization": f"token {TOKEN}",
-    "Accept": "application/vnd.github.v3+json",
-}
+headers = {"Authorization": f"token {TOKEN}", "Accept": "application/vnd.github.v3+json"}
 
 
 def get_issues(state="open"):
@@ -440,9 +437,7 @@ def handle_duplicate_issues(all_issues, auto_yes):
 def main():
     parser = argparse.ArgumentParser(description="Handle duplicate GitHub issues")
     parser.add_argument(
-        "--yes",
-        action="store_true",
-        help="Automatically close duplicates without prompting",
+        "--yes", action="store_true", help="Automatically close duplicates without prompting"
     )
     args = parser.parse_args()
 

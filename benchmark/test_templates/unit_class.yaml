@@ -1,0 +1,109 @@
+name: unit_class
+description: Template for unit testing individual classes
+framework: pytest
+language: python
+template_code: |
+    import pytest
+    import sys
+    import os
+    from unittest.mock import Mock, patch
+    
+    # Add project root to path
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+    from {file_name} import {class_name}
+    
+    def test_{class_name}_initialization():
+        """Test {class_name} initialization"""
+        # Test default initialization
+        obj = {class_name}()
+        assert obj is not None
+        assert hasattr(obj, '{{default_attribute}}')
+        
+        # Test initialization with parameters
+        obj = {class_name}({{init_params}})
+        assert obj.{{param_attribute}} == {{expected_value}}
+    
+    def test_{class_name}_basic_method():
+        """Test basic method functionality"""
+        obj = {class_name}({{init_params}})
+        
+        # Test method call
+        result = obj.{{method_name}}({{method_params}})
+        assert result == {{expected_result}}
+    
+    def test_{class_name}_method_with_side_effects():
+        """Test method with side effects"""
+        obj = {class_name}({{init_params}})
+        
+        # Test method that modifies state
+        initial_state = obj.{{state_attribute}}
+        obj.{{state_changing_method}}({{change_params}})
+        final_state = obj.{{state_attribute}}
+        
+        assert final_state != initial_state
+        assert final_state == {{expected_final_state}}
+    
+    def test_{class_name}_error_handling():
+        """Test error handling in {class_name}"""
+        obj = {class_name}({{init_params}})
+        
+        # Test method that should raise exception
+        with pytest.raises({{expected_exception}}):
+            obj.{{error_method}}({{error_params}})
+    
+    def test_{class_name}_mocking_dependencies():
+        """Test {class_name} with mocked dependencies"""
+        with patch('{{dependency_path}}') as mock_dependency:
+            # Setup mock
+            mock_dependency.{{mock_method}}.return_value = {{mock_return_value}}
+            
+            obj = {class_name}({{init_params}})
+            result = obj.{{method_using_dependency}}({{method_params}})
+            
+            # Verify mock was called
+            mock_dependency.{{mock_method}}.assert_called_once_with({{expected_call_params}})
+            assert result == {{expected_result}}
+    
+    def test_{class_name}_property_access():
+        """Test property access and modification"""
+        obj = {class_name}({{init_params}})
+        
+        # Test property getter
+        assert obj.{{property_name}} == {{initial_property_value}}
+        
+        # Test property setter
+        obj.{{property_name}} = {{new_property_value}}
+        assert obj.{{property_name}} == {{new_property_value}}
+variables:
+  - class_name
+  - default_attribute
+  - init_params
+  - param_attribute
+  - expected_value
+  - method_name
+  - method_params
+  - expected_result
+  - state_attribute
+  - state_changing_method
+  - change_params
+  - expected_final_state
+  - expected_exception
+  - error_method
+  - error_params
+  - dependency_path
+  - mock_method
+  - mock_return_value
+  - method_using_dependency
+  - expected_call_params
+  - property_name
+  - initial_property_value
+  - new_property_value
+dependencies:
+  - pytest
+  - unittest.mock
+tags:
+  - unit
+  - class
+  - mocking
+  - properties
